@@ -113,7 +113,7 @@
   <a class="back-link" href="index.html">&larr; Back to study site</a>
   <div class="hero">
     <h1>Unit 2 Quiz</h1>
-    <p>15 questions covering segment proofs, angle pairs, transversals, exterior angles, and parallel-line converses.</p>
+    <p>25 questions covering segment proofs, angle pairs, transversals, exterior angles, and parallel-line converses.</p>
   </div>
 
   <div id="quizArea">
@@ -247,7 +247,50 @@ var Q = [
 
   {kicker:'Angle Pairs', text:'Two angles whose measures add up to 90° are called:', opts:[
     'Supplementary','Complementary','Congruent','Vertical'
-  ], correct:1, explain:'Complementary angles sum to 90°; supplementary angles sum to 180°.'}
+  ], correct:1, explain:'Complementary angles sum to 90°; supplementary angles sum to 180°.'},
+
+  {kicker:'Segments · Solve', text:'On a line, AB = (2x+3), BC = (x+9), and AC = 42. What is x?', opts:[
+    '10','8','13','11'
+  ], correct:0, explain:'Segment Addition Postulate: AB + BC = AC, so (2x+3)+(x+9) = 42 → 3x+12 = 42 → x = 10.'},
+
+  {kicker:'Segments · Solve', text:'M is the midpoint of PQ. PM = (5x−2) and MQ = (3x+8). What is x?', opts:[
+    '5','4','6','10'
+  ], correct:0, explain:'Definition of Midpoint: PM = MQ, so 5x−2 = 3x+8 → 2x = 10 → x = 5.'},
+
+  {kicker:'Angle Pairs · Solve', text:'Two vertical angles measure (3x+8)° and 62°. What is x?', opts:[
+    '18','54','20','16'
+  ], correct:0, explain:'Vertical angles are congruent: 3x+8 = 62 → 3x = 54 → x = 18.'},
+
+  {kicker:'Angle Pairs · Solve', text:'A linear pair measures (4x+10)° and (2x+20)°. What is x?', opts:[
+    '25','15','30','20'
+  ], correct:0, explain:'Linear Pair Postulate: the two measures sum to 180°. (4x+10)+(2x+20) = 180 → 6x+30 = 180 → x = 25.'},
+
+  {kicker:'Angle Pairs · Solve', text:'Two complementary angles measure (5n−3)° and 38°. What is n?', opts:[
+    '11','9','13','17'
+  ], correct:0, explain:'Complementary angles sum to 90°: (5n−3)+38 = 90 → 5n = 55 → n = 11.'},
+
+  {kicker:'Transversals · Solve', text:'l ∥ m ∥ n, all cut by one transversal. A pair of corresponding angles measure (6x−4)° and (4x+10)°. What is x?', opts:[
+    '7','14','2','9'
+  ], correct:0, explain:'Corresponding Angles Postulate: the two measures are equal. 6x−4 = 4x+10 → 2x = 14 → x = 7.'},
+
+  {kicker:'Triangle Sum · Solve', text:'A triangle\'s three interior angles measure (2x+5)°, (3x−1)°, and 66°. What is x?', opts:[
+    '22','18','24','20'
+  ], correct:0, explain:'Triangle Sum Theorem: the three measures add to 180°. (2x+5)+(3x−1)+66 = 180 → 5x+70 = 180 → x = 22.'},
+
+  {kicker:'Exterior Angle · Solve', text:'A triangle\'s exterior angle measures (7x+4)°. Its two remote interior angles measure (3x+10)° and 38°. What is x?', opts:[
+    '11','9','13','7'
+  ], correct:0, explain:'Exterior Angle Theorem: exterior = remote₁ + remote₂. 7x+4 = (3x+10)+38 → 4x = 44 → x = 11.'},
+
+  {kicker:'Exterior Angle · Tricky', text:'Two lines cross right at each end of a triangle\'s side. The vertical angles opposite the triangle\'s own interior angles there measure (x+50)° and (x+70)°, and the triangle\'s third interior angle is 100°. What is x?', opts:[
+    '−20','20','40','−40'
+  ], correct:0, explain:'Vertical Angles Theorem makes the marked angles equal to the triangle\'s actual interior angles there, so Triangle Sum still applies: 100+(x+50)+(x+70) = 180 → 2x+220 = 180 → x = −20. Negative is fine here — plug it back in and the three angles (100°, 30°, 50°) really do sum to 180°.'},
+
+  {kicker:'Converse Theorems', text:'You\'re given that a pair of alternate exterior angles are congruent. Which theorem lets you conclude the two lines are parallel?', opts:[
+    'Alternate Exterior Angles Converse Theorem',
+    'Alternate Interior Angles Converse Theorem',
+    'Corresponding Angles Converse Postulate',
+    'Consecutive Interior Angles Converse Theorem'
+  ], correct:0, explain:'Match the angle pair in the Given to the converse theorem built on that exact pair — congruent alternate exterior angles call for the Alternate Exterior Angles Converse Theorem.'}
 ];
 
 var idx = 0, score = 0, answered = false, missed = [];

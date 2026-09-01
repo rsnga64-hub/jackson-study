@@ -345,6 +345,30 @@ const sections = [
         <div class="setup">Given: C is midpoint of BD, B is midpoint of AC &nbsp;&rarr;&nbsp; Prove: CE = AB + DE</div>
         <div class="setup">Given: Q is midpoint of PR &nbsp;&rarr;&nbsp; Prove: ST = QR, and QS = PQ</div>
       </div>
+
+      <div class="proof-label">Worked example: two Given facts &rarr; name a midpoint</div>
+      <div class="numex" style="margin-bottom:10px"><div class="setup">B, C, D lie on a line with C between B and D; A is a separate point connected to C. &nbsp;Given: AC = BC and AC &cong; CD &nbsp;&rarr;&nbsp; Prove: C is the midpoint of BD</div></div>
+      <table class="proof">
+        <tr><th>Statement</th><th>Reason</th></tr>
+        <tr><td>AC = BC and AC &cong; CD</td><td>Given</td></tr>
+        <tr><td>AC = CD</td><td>Definition of Congruent Segments</td></tr>
+        <tr><td>BC = CD</td><td>Substitution Property of Equality</td></tr>
+        <tr><td>C is the midpoint of BD</td><td>Definition of Midpoint</td></tr>
+      </table>
+
+      <div class="proof-label">Worked example: congruence feeds Segment Addition</div>
+      <div class="numex" style="margin-bottom:10px"><div class="setup">Same points. &nbsp;Given: AC &cong; CD &nbsp;&rarr;&nbsp; Prove: BC + AC = BD</div></div>
+      <table class="proof">
+        <tr><th>Statement</th><th>Reason</th></tr>
+        <tr><td>AC &cong; CD</td><td>Given</td></tr>
+        <tr><td>AC = CD</td><td>Definition of Congruent Segments</td></tr>
+        <tr><td>BC + CD = BD</td><td>Segment Addition Postulate</td></tr>
+        <tr><td>BC + AC = BD</td><td>Substitution Property of Equality</td></tr>
+      </table>
+      <div class="box tip">
+        <h4>Why this pattern shows up twice</h4>
+        <p>Both proofs start from the same congruence (AC &cong; CD) &mdash; one turns it into a midpoint claim, the other feeds it into Segment Addition. Converting &cong; to = with Definition of Congruent Segments is almost always your second line.</p>
+      </div>
     `
   },
   {
@@ -369,6 +393,15 @@ const sections = [
         <tr><td>m∠A + m∠B + m∠C = 180</td><td>Triangle Sum Theorem</td></tr>
         <tr><td>m∠C = 180 &minus; m∠A &minus; m∠B</td><td>Subtraction Property of Equality</td></tr>
       </table>
+
+      <div class="proof-label">Worked examples: solve for the variable</div>
+      <div class="numex"><div class="setup">Two vertical angles measure (4c+6)&deg; and 58&deg;</div><div class="steps">4c+6 = 58 &rarr; 4c = 52 &rarr; c = 13</div></div>
+      <div class="numex"><div class="setup">A linear pair measures (9a+3)&deg; and 87&deg;</div><div class="steps">(9a+3) + 87 = 180 &rarr; 9a = 90 &rarr; a = 10</div></div>
+      <div class="numex"><div class="setup">A right-angle mark splits into two complementary pieces: 25&deg; and (6n+2)&deg;</div><div class="steps">25 + (6n+2) = 90 &rarr; 6n = 63 &rarr; n = 10.5</div></div>
+      <div class="box watch">
+        <h4>Read the mark, not just the picture</h4>
+        <p>A small square in the corner means the two angles there are complementary (sum to 90&deg;) &mdash; that's a different clue than two angles just looking vertical or forming a straight line. Identify which clue you're looking at (crossing lines &rarr; vertical; straight line split in two &rarr; linear pair; right-angle box &rarr; complementary) before you write an equation.</p>
+      </div>
     `
   },
   {
@@ -395,6 +428,13 @@ const sections = [
       <div class="box watch">
         <h4>Common mistake</h4>
         <p>Always name which two lines AND which transversal you're using. Mislabeling the transversal is the #1 error in this section.</p>
+      </div>
+
+      <div class="proof-label">Worked example: solve for x with three parallel lines</div>
+      <div class="numex"><div class="setup">l &parallel; m &parallel; n, all cut by one transversal. A pair of corresponding angles measure (5x&minus;7)&deg; and (3x+15)&deg;</div><div class="steps">5x&minus;7 = 3x+15 &rarr; 2x = 22 &rarr; x = 11</div></div>
+      <div class="box tip">
+        <h4>Matching angle pairs to a lettered list</h4>
+        <p>When a problem shows a numbered diagram and asks you to match "Corresponding," "Alternate Interior," etc. to a pair like &ang;1 &amp; &ang;4, check two things: same side or opposite sides of the transversal (same-side/consecutive vs. alternate), and between the two lines or outside them (interior vs. exterior). If Vertical Angles or Linear Pair are also answer choices, remember those two share a vertex &mdash; a transversal pair never does, so any option sharing a vertex is a decoy here.</p>
       </div>
     `
   },
@@ -434,6 +474,14 @@ const sections = [
       <div class="numex">
         <div class="setup">Exterior = (17x+6), remote interior angles = (11x&minus;6) and 54</div>
         <div class="steps">17x + 6 = 11x + 48 &rarr; 6x = 42 &rarr; x = 7</div>
+      </div>
+      <div class="numex">
+        <div class="setup">Trickier version: no exterior angle is handed to you directly. Two separate lines cross right at each end of one triangle side, and the marked angles &mdash; (x+40)&deg; and (x+65)&deg; &mdash; are the vertical angles opposite the triangle's own two interior angles there. The triangle's third interior angle is 96&deg;.</div>
+        <div class="steps">Vertical Angles Theorem first: each marked angle equals the actual interior angle at that vertex. Then Triangle Sum: 96 + (x+40) + (x+65) = 180 &rarr; 2x = &minus;21 &rarr; x = &minus;10.5</div>
+      </div>
+      <div class="box watch">
+        <h4>Don't assume x has to come out positive</h4>
+        <p>If a diagram gives you crossing lines instead of a clean exterior-angle ray, you may need Vertical Angles Theorem just to identify what the interior angles even are before Triangle Sum applies &mdash; and the resulting x can legitimately be negative. Plug it back into each expression and check the three interior angles still sum to 180&deg; before you panic about the sign.</p>
       </div>
 
       <div class="proof-label">Proving Exterior Angle Theorem from Triangle Sum</div>
@@ -511,6 +559,19 @@ const sections = [
       <div class="box tip">
         <h4>The general move</h4>
         <p>Blocked from using the theorem you're proving? Convert the given congruence into a different angle pair (usually via vertical angles or a linear pair) that a different postulate can act on.</p>
+      </div>
+
+      <div class="proof-label">Worked example: chaining Corresponding &rarr; Transitive &rarr; a converse (Given: P &parallel; R and &ang;6 &cong; &ang;7, Prove: P &parallel; Q)</div>
+      <table class="proof">
+        <tr><th>Statement</th><th>Reason</th></tr>
+        <tr><td>P &parallel; R and &ang;6 &cong; &ang;7</td><td>Given</td></tr>
+        <tr><td>&ang;5 &cong; &ang;7</td><td>Corresponding &ang;s Postulate</td></tr>
+        <tr><td>&ang;5 &cong; &ang;6</td><td>Transitive Property</td></tr>
+        <tr><td>P &parallel; Q</td><td>Alternate Exterior &ang;s Converse Theorem</td></tr>
+      </table>
+      <div class="box tip">
+        <h4>Same skeleton, different order</h4>
+        <p>This is the same "two facts chained by Transitive" pattern from the 2.5 tab, just run in reverse: instead of ending on Transitive, it ends on a converse theorem. The one Given pair of parallel lines (P &parallel; R here) always supplies your first non-converse angle theorem &mdash; the pair you're trying to prove parallel is always the last line, always justified by a converse.</p>
       </div>
     `
   }
