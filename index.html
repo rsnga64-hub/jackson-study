@@ -12,6 +12,10 @@
     --text-soft: #64707F;
     --blue: #2E86AB;
     --blue-soft: #E9F3F8;
+    --teal: #2C9C82;
+    --teal-soft: #E6F5F0;
+    --coral: #D65A5A;
+    --coral-soft: #FBEBEB;
     --border: #E4E0D4;
     --card-bg: #FFFFFF;
   }
@@ -49,6 +53,17 @@
     border-radius: 999px;
     margin-bottom: 10px;
   }
+  .tag.teal { background: var(--teal-soft); color: var(--teal); }
+  .tag.coral { background: var(--coral-soft); color: var(--coral); }
+  .section-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--text-soft);
+    margin: 28px 0 10px;
+  }
+  .section-label:first-of-type { margin-top: 0; }
 </style>
 </head>
 <body>
@@ -56,10 +71,24 @@
     <h1>Jackson's Study Site</h1>
     <p class="sub">Study guides and practice pages, all in one place.</p>
 
+    <p class="section-label">Unit 2 — Geometry Proofs</p>
+
     <a class="card" href="proofs_guide.html">
-      <span class="tag">Geometry</span>
+      <span class="tag">Study Guide</span>
       <h2>Unit 2 — Geometry Proofs</h2>
       <p>Study guide covering proof structure, postulates, and practice problems.</p>
+    </a>
+
+    <a class="card" href="unit2_flashcards.html">
+      <span class="tag teal">Flashcards</span>
+      <h2>Unit 2 Flashcards</h2>
+      <p>26 definitions, postulates, and theorems with illustrated diagrams — tap to flip.</p>
+    </a>
+
+    <a class="card" href="unit2_quiz.html">
+      <span class="tag coral">Quiz</span>
+      <h2>Unit 2 Quiz</h2>
+      <p>15-question self-graded quiz covering the whole unit.</p>
     </a>
   </div>
 </body>

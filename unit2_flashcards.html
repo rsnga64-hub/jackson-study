@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 2 Flashcards: Geometry Proofs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FBFAF7;
+    --grid-line: rgba(28,43,74,0.055);
+    --ink: #1C2B4A;
+    --text: #2B3648;
+    --text-soft: #64707F;
+    --blue: #2E86AB;
+    --blue-soft: #E9F3F8;
+    --amber: #D98A2B;
+    --amber-soft: #FCF1DE;
+    --coral: #D65A5A;
+    --coral-soft: #FBEBEB;
+    --teal: #2C9C82;
+    --teal-soft: #E6F5F0;
+    --violet: #7C5CBF;
+    --violet-soft: #EFE9F8;
+    --card-bg: #FFFFFF;
+    --border: #E4E0D4;
+    --gray: #94A0AD;
+    --gray-line: #CBD3DC;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  h1, h2, h3, .display { font-family: 'Space Grotesk', sans-serif; color: var(--ink); }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 32px 20px 80px; }
+  a { color: inherit; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--text-soft); text-decoration: none; font-size: 0.88rem; font-weight: 600; margin-bottom: 18px; }
+  .back-link:hover { color: var(--blue); }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    background: var(--ink);
+    border-radius: 18px;
+    padding: 26px 28px;
+    color: #fff;
+    margin-bottom: 22px;
+  }
+  .hero h1 { color: #fff; font-size: 1.7rem; margin: 0 0 6px; line-height: 1.15; }
+  .hero p { margin: 0; color: #C8D3E0; font-size: 0.96rem; max-width: 52ch; }
+
+  /* ---------- Category tabs ---------- */
+  .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 20px; }
+  .tab-btn {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.84rem;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text-soft);
+    border-radius: 999px;
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .tab-btn:hover { border-color: var(--ink); color: var(--ink); }
+  .tab-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  /* ---------- Progress / stats ---------- */
+  .statline {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.82rem; color: var(--text-soft); margin-bottom: 10px; flex-wrap: wrap; gap: 6px;
+  }
+  .statline b { color: var(--ink); }
+  .progress-track { height: 6px; background: var(--border); border-radius: 999px; overflow: hidden; margin-bottom: 18px; }
+  .progress-fill { height: 100%; background: var(--blue); border-radius: 999px; transition: width 0.2s ease; }
+
+  /* ---------- Flashcard ---------- */
+  .stage { perspective: 1600px; margin-bottom: 18px; }
+  .flashcard {
+    position: relative;
+    min-height: 380px;
+    border-radius: 18px;
+    cursor: pointer;
+    transition: transform 0.5s cubic-bezier(.4,.2,.2,1);
+    transform-style: preserve-3d;
+  }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .face {
+    position: absolute; inset: 0;
+    -webkit-backface-visibility: hidden; backface-visibility: hidden;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    box-shadow: 0 4px 18px rgba(28,43,74,0.07);
+    padding: 26px 28px;
+    display: flex; flex-direction: column;
+  }
+  .face.back { transform: rotateY(180deg); }
+  .cat-tag {
+    display: inline-flex; align-self: flex-start;
+    font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.72rem;
+    letter-spacing: 0.02em; text-transform: uppercase;
+    padding: 4px 11px; border-radius: 999px; margin-bottom: 14px;
+  }
+  .face.front { align-items: center; text-align: center; justify-content: center; }
+  .term { font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: var(--ink); font-size: 1.55rem; line-height: 1.25; margin: 0; }
+  .flip-hint { margin-top: 18px; font-size: 0.8rem; color: var(--gray); }
+  .def { font-size: 1.05rem; font-weight: 600; color: var(--ink); line-height: 1.4; margin: 0 0 10px; }
+  .extra { font-size: 0.9rem; color: var(--text-soft); line-height: 1.45; margin: 0 0 14px; }
+  .diagram-wrap { margin-top: auto; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 6px; }
+  .diagram-wrap svg { display: block; width: 100%; height: auto; }
+
+  /* ---------- Controls ---------- */
+  .controls { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  .btn {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.88rem;
+    border: 1px solid var(--border); background: var(--card-bg); color: var(--ink);
+    border-radius: 10px; padding: 10px 16px; cursor: pointer; transition: all 0.15s ease;
+  }
+  .btn:hover { border-color: var(--ink); }
+  .btn:disabled { opacity: 0.4; cursor: default; }
+  .btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .btn.primary:hover { opacity: 0.9; }
+  .rate-row { display: flex; gap: 10px; justify-content: center; margin-bottom: 6px; }
+  .btn.rate-bad { border-color: var(--coral); color: var(--coral); }
+  .btn.rate-bad:hover { background: var(--coral-soft); }
+  .btn.rate-good { border-color: var(--teal); color: var(--teal); }
+  .btn.rate-good:hover { background: var(--teal-soft); }
+
+  .tally { text-align: center; font-size: 0.82rem; color: var(--text-soft); margin-top: 4px; }
+  .tally b.good { color: var(--teal); }
+  .tally b.bad { color: var(--coral); }
+
+  @media (max-width: 480px) {
+    .flashcard { min-height: 420px; }
+    .term { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="index.html">&larr; Back to study site</a>
+  <div class="hero">
+    <h1>Unit 2 Flashcards</h1>
+    <p>Definitions, postulates, and theorems from Segment Proofs through Parallel Line Converses &mdash; tap a card to flip it.</p>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="statline">
+    <span>Card <b id="cardNum">1</b> of <b id="cardTotal">26</b></span>
+    <span id="filterLabel">All cards</span>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+  <div class="stage">
+    <div class="flashcard" id="flashcard">
+      <div class="face front">
+        <span class="cat-tag" id="catTagFront"></span>
+        <p class="term" id="termText"></p>
+        <p class="flip-hint">Tap the card to see the definition</p>
+      </div>
+      <div class="face back">
+        <span class="cat-tag" id="catTagBack"></span>
+        <p class="def" id="defText"></p>
+        <p class="extra" id="extraText"></p>
+        <div class="diagram-wrap" id="diagramWrap" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rate-row" id="rateRow" style="visibility:hidden;">
+    <button class="btn rate-bad" id="btnBad">Still learning</button>
+    <button class="btn rate-good" id="btnGood">Got it</button>
+  </div>
+
+  <div class="controls">
+    <button class="btn" id="btnPrev">&larr; Prev</button>
+    <button class="btn primary" id="btnShuffle">Shuffle</button>
+    <button class="btn" id="btnNext">Next &rarr;</button>
+  </div>
+
+  <p class="tally" id="tally"></p>
+</div>
+
+<script>
+/* ============ Diagram builders (coordinates precomputed for geometric accuracy) ============ */
+function svg(inner, vb, h) {
+  return '<svg viewBox="'+vb+'" width="100%" height="'+(h||180)+'" xmlns="http://www.w3.org/2000/svg">'+inner+'</svg>';
+}
+function lineEl(x1,y1,x2,y2,color,w){ return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round"/>'; }
+function dot(x,y,color){ return '<circle cx="'+x+'" cy="'+y+'" r="3.2" fill="'+(color||'var(--ink)')+'"/>'; }
+function txt(x,y,s,color,size,weight,anchor){ return '<text x="'+x+'" y="'+y+'" fill="'+(color||'var(--ink)')+'" font-family="Space Grotesk, sans-serif" font-size="'+(size||13)+'" font-weight="'+(weight||700)+'" text-anchor="'+(anchor||'middle')+'">'+s+'</text>'; }
+function wedgeEl(path,color,active){
+  if(active) return '<path d="'+path+'" fill="'+color+'" fill-opacity="0.28" stroke="'+color+'" stroke-width="2"/>';
+  return '<path d="'+path+'" fill="none" stroke="var(--gray-line)" stroke-width="1.5"/>';
+}
+function ptick(x,y){
+  // small double-tick "given parallel" mark, drawn on a horizontal line at (x,y)
+  return '<line x1="'+(x-5)+'" y1="'+(y+7)+'" x2="'+(x+5)+'" y2="'+(y-7)+'" stroke="var(--text-soft)" stroke-width="2"/>'
+       + '<line x1="'+(x-12)+'" y1="'+(y+7)+'" x2="'+(x-2)+'" y2="'+(y-7)+'" stroke="var(--text-soft)" stroke-width="2"/>';
+}
+
+/* --- Segment Addition Postulate --- */
+function diagSegAdd(){
+  var y=100, xA=30,xB=150,xC=270;
+  var inner = lineEl(xA,y,xC,y) + dot(xA,y)+dot(xB,y)+dot(xC,y)
+    + txt(xA,y-14,'A','var(--ink)',15) + txt(xB,y-14,'B','var(--ink)',15) + txt(xC,y-14,'C','var(--ink)',15)
+    + lineEl(xA,y+20,xB,y+20,'var(--blue)',2.5) + txt((xA+xB)/2,y+36,'AB','var(--blue)',12)
+    + lineEl(xB,y+20,xC,y+20,'var(--teal)',2.5) + txt((xB+xC)/2,y+36,'BC','var(--teal)',12)
+    + lineEl(xA,y-34,xC,y-34,'var(--coral)',2.5) + txt((xA+xC)/2,y-46,'AC = AB + BC','var(--coral)',13);
+  return svg(inner,'0 0 300 170',170);
+}
+/* --- Definition of Midpoint --- */
+function diagMidpoint(){
+  var y=100, xX=40,xM=150,xY=260;
+  var inner = lineEl(xX,y,xY,y) + dot(xX,y)+dot(xM,y)+dot(xY,y)
+    + txt(xX,y+26,'X','var(--ink)',15) + txt(xM,y+26,'M','var(--ink)',15) + txt(xY,y+26,'Y','var(--ink)',15)
+    + lineEl((xX+xM)/2-6,y-10,(xX+xM)/2+6,y+10,'var(--blue)',2.5)
+    + lineEl((xM+xY)/2-6,y-10,(xM+xY)/2+6,y+10,'var(--blue)',2.5)
+    + txt(xM,y-24,'XM = MY','var(--blue)',13);
+  return svg(inner,'0 0 300 160',150);
+}
+/* --- Adjacent angles: one vertex, 3 rays --- */
+function diagAdjacent(){
+  var cx=150,cy=150;
+  var wa='M 150.0 150.0 L 169.3 132.6 A 26 26 0 0 1 176.0 150.0 Z';
+  var wb='M 150.0 150.0 L 145.5 124.4 A 26 26 0 0 1 169.3 132.6 Z';
+  var inner = lineEl(cx,cy,240.0,150.0) + lineEl(cx,cy,216.9,89.8) + lineEl(cx,cy,134.4,61.4)
+    + wedgeEl(wa,'var(--teal)',true) + wedgeEl(wb,'var(--blue)',true)
+    + txt(183.6,141,'1','var(--teal)',13) + txt(161.7,120,'2','var(--blue)',13)
+    + txt(cx,cy+30,'∠1 and ∠2 share vertex + ray','var(--text-soft)',11,600);
+  return svg(inner,'40 40 260 160',160);
+}
+/* --- Complementary (two separate angles, 35 + 55 = 90) --- */
+function diagComplementary(){
+  var inner = lineEl(80,150,150.0,150.0) + lineEl(80,150,137.3,109.8)
+    + wedgeEl('M 80.0 150.0 L 101.3 135.1 A 26 26 0 0 1 106.0 150.0 Z','var(--teal)',true)
+    + txt(112,144,'35°','var(--teal)',12)
+    + lineEl(250,150,250.0,80.0) + lineEl(250,150,307.3,109.8)
+    + wedgeEl('M 250.0 150.0 L 250.0 124.0 A 26 26 0 0 1 271.3 135.1 Z','var(--teal)',true)
+    + txt(266,124,'55°','var(--teal)',12)
+    + txt(165,45,'35° + 55° = 90°','var(--ink)',14);
+  return svg(inner,'20 20 320 150',150);
+}
+/* --- Supplementary (two separate angles, 70 + 110 = 180) --- */
+function diagSupplementary(){
+  var inner = lineEl(80,150,150.0,150.0) + lineEl(80,150,103.9,84.2)
+    + wedgeEl('M 80.0 150.0 L 88.9 125.6 A 26 26 0 0 1 106.0 150.0 Z','var(--coral)',true)
+    + txt(115,138,'70°','var(--coral)',12)
+    + lineEl(250,150,180.0,150.0) + lineEl(250,150,273.9,84.2)
+    + wedgeEl('M 250.0 150.0 L 224.0 150.0 A 26 26 0 0 1 258.9 125.6 Z','var(--coral)',true)
+    + txt(232,113,'110°','var(--coral)',12)
+    + txt(165,40,'70° + 110° = 180°','var(--ink)',14);
+  return svg(inner,'20 15 320 155',150);
+}
+/* --- Linear Pair: one vertex, straight line, 65/115 --- */
+function diagLinearPair(){
+  var cx=150,cy=150;
+  var wa='M 150.0 150.0 L 161.8 124.6 A 28 28 0 0 1 178.0 150.0 Z';
+  var wb='M 150.0 150.0 L 122.0 150.0 A 28 28 0 0 1 161.8 124.6 Z';
+  var inner = lineEl(40,150,260,150) + lineEl(cx,cy,196.5,50.3)
+    + wedgeEl(wa,'var(--teal)',true) + wedgeEl(wb,'var(--blue)',true)
+    + txt(183.7,120,'1','var(--teal)',13) + txt(128.5,112,'2','var(--blue)',13)
+    + txt(cx,cy+26,'∠1 + ∠2 = 180° (straight line)','var(--text-soft)',11,600);
+  return svg(inner,'20 30 260 150',150);
+}
+/* --- Vertical angles: crossing lines, 4-angle vertex --- */
+function diagVertical(theorem){
+  var cx=150,cy=100;
+  var A1='M 150.0 100.0 L 128.0 100.0 A 22 22 0 0 1 137.4 82.0 Z';
+  var A2='M 150.0 100.0 L 137.4 82.0 A 22 22 0 0 1 172.0 100.0 Z';
+  var A3='M 150.0 100.0 L 162.6 118.0 A 22 22 0 0 1 128.0 100.0 Z';
+  var A4='M 150.0 100.0 L 172.0 100.0 A 22 22 0 0 1 162.6 118.0 Z';
+  var inner = lineEl(40,100,260,100) + lineEl(86.9,9.9,213.1,190.1)
+    + wedgeEl(A1,'var(--violet)',true) + wedgeEl(A2,'#cbd3dc',false) + wedgeEl(A3,'#cbd3dc',false) + wedgeEl(A4,'var(--violet)',true)
+    + txt(119.8,88,'1','var(--violet)',13) + txt(165.7,74,'2','var(--gray)',12)
+    + txt(134.3,126,'3','var(--gray)',12) + txt(180.2,120,'4','var(--violet)',13)
+    + txt(150,190,theorem ? '∠1 ≅ ∠4  (vertical angles are congruent)' : '∠1 and ∠4 are vertical angles','var(--text-soft)',11,600);
+  return svg(inner,'20 0 260 210',175);
+}
+/* --- Triangle Sum: plain triangle, all 3 interior angles --- */
+function diagTriangleSum(){
+  var A=[60,190], B=[220,190], C=[140,50];
+  var inner = lineEl(A[0],A[1],B[0],B[1]) + lineEl(B[0],B[1],C[0],C[1]) + lineEl(C[0],C[1],A[0],A[1])
+    + wedgeEl('M 60.0 190.0 L 86.0 190.0 A 26 26 0 0 1 72.9 167.4 Z','var(--blue)',true)
+    + wedgeEl('M 220.0 190.0 L 196.0 190.0 A 24 24 0 0 1 208.1 169.2 Z','var(--teal)',true)
+    + wedgeEl('M 140.0 50.0 L 150.9 69.1 A 22 22 0 0 1 129.1 69.1 Z','var(--coral)',true)
+    + txt(93.7,178,'A','var(--blue)',13) + txt(188.9,178,'B','var(--teal)',13) + txt(140,83,'C','var(--coral)',13)
+    + txt(140,215,'m∠A + m∠B + m∠C = 180°','var(--ink)',13);
+  return svg(inner,'30 30 260 200',175);
+}
+/* --- Parallel lines + transversal, 8 angles (reused for transversal / corresponding / alt-int / alt-ext / consec-int, forward + converse) --- */
+var PAR_ANGLES = {
+  1:{w:'M 150.0 60.0 L 130.0 60.0 A 20 20 0 0 1 138.5 43.6 Z', lx:121.6, ly:49.2},
+  2:{w:'M 150.0 60.0 L 138.5 43.6 A 20 20 0 0 1 170.0 60.0 Z', lx:164.8, ly:35.6},
+  3:{w:'M 150.0 60.0 L 161.5 76.4 A 20 20 0 0 1 130.0 60.0 Z', lx:135.2, ly:92.4},
+  4:{w:'M 150.0 60.0 L 170.0 60.0 A 20 20 0 0 1 161.5 76.4 Z', lx:178.4, ly:78.8},
+  5:{w:'M 220.0 160.0 L 200.0 160.0 A 20 20 0 0 1 208.5 143.6 Z', lx:191.6, ly:149.2},
+  6:{w:'M 220.0 160.0 L 208.5 143.6 A 20 20 0 0 1 240.0 160.0 Z', lx:234.8, ly:135.6},
+  7:{w:'M 220.0 160.0 L 231.5 176.4 A 20 20 0 0 1 200.0 160.0 Z', lx:205.2, ly:192.4},
+  8:{w:'M 220.0 160.0 L 240.0 160.0 A 20 20 0 0 1 231.5 176.4 Z', lx:248.4, ly:178.8}
+};
+function diagParallel(opts){
+  opts = opts || {};
+  var highlight = opts.highlight || [];
+  var color = opts.color || 'var(--coral)';
+  var linesOnly = opts.linesOnly || false;
+  var lineTicks = opts.lineTicks || false;
+  var transColor = linesOnly ? color : 'var(--ink)';
+  var inner = lineEl(20,60,280,60,'var(--ink)') + lineEl(20,160,280,160,'var(--ink)')
+    + lineEl(127.1,27.2,243.0,192.8,transColor);
+  if(lineTicks){ inner += ptick(245,60) + ptick(245,160); }
+  if(!linesOnly){
+    for(var n=1;n<=8;n++){
+      var a = PAR_ANGLES[n];
+      var active = highlight.indexOf(n) !== -1;
+      inner += wedgeEl(a.w, active?color:'#cbd3dc', active);
+      inner += txt(a.lx, a.ly, n, active?color:'var(--gray)', active?13:11.5);
+    }
+  } else {
+    inner += txt(185,115,'transversal','var(--coral)',13,700,'middle');
+  }
+  return svg(inner,'0 0 300 210',185);
+}
+/* --- Triangle + exterior angle --- */
+function diagTriangleExt(opts){
+  opts = opts || {};
+  var A=[60,190], B=[220,190], C=[140,50], D=[300,190];
+  var inner = lineEl(A[0],A[1],D[0],D[1]) + lineEl(B[0],B[1],C[0],C[1]) + lineEl(C[0],C[1],A[0],A[1]);
+  if(opts.remote){
+    inner += wedgeEl('M 60.0 190.0 L 72.9 167.4 A 26 26 0 0 1 86.0 190.0 Z','var(--amber)',true);
+    inner += wedgeEl('M 140.0 50.0 L 150.9 69.1 A 22 22 0 0 1 129.1 69.1 Z','var(--amber)',true);
+    inner += txt(93.7,178,'A','var(--amber)',13) + txt(140,83,'C','var(--amber)',13);
+  } else {
+    inner += wedgeEl('M 60.0 190.0 L 72.9 167.4 A 26 26 0 0 1 86.0 190.0 Z','#cbd3dc',false);
+    inner += wedgeEl('M 140.0 50.0 L 150.9 69.1 A 22 22 0 0 1 129.1 69.1 Z','#cbd3dc',false);
+    inner += txt(93.7,178,'A','var(--gray)',12) + txt(140,83,'C','var(--gray)',12);
+  }
+  if(opts.bint){
+    inner += wedgeEl('M 220.0 190.0 L 196.0 190.0 A 24 24 0 0 1 208.1 169.2 Z','var(--gray)',false);
+  }
+  if(opts.bext){
+    inner += wedgeEl('M 220.0 190.0 L 205.1 164.0 A 30 30 0 0 1 250.0 190.0 Z','var(--coral)',true);
+    inner += txt(242.6,148,'ext','var(--coral)',12);
+  } else {
+    inner += wedgeEl('M 220.0 190.0 L 205.1 164.0 A 30 30 0 0 1 250.0 190.0 Z','#cbd3dc',false);
+  }
+  if(opts.caption){ inner += txt(160,215,opts.caption,'var(--ink)',12.5); }
+  return svg(inner,'20 20 300 200',175);
+}
+/* --- Definition of congruent angles: two separate 55°/55° angles --- */
+function diagCongruent(){
+  var inner = lineEl(80,150,150.0,150.0) + lineEl(80,150,120.15,92.66)
+    + wedgeEl('M 80.0 150.0 L 94.9 128.7 A 26 26 0 0 1 106.0 150.0 Z','var(--blue)',true)
+    + txt(114.6,138,'A','var(--blue)',13)
+    + lineEl(250,150,180.0,150.0) + lineEl(250,150,209.85,92.66)
+    + wedgeEl('M 250.0 150.0 L 224.0 150.0 A 26 26 0 0 1 235.1 128.7 Z','var(--blue)',true)
+    + txt(215.4,138,'B','var(--blue)',13)
+    + txt(165,45,'∠A ≅ ∠B  →  m∠A = m∠B','var(--ink)',13.5);
+  return svg(inner,'20 15 320 150',150);
+}
+
+/* ============ Card data ============ */
+var CATS = [
+  {key:'segments', label:'Segments', color:'var(--blue)'},
+  {key:'angles', label:'Angle Pairs', color:'var(--teal)'},
+  {key:'transversals', label:'Transversals', color:'var(--coral)'},
+  {key:'exterior', label:'Exterior Angle', color:'var(--amber)'},
+  {key:'converse', label:'Converse Thms', color:'var(--violet)'},
+  {key:'toolkit', label:'Proof Toolkit', color:'var(--ink)'}
+];
+function catInfo(key){ for(var i=0;i<CATS.length;i++) if(CATS[i].key===key) return CATS[i]; return CATS[0]; }
+
+var CARDS = [
+  {cat:'segments', term:'Segment Addition Postulate', def:'If B is between A and C, then AB + BC = AC.', extra:'Lets you break one long segment into two measurable pieces — or combine two pieces into the whole.', diagram:diagSegAdd},
+  {cat:'segments', term:'Definition of Midpoint', def:'If M is the midpoint of segment XY, then XM = MY.', extra:'Always the first move in a segment proof — it\'s Given, so it costs nothing.', diagram:diagMidpoint},
+
+  {cat:'angles', term:'Adjacent Angles', def:'Two angles that share a vertex and a side (ray), and don\'t overlap.', extra:'Being adjacent says nothing about the total — it just means they\'re next-door neighbors.', diagram:diagAdjacent},
+  {cat:'angles', term:'Complementary Angles', def:'Two angles whose measures add up to 90°.', extra:'They don\'t need to touch — complementary is only about the sum.', diagram:diagComplementary},
+  {cat:'angles', term:'Supplementary Angles', def:'Two angles whose measures add up to 180°.', extra:'Like complementary, they don\'t need to be adjacent — only the sum matters.', diagram:diagSupplementary},
+  {cat:'angles', term:'Linear Pair', def:'Adjacent, supplementary angles — they share a ray and together form a straight line.', extra:'A linear pair is always supplementary, but not every supplementary pair is a linear pair.', diagram:diagLinearPair},
+  {cat:'angles', term:'Vertical Angles', def:'Two angles across from each other where two lines cross.', extra:'They\'re never adjacent — they only share the vertex, not a side.', diagram:function(){return diagVertical(false);}},
+  {cat:'angles', term:'Linear Pair Postulate', def:'If two angles form a linear pair, then they are supplementary.', extra:'This is a postulate — accepted as true, not proved.', diagram:diagLinearPair},
+  {cat:'angles', term:'Vertical Angles Theorem', def:'If two angles are vertical angles, then they are congruent.', extra:'Unlike the Linear Pair Postulate, this one can be proved from other facts.', diagram:function(){return diagVertical(true);}},
+  {cat:'angles', term:'Triangle Sum Theorem', def:'The sum of the interior angles in a triangle is 180°.', extra:'m∠A + m∠B + m∠C = 180°', diagram:diagTriangleSum},
+
+  {cat:'transversals', term:'Transversal', def:'A line that crosses two other lines, each at a different point.', extra:'The angle-pair names below only exist because of the transversal — always name which two lines and which transversal you\'re using.', diagram:function(){return diagParallel({linesOnly:true});}},
+  {cat:'transversals', term:'Corresponding Angles', def:'Two angles in the same relative position at each intersection — same side of the transversal, one interior + one exterior.', extra:'', diagram:function(){return diagParallel({highlight:[1,5], color:'var(--coral)', lineTicks:true});}},
+  {cat:'transversals', term:'Alternate Interior Angles', def:'Two interior angles on opposite sides of the transversal.', extra:'', diagram:function(){return diagParallel({highlight:[3,6], color:'var(--coral)', lineTicks:true});}},
+  {cat:'transversals', term:'Alternate Exterior Angles', def:'Two exterior angles on opposite sides of the transversal.', extra:'', diagram:function(){return diagParallel({highlight:[1,8], color:'var(--coral)', lineTicks:true});}},
+  {cat:'transversals', term:'Consecutive Interior Angles', def:'Two interior angles on the same side of the transversal.', extra:'Also called Same-Side Interior Angles.', diagram:function(){return diagParallel({highlight:[3,5], color:'var(--coral)', lineTicks:true});}},
+
+  {cat:'exterior', term:'Exterior Angle (of a triangle)', def:'An angle that forms a linear pair with one interior angle of the triangle.', extra:'Check two things: does it form a linear pair with an interior angle, and is it outside the triangle?', diagram:function(){return diagTriangleExt({bext:true, caption:'the highlighted angle is exterior'});}},
+  {cat:'exterior', term:'Remote Interior Angles', def:'The two interior angles of a triangle that are NOT adjacent to a given exterior angle.', extra:'', diagram:function(){return diagTriangleExt({remote:true, caption:'∠A and ∠C are remote from the exterior angle at B'});}},
+  {cat:'exterior', term:'Exterior Angle Theorem', def:'An exterior angle of a triangle equals the sum of the two remote interior angles.', extra:'exterior = remote₁ + remote₂', diagram:function(){return diagTriangleExt({remote:true, bext:true, caption:'ext = m∠A + m∠C'});}},
+
+  {cat:'converse', term:'Corresponding Angles Converse Postulate', def:'If corresponding angles are congruent, then the lines are parallel.', extra:'This flips the direction: angle relationship → parallel lines.', diagram:function(){return diagParallel({highlight:[1,5], color:'var(--violet)'});}},
+  {cat:'converse', term:'Alternate Interior Angles Converse Theorem', def:'If alternate interior angles are congruent, then the lines are parallel.', extra:'', diagram:function(){return diagParallel({highlight:[3,6], color:'var(--violet)'});}},
+  {cat:'converse', term:'Alternate Exterior Angles Converse Theorem', def:'If alternate exterior angles are congruent, then the lines are parallel.', extra:'', diagram:function(){return diagParallel({highlight:[1,8], color:'var(--violet)'});}},
+  {cat:'converse', term:'Consecutive Interior Angles Converse Theorem', def:'If consecutive interior angles are supplementary, then the lines are parallel.', extra:'Supplementary here, not congruent — the other three converses use congruent angles.', diagram:function(){return diagParallel({highlight:[3,5], color:'var(--violet)'});}},
+
+  {cat:'toolkit', term:'Definition of Congruent Angles', def:'Congruent angles (≅) have equal measures.', extra:'∠A ≅ ∠B means m∠A = m∠B — use this to turn a congruence statement into an equation you can do algebra with.', diagram:diagCongruent},
+  {cat:'toolkit', term:'Reflexive Property', def:'Any quantity is equal to itself.', extra:'Example: m∠2 = m∠2. Useful when the same angle or segment shows up on both sides of an argument.', diagram:null},
+  {cat:'toolkit', term:'Transitive Property', def:'If a = b and b = c, then a = c.', extra:'The tool that lets you chain two separate congruences into one.', diagram:null},
+  {cat:'toolkit', term:'Substitution Property', def:'If a = b, you may replace a with b (or b with a) in any equation.', extra:'Combine two equations that share an expression by substituting one into the other.', diagram:null}
+];
+
+/* ============ Deck state & rendering ============ */
+var activeCat = 'all';
+var order = CARDS.map(function(_,i){return i;});
+var pos = 0;
+var flipped = false;
+var goodCount = 0, badCount = 0;
+var seenRated = {};
+
+function currentIndices(){
+  if(activeCat==='all') return order;
+  return order.filter(function(i){ return CARDS[i].cat===activeCat; });
+}
+
+function buildTabs(){
+  var tabsEl = document.getElementById('tabs');
+  var allBtn = document.createElement('button');
+  allBtn.className='tab-btn active'; allBtn.textContent='All'; allBtn.dataset.key='all';
+  tabsEl.appendChild(allBtn);
+  CATS.forEach(function(c){
+    var b=document.createElement('button');
+    b.className='tab-btn'; b.textContent=c.label; b.dataset.key=c.key;
+    tabsEl.appendChild(b);
+  });
+  tabsEl.addEventListener('click', function(e){
+    if(e.target.tagName!=='BUTTON') return;
+    activeCat = e.target.dataset.key;
+    Array.prototype.forEach.call(tabsEl.children, function(b){ b.classList.toggle('active', b.dataset.key===activeCat); });
+    document.getElementById('filterLabel').textContent = activeCat==='all' ? 'All cards' : catInfo(activeCat).label;
+    pos = 0; flipped=false;
+    renderCard();
+  });
+}
+
+function renderCard(){
+  var idxs = currentIndices();
+  if(idxs.length===0) return;
+  if(pos>=idxs.length) pos=0;
+  var card = CARDS[idxs[pos]];
+  var info = catInfo(card.cat);
+
+  document.getElementById('flashcard').classList.remove('flipped');
+  flipped=false;
+
+  document.getElementById('catTagFront').textContent = info.label;
+  document.getElementById('catTagFront').style.background = info.color;
+  document.getElementById('catTagFront').style.color = '#fff';
+  document.getElementById('catTagBack').textContent = info.label;
+  document.getElementById('catTagBack').style.background = info.color;
+  document.getElementById('catTagBack').style.color = '#fff';
+
+  document.getElementById('termText').textContent = card.term;
+  document.getElementById('defText').textContent = card.def;
+  document.getElementById('extraText').textContent = card.extra || '';
+
+  var dWrap = document.getElementById('diagramWrap');
+  if(card.diagram){
+    dWrap.style.display='block';
+    dWrap.innerHTML = card.diagram();
+  } else {
+    dWrap.style.display='none';
+    dWrap.innerHTML='';
+  }
+
+  document.getElementById('cardNum').textContent = pos+1;
+  document.getElementById('cardTotal').textContent = idxs.length;
+  document.getElementById('progressFill').style.width = Math.round(((pos+1)/idxs.length)*100)+'%';
+
+  document.getElementById('rateRow').style.visibility='hidden';
+  updateTally();
+}
+
+function updateTally(){
+  var t = document.getElementById('tally');
+  if(goodCount+badCount===0){ t.textContent=''; return; }
+  t.innerHTML = '<b class="good">'+goodCount+'</b> got it &middot; <b class="bad">'+badCount+'</b> still learning';
+}
+
+function nextCard(){ var idxs=currentIndices(); pos=(pos+1)%idxs.length; renderCard(); }
+function prevCard(){ var idxs=currentIndices(); pos=(pos-1+idxs.length)%idxs.length; renderCard(); }
+function shuffleDeck(){
+  for(var i=order.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=order[i]; order[i]=order[j]; order[j]=t; }
+  pos=0; goodCount=0; badCount=0; seenRated={}; renderCard();
+}
+
+document.getElementById('flashcard').addEventListener('click', function(){
+  flipped=!flipped;
+  this.classList.toggle('flipped', flipped);
+  document.getElementById('rateRow').style.visibility = flipped ? 'visible' : 'hidden';
+});
+document.getElementById('btnNext').addEventListener('click', function(e){ e.stopPropagation(); nextCard(); });
+document.getElementById('btnPrev').addEventListener('click', function(e){ e.stopPropagation(); prevCard(); });
+document.getElementById('btnShuffle').addEventListener('click', function(e){ e.stopPropagation(); shuffleDeck(); });
+document.getElementById('btnGood').addEventListener('click', function(e){
+  e.stopPropagation();
+  var idxs=currentIndices(); var key=idxs[pos];
+  if(seenRated[key]==='bad') badCount--; if(seenRated[key]!=='good'){ goodCount++; seenRated[key]='good'; }
+  updateTally(); nextCard();
+});
+document.getElementById('btnBad').addEventListener('click', function(e){
+  e.stopPropagation();
+  var idxs=currentIndices(); var key=idxs[pos];
+  if(seenRated[key]==='good') goodCount--; if(seenRated[key]!=='bad'){ badCount++; seenRated[key]='bad'; }
+  updateTally(); nextCard();
+});
+
+buildTabs();
+renderCard();
+</script>
+</body>
+</html>
