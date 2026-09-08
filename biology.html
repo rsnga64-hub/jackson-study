@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biology — Jackson's Study Site</title>
+<style>
+  :root {
+    --bg: #FBFAF7;
+    --ink: #1C2B4A;
+    --text: #2B3648;
+    --text-soft: #64707F;
+    --blue: #2E86AB;
+    --blue-soft: #E9F3F8;
+    --border: #E4E0D4;
+    --card-bg: #FFFFFF;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 48px 20px 80px; }
+  a { color: inherit; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--text-soft); text-decoration: none; font-size: 0.88rem; font-weight: 600; margin-bottom: 18px; }
+  .back-link:hover { color: var(--blue); }
+  h1 { color: var(--ink); font-size: 1.8rem; margin: 0 0 8px; }
+  p.sub { color: var(--text-soft); margin: 0 0 32px; }
+  .empty {
+    background: var(--card-bg);
+    border: 1px dashed var(--border);
+    border-radius: 14px;
+    padding: 32px 26px;
+    text-align: center;
+  }
+  .empty .icon { font-size: 1.8rem; margin-bottom: 10px; }
+  .empty h2 { margin: 0 0 6px; font-size: 1.05rem; color: var(--ink); }
+  .empty p { margin: 0; color: var(--text-soft); font-size: 0.92rem; max-width: 44ch; margin: 0 auto; }
+  .section-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--text-soft);
+    margin: 0 0 10px;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="back-link" href="index.html">&larr; All subjects</a>
+    <h1>Biology</h1>
+    <p class="sub">Study guides and practice pages, by unit.</p>
+
+    <p class="section-label">Coming soon</p>
+    <div class="empty">
+      <div class="icon">🧬</div>
+      <h2>No units published yet</h2>
+      <p>Biology units will show up here the same way Geometry's do — a study guide, flashcards, and a self-graded quiz per unit — once source materials for a unit are ready.</p>
+    </div>
+  </div>
+</body>
+</html>

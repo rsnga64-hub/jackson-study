@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 3 Quiz: Quadrilaterals</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FBFAF7;
+    --grid-line: rgba(28,43,74,0.055);
+    --ink: #1C2B4A;
+    --text: #2B3648;
+    --text-soft: #64707F;
+    --blue: #2E86AB;
+    --blue-soft: #E9F3F8;
+    --amber: #D98A2B;
+    --amber-soft: #FCF1DE;
+    --coral: #D65A5A;
+    --coral-soft: #FBEBEB;
+    --teal: #2C9C82;
+    --teal-soft: #E6F5F0;
+    --card-bg: #FFFFFF;
+    --border: #E4E0D4;
+    --gray: #94A0AD;
+    --gray-line: #CBD3DC;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; color: var(--ink); }
+  .wrap { max-width: 680px; margin: 0 auto; padding: 32px 20px 80px; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--text-soft); text-decoration: none; font-size: 0.88rem; font-weight: 600; margin-bottom: 18px; }
+  .back-link:hover { color: var(--blue); }
+
+  .hero { background: var(--ink); border-radius: 18px; padding: 26px 28px; color: #fff; margin-bottom: 22px; }
+  .hero h1 { color: #fff; font-size: 1.7rem; margin: 0 0 6px; }
+  .hero p { margin: 0; color: #C8D3E0; font-size: 0.96rem; max-width: 52ch; }
+
+  .statline { display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text-soft); margin-bottom: 8px; }
+  .statline b { color: var(--ink); }
+  .progress-track { height: 6px; background: var(--border); border-radius: 999px; overflow: hidden; margin-bottom: 20px; }
+  .progress-fill { height: 100%; background: var(--blue); border-radius: 999px; transition: width 0.25s ease; }
+
+  .qcard {
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px;
+    padding: 26px 28px; box-shadow: 0 4px 18px rgba(28,43,74,0.06);
+  }
+  .qkicker { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.72rem; letter-spacing: 0.03em; text-transform: uppercase; color: var(--blue); margin: 0 0 8px; }
+  .qtext { font-size: 1.15rem; font-weight: 700; color: var(--ink); line-height: 1.35; margin: 0 0 16px; }
+  .diagram-wrap { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 6px; margin-bottom: 18px; }
+  .diagram-wrap svg { display: block; width: 100%; height: auto; }
+
+  .opt {
+    display: flex; align-items: center; gap: 10px;
+    width: 100%; text-align: left; font-family: 'Inter', sans-serif; font-size: 0.98rem; font-weight: 600;
+    color: var(--ink); background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 12px;
+    padding: 12px 16px; margin-bottom: 10px; cursor: pointer; transition: all 0.15s ease;
+  }
+  .opt:hover:not(.locked) { border-color: var(--blue); background: var(--blue-soft); }
+  .opt .letter {
+    flex-shrink: 0; width: 24px; height: 24px; border-radius: 999px; border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 700; color: var(--text-soft);
+  }
+  .opt.correct { border-color: var(--teal); background: var(--teal-soft); }
+  .opt.correct .letter { background: var(--teal); border-color: var(--teal); color: #fff; }
+  .opt.incorrect { border-color: var(--coral); background: var(--coral-soft); }
+  .opt.incorrect .letter { background: var(--coral); border-color: var(--coral); color: #fff; }
+  .opt.locked { cursor: default; }
+  .opt.dim { opacity: 0.55; }
+
+  .explain {
+    display: none; margin-top: 14px; padding: 12px 14px; border-radius: 10px;
+    background: var(--blue-soft); color: var(--ink); font-size: 0.9rem; line-height: 1.45;
+  }
+  .explain.show { display: block; }
+  .explain b { color: var(--blue); }
+
+  .qcontrols { display: flex; justify-content: flex-end; margin-top: 18px; }
+  .btn {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.92rem;
+    border: 1px solid var(--ink); background: var(--ink); color: #fff;
+    border-radius: 10px; padding: 11px 20px; cursor: pointer; transition: opacity 0.15s ease;
+  }
+  .btn:hover { opacity: 0.88; }
+  .btn:disabled { opacity: 0.35; cursor: default; }
+  .btn.ghost { background: var(--card-bg); color: var(--ink); }
+
+  /* results screen */
+  .results { text-align: center; }
+  .score-big { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 3rem; color: var(--ink); margin: 6px 0; }
+  .score-msg { font-size: 1rem; color: var(--text-soft); margin-bottom: 22px; }
+  .missed-list { text-align: left; margin: 20px 0; padding: 0; list-style: none; }
+  .missed-list li { padding: 10px 0; border-top: 1px solid var(--border); font-size: 0.88rem; color: var(--text-soft); }
+  .missed-list li b { color: var(--ink); display: block; margin-bottom: 2px; }
+
+  @media (max-width: 480px) {
+    .qtext { font-size: 1.03rem; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="geometry.html">&larr; Back to Geometry</a>
+  <div class="hero">
+    <h1>Unit 3 Quiz</h1>
+    <p>18 questions covering literal equations &amp; slope, quadrilateral properties, and parallelogram algebra.</p>
+  </div>
+
+  <div id="quizArea">
+    <div class="statline">
+      <span>Question <b id="qNum">1</b> of <b id="qTotal">18</b></span>
+      <span id="scoreLive">Score: 0</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+    <div class="qcard">
+      <p class="qkicker" id="qKicker"></p>
+      <p class="qtext" id="qText"></p>
+      <div class="diagram-wrap" id="diagramWrap" style="display:none;"></div>
+      <div id="optsWrap"></div>
+      <div class="explain" id="explain"></div>
+      <div class="qcontrols">
+        <button class="btn" id="btnNext" disabled>Next Question &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="resultsArea" style="display:none;">
+    <div class="qcard results">
+      <p class="qkicker">Quiz complete</p>
+      <div class="score-big" id="finalScore">0 / 18</div>
+      <p class="score-msg" id="finalMsg"></p>
+      <ul class="missed-list" id="missedList"></ul>
+      <button class="btn" id="btnRetake">Retake Quiz</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---- shared diagram helpers ---- */
+function svg(inner, vb, h) { return '<svg viewBox="'+vb+'" width="100%" height="'+(h||180)+'" xmlns="http://www.w3.org/2000/svg">'+inner+'</svg>'; }
+function lineEl(x1,y1,x2,y2,color,w,dash){ return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round"'+(dash?' stroke-dasharray="5 4"':'')+'/>'; }
+function txt(x,y,s,color,size,weight,anchor){ return '<text x="'+x+'" y="'+y+'" fill="'+(color||'var(--ink)')+'" font-family="Space Grotesk, sans-serif" font-size="'+(size||13)+'" font-weight="'+(weight||700)+'" text-anchor="'+(anchor||'middle')+'">'+s+'</text>'; }
+function poly(pts,color,w){ return '<polygon points="'+pts+'" fill="none" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linejoin="round"/>'; }
+function tick(mx,my,dx,dy,color,double_){
+  var len=Math.sqrt(dx*dx+dy*dy); var ux=dx/len, uy=dy/len; var px=-uy, py=ux;
+  function mark(cx,cy){
+    return '<line x1="'+(cx-px*7)+'" y1="'+(cy-py*7)+'" x2="'+(cx+px*7)+'" y2="'+(cy+py*7)+'" stroke="'+color+'" stroke-width="2.4" stroke-linecap="round"/>';
+  }
+  if(double_) return mark(mx-ux*4,my-uy*4) + mark(mx+ux*4,my+uy*4);
+  return mark(mx,my);
+}
+function rightAngle(x,y,dx1,dy1,dx2,dy2,color,size){
+  size = size||11;
+  var p1x=x+dx1*size, p1y=y+dy1*size;
+  var p2x=x+dx2*size, p2y=y+dy2*size;
+  var p3x=p1x+dx2*size, p3y=p1y+dy2*size;
+  return '<polyline points="'+p1x+','+p1y+' '+p3x+','+p3y+' '+p2x+','+p2y+'" fill="none" stroke="'+color+'" stroke-width="2"/>';
+}
+function diagRhombus(){
+  var color='var(--teal)';
+  var A=[150,30], B=[250,110], C=[150,190], D=[50,110];
+  var inner = poly(A+' '+B+' '+C+' '+D,'var(--ink)')
+    + tick(200,70,100,80,color,false) + tick(200,150,100,80,color,false)
+    + tick(100,150,100,-80,color,false) + tick(100,70,100,-80,color,false);
+  return svg(inner,'0 0 300 220',175);
+}
+function diagKite(){
+  var colorTop='var(--violet, #7C5CBF)', colorBot='var(--blue)';
+  var T=[150,30], R=[220,110], Bm=[150,190], L=[80,110];
+  var inner = poly(T+' '+R+' '+Bm+' '+L,'var(--ink)')
+    + tick(185,70,70,80,colorTop,false) + tick(115,70,-70,80,colorTop,false)
+    + tick(185,150,70,-80,colorBot,true) + tick(115,150,-70,-80,colorBot,true);
+  return svg(inner,'0 0 300 220',175);
+}
+function diagIsoTrapezoid(){
+  var color='var(--teal)'; var legColor='var(--coral)';
+  var A=[50,170], B=[250,170], C=[190,70], D=[110,70];
+  var inner = poly(A+' '+B+' '+C+' '+D,'var(--ink)')
+    + tick(80,120,60,-100,legColor,false) + tick(220,120,-60,-100,legColor,false);
+  return svg(inner,'0 0 300 200',170);
+}
+
+/* ---- question bank ---- */
+var Q = [
+  {kicker:'3.1 Literal Equations', text:'Solve y = mx + b for m.', opts:[
+    'm = (y − b) / x','m = (y + b) / x','m = (x − b) / y','m = y − b − x'
+  ], correct:0, explain:'Subtract b from both sides, then divide by x: m = (y − b) / x.'},
+
+  {kicker:'3.1 Parallel Slopes', text:'A line is parallel to y = 2x + 5 and has a y-intercept of 9. If y = 21, what is x?', opts:[
+    '6','7','8','9'
+  ], correct:0, explain:'Parallel → same slope, so m = 2, b = 9: 21 = 2x + 9 → 12 = 2x → x = 6.'},
+
+  {kicker:'3.1 Perpendicular Slopes', text:'A line has a y-intercept of 10 and passes through (3, 25). What is the slope of a line perpendicular to it?', opts:[
+    '−1/5','5','1/5','−5'
+  ], correct:0, explain:'First find the line\'s own slope: 25 = m(3) + 10 → 15 = 3m → m = 5. Perpendicular slope = −1/5.'},
+
+  {kicker:'3.1 Slope Relationships', text:'Two lines have slopes 4/5 and −5/4. These lines are:', opts:[
+    'Parallel','Perpendicular','The same line','Neither parallel nor perpendicular'
+  ], correct:1, explain:'4/5 and −5/4 are negative reciprocals of each other, so the lines are perpendicular.'},
+
+  {kicker:'3.1 Slope Relationships', text:'A line has slope −3/7. What is the slope of any line perpendicular to it?', opts:[
+    '7/3','−7/3','3/7','−3/7'
+  ], correct:0, explain:'Flip the fraction and switch the sign: −3/7 → 7/3.'},
+
+  {kicker:'3.2 Quadrilateral ID', text:'Which quadrilateral has exactly one pair of parallel sides?', opts:[
+    'Parallelogram','Trapezoid','Rhombus','Kite'
+  ], correct:1, explain:'A trapezoid is defined by having exactly one pair of parallel sides (the bases).'},
+
+  {kicker:'3.2 Diagram', text:'All four sides of this quadrilateral are marked congruent, and no right angles are marked. What is the most specific name?', diagram:'rhombus', opts:[
+    'Square','Rectangle','Rhombus','Kite'
+  ], correct:2, explain:'4 congruent sides with no right angles marked is a rhombus — it would only be a square if right angles were marked too.'},
+
+  {kicker:'3.2 Diagram', text:'This shape has two pairs of CONSECUTIVE congruent sides (marked with matching tick marks next to each other). What is it?', diagram:'kite', opts:[
+    'Parallelogram','Kite','Rhombus','Isosceles Trapezoid'
+  ], correct:1, explain:'Consecutive (not opposite) congruent side pairs is the defining feature of a kite.'},
+
+  {kicker:'3.2 True/False', text:'True or false: a rhombus is always a square.', opts:[
+    'True','False'
+  ], correct:1, explain:'False — a rhombus only guarantees 4 congruent sides. It needs 4 right angles too before it can be called a square.'},
+
+  {kicker:'3.2 Properties', text:'The diagonals of a rectangle are always:', opts:[
+    'Perpendicular','Congruent','Equal in length to the sides','Bisecting the angles'
+  ], correct:1, explain:'A rectangle\'s diagonals are congruent — perpendicular diagonals show up in rhombi, squares, and kites instead.'},
+
+  {kicker:'3.2 Family Tree', text:'Which shape is NOT part of the parallelogram family?', opts:[
+    'Rectangle','Rhombus','Square','Kite'
+  ], correct:3, explain:'A kite branches off the quadrilateral family on its own — it does not inherit parallelogram properties.'},
+
+  {kicker:'3.2 Diagram', text:'This trapezoid\'s legs are marked congruent. What extra properties come with that?', diagram:'isoTrapezoid', opts:[
+    'Congruent base angles and congruent diagonals','Perpendicular diagonals','4 right angles','Opposite sides parallel and congruent'
+  ], correct:0, explain:'Congruent legs make it an isosceles trapezoid, which also guarantees congruent base angles and congruent diagonals.'},
+
+  {kicker:'3.2 Properties', text:'A square must have:', opts:[
+    '4 congruent sides only','4 right angles only','Both 4 right angles and 4 congruent sides','Neither — just 4 sides'
+  ], correct:2, explain:'A square needs both properties at once — a rhombus alone or a rectangle alone isn\'t enough.'},
+
+  {kicker:'3.2 Algebra · Opposite Sides', text:'PQRS is a parallelogram. QR = 5x + 2 and PS = 3x + 14 (opposite sides). What is x?', opts:[
+    '6','5','7','8'
+  ], correct:0, explain:'Opposite Sides Theorem: 5x + 2 = 3x + 14 → 2x = 12 → x = 6.'},
+
+  {kicker:'3.2 Algebra · Consecutive Angles', text:'In parallelogram ABCD, consecutive angles A and B measure (4x + 6)° and (2x + 24)°. What is x?', opts:[
+    '25','20','30','15'
+  ], correct:0, explain:'Consecutive angles are supplementary: (4x+6) + (2x+24) = 180 → 6x + 30 = 180 → x = 25.'},
+
+  {kicker:'3.2 Algebra · Opposite Angles', text:'In parallelogram WXYZ, opposite angles W and Y measure (6x)° and (4x + 18)°. What is x?', opts:[
+    '9','8','10','12'
+  ], correct:0, explain:'Opposite angles are congruent: 6x = 4x + 18 → 2x = 18 → x = 9.'},
+
+  {kicker:'3.2 Algebra · Diagonals Bisect', text:'The diagonals of parallelogram JKLM cross, splitting one diagonal into pieces (4x − 1) and (2x + 7). What is x?', opts:[
+    '4','3','5','6'
+  ], correct:0, explain:'Diagonals Bisect Theorem: the two pieces are equal. 4x − 1 = 2x + 7 → 2x = 8 → x = 4.'},
+
+  {kicker:'3.2 Algebra · For what value of x…', text:'For what value of x will quadrilateral MNPQ be a parallelogram, if one diagonal splits into pieces 5x and (3x + 6)?', opts:[
+    '3','4','2','6'
+  ], correct:0, explain:'For the diagonals to bisect each other (making it a parallelogram), the pieces must be equal: 5x = 3x + 6 → 2x = 6 → x = 3.'}
+];
+
+var idx = 0, score = 0, answered = false, missed = [];
+
+function diagramFor(key){
+  if(key==='rhombus') return diagRhombus();
+  if(key==='kite') return diagKite();
+  if(key==='isoTrapezoid') return diagIsoTrapezoid();
+  return '';
+}
+
+function render(){
+  var q = Q[idx];
+  document.getElementById('qNum').textContent = idx+1;
+  document.getElementById('qTotal').textContent = Q.length;
+  document.getElementById('scoreLive').textContent = 'Score: '+score;
+  document.getElementById('progressFill').style.width = Math.round((idx/Q.length)*100)+'%';
+  document.getElementById('qKicker').textContent = q.kicker;
+  document.getElementById('qText').textContent = q.text;
+
+  var dWrap = document.getElementById('diagramWrap');
+  if(q.diagram){ dWrap.style.display='block'; dWrap.innerHTML = diagramFor(q.diagram); }
+  else { dWrap.style.display='none'; dWrap.innerHTML=''; }
+
+  var optsWrap = document.getElementById('optsWrap');
+  optsWrap.innerHTML='';
+  var letters=['A','B','C','D'];
+  q.opts.forEach(function(optText, i){
+    var b = document.createElement('button');
+    b.className='opt';
+    b.innerHTML = '<span class="letter">'+letters[i]+'</span><span>'+optText+'</span>';
+    b.addEventListener('click', function(){ selectAnswer(i); });
+    optsWrap.appendChild(b);
+  });
+
+  document.getElementById('explain').classList.remove('show');
+  document.getElementById('explain').textContent='';
+  document.getElementById('btnNext').disabled = true;
+  answered = false;
+}
+
+function selectAnswer(i){
+  if(answered) return;
+  answered = true;
+  var q = Q[idx];
+  var opts = document.querySelectorAll('.opt');
+  opts.forEach(function(el,i2){
+    el.classList.add('locked');
+    if(i2===q.correct) el.classList.add('correct');
+    else if(i2===i) el.classList.add('incorrect');
+    else el.classList.add('dim');
+  });
+  if(i===q.correct){ score++; }
+  else { missed.push(q); }
+  document.getElementById('scoreLive').textContent = 'Score: '+score;
+  var ex = document.getElementById('explain');
+  ex.innerHTML = '<b>'+(i===q.correct?'Correct. ':'Not quite. ')+'</b>'+q.explain;
+  ex.classList.add('show');
+  document.getElementById('btnNext').disabled = false;
+}
+
+function nextQuestion(){
+  if(idx < Q.length-1){ idx++; render(); }
+  else { showResults(); }
+}
+
+function showResults(){
+  document.getElementById('quizArea').style.display='none';
+  document.getElementById('resultsArea').style.display='block';
+  document.getElementById('finalScore').textContent = score+' / '+Q.length;
+  var pct = Math.round((score/Q.length)*100);
+  var msg;
+  if(pct===100) msg = 'Perfect score — Unit 3 (so far) is locked in.';
+  else if(pct>=80) msg = 'Strong work. Review the missed ones below and you\'ve got this unit.';
+  else if(pct>=60) msg = 'Good start — a few gaps to close. Check the missed questions below.';
+  else msg = 'Worth another pass through the flashcards before the next round.';
+  document.getElementById('finalMsg').textContent = msg+' ('+pct+'%)';
+
+  var list = document.getElementById('missedList');
+  list.innerHTML='';
+  if(missed.length===0){
+    var li=document.createElement('li'); li.textContent='No missed questions — nice.'; list.appendChild(li);
+  } else {
+    missed.forEach(function(q){
+      var li=document.createElement('li');
+      li.innerHTML = '<b>'+q.text+'</b>Correct answer: '+q.opts[q.correct];
+      list.appendChild(li);
+    });
+  }
+}
+
+document.getElementById('btnNext').addEventListener('click', nextQuestion);
+document.getElementById('btnRetake').addEventListener('click', function(){
+  idx=0; score=0; missed=[]; answered=false;
+  document.getElementById('resultsArea').style.display='none';
+  document.getElementById('quizArea').style.display='block';
+  render();
+});
+
+render();
+</script>
+</body>
+</html>
