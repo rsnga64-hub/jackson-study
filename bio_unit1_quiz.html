@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biology Unit 1 Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FBFAF7;
+    --grid-line: rgba(28,43,74,0.055);
+    --ink: #1C2B4A;
+    --text: #2B3648;
+    --text-soft: #64707F;
+    --blue: #2E86AB;
+    --blue-soft: #E9F3F8;
+    --amber: #D98A2B;
+    --amber-soft: #FCF1DE;
+    --coral: #D65A5A;
+    --coral-soft: #FBEBEB;
+    --teal: #2C9C82;
+    --teal-soft: #E6F5F0;
+    --violet: #7C5CBF;
+    --violet-soft: #EFE9F8;
+    --card-bg: #FFFFFF;
+    --border: #E4E0D4;
+    --gray: #94A0AD;
+    --gray-line: #CBD3DC;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; color: var(--ink); }
+  .wrap { max-width: 680px; margin: 0 auto; padding: 32px 20px 80px; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--text-soft); text-decoration: none; font-size: 0.88rem; font-weight: 600; margin-bottom: 18px; }
+  .back-link:hover { color: var(--blue); }
+
+  .hero { background: var(--ink); border-radius: 18px; padding: 26px 28px; color: #fff; margin-bottom: 22px; }
+  .hero h1 { color: #fff; font-size: 1.7rem; margin: 0 0 6px; }
+  .hero p { margin: 0; color: #C8D3E0; font-size: 0.96rem; max-width: 52ch; }
+
+  .statline { display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text-soft); margin-bottom: 8px; }
+  .statline b { color: var(--ink); }
+  .progress-track { height: 6px; background: var(--border); border-radius: 999px; overflow: hidden; margin-bottom: 20px; }
+  .progress-fill { height: 100%; background: var(--blue); border-radius: 999px; transition: width 0.25s ease; }
+
+  .qcard {
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px;
+    padding: 26px 28px; box-shadow: 0 4px 18px rgba(28,43,74,0.06);
+  }
+  .qkicker { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.72rem; letter-spacing: 0.03em; text-transform: uppercase; color: var(--blue); margin: 0 0 8px; }
+  .qtext { font-size: 1.15rem; font-weight: 700; color: var(--ink); line-height: 1.35; margin: 0 0 16px; }
+  .diagram-wrap { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 6px; margin-bottom: 18px; max-width: 360px; }
+  .diagram-wrap svg { display: block; width: 100%; height: auto; }
+
+  .opt {
+    display: flex; align-items: center; gap: 10px;
+    width: 100%; text-align: left; font-family: 'Inter', sans-serif; font-size: 0.98rem; font-weight: 600;
+    color: var(--ink); background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 12px;
+    padding: 12px 16px; margin-bottom: 10px; cursor: pointer; transition: all 0.15s ease;
+  }
+  .opt:hover:not(.locked) { border-color: var(--blue); background: var(--blue-soft); }
+  .opt .letter {
+    flex-shrink: 0; width: 24px; height: 24px; border-radius: 999px; border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 700; color: var(--text-soft);
+  }
+  .opt.correct { border-color: var(--teal); background: var(--teal-soft); }
+  .opt.correct .letter { background: var(--teal); border-color: var(--teal); color: #fff; }
+  .opt.incorrect { border-color: var(--coral); background: var(--coral-soft); }
+  .opt.incorrect .letter { background: var(--coral); border-color: var(--coral); color: #fff; }
+  .opt.locked { cursor: default; }
+  .opt.dim { opacity: 0.55; }
+
+  .explain {
+    display: none; margin-top: 14px; padding: 12px 14px; border-radius: 10px;
+    background: var(--blue-soft); color: var(--ink); font-size: 0.9rem; line-height: 1.45;
+  }
+  .explain.show { display: block; }
+  .explain b { color: var(--blue); }
+
+  .qcontrols { display: flex; justify-content: flex-end; margin-top: 18px; }
+  .btn {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.92rem;
+    border: 1px solid var(--ink); background: var(--ink); color: #fff;
+    border-radius: 10px; padding: 11px 20px; cursor: pointer; transition: opacity 0.15s ease;
+  }
+  .btn:hover { opacity: 0.88; }
+  .btn:disabled { opacity: 0.35; cursor: default; }
+  .btn.ghost { background: var(--card-bg); color: var(--ink); }
+
+  /* results screen */
+  .results { text-align: center; }
+  .score-big { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 3rem; color: var(--ink); margin: 6px 0; }
+  .score-msg { font-size: 1rem; color: var(--text-soft); margin-bottom: 22px; }
+  .missed-list { text-align: left; margin: 20px 0; padding: 0; list-style: none; }
+  .missed-list li { padding: 10px 0; border-top: 1px solid var(--border); font-size: 0.88rem; color: var(--text-soft); }
+  .missed-list li b { color: var(--ink); display: block; margin-bottom: 2px; }
+
+  @media (max-width: 480px) {
+    .qtext { font-size: 1.03rem; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="biology.html">&larr; Back to Biology</a>
+  <div class="hero">
+    <h1>Unit 1 Quiz</h1>
+    <p>21 questions covering bonding &amp; water, the water properties lab, macromolecules, and enzymes.</p>
+  </div>
+
+  <div id="quizArea">
+    <div class="statline">
+      <span>Question <b id="qNum">1</b> of <b id="qTotal">20</b></span>
+      <span id="scoreLive">Score: 0</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+    <div class="qcard">
+      <p class="qkicker" id="qKicker"></p>
+      <p class="qtext" id="qText"></p>
+      <div class="diagram-wrap" id="diagramWrap" style="display:none;"></div>
+      <div id="optsWrap"></div>
+      <div class="explain" id="explain"></div>
+      <div class="qcontrols">
+        <button class="btn" id="btnNext" disabled>Next Question &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="resultsArea" style="display:none;">
+    <div class="qcard results">
+      <p class="qkicker">Quiz complete</p>
+      <div class="score-big" id="finalScore">0 / 20</div>
+      <p class="score-msg" id="finalMsg"></p>
+      <ul class="missed-list" id="missedList"></ul>
+      <button class="btn" id="btnRetake">Retake Quiz</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---- shared diagram helpers ---- */
+function svg(inner, vb, h) { return '<svg viewBox="'+vb+'" width="100%" height="'+(h||180)+'" xmlns="http://www.w3.org/2000/svg">'+inner+'</svg>'; }
+function lineEl(x1,y1,x2,y2,color,w,dash){ return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round"'+(dash?' stroke-dasharray="5 4"':'')+'/>'; }
+function circleEl(cx,cy,r,fill,stroke,sw){ return '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(sw==null?2:sw)+'"/>'; }
+function txt(x,y,s,color,size,weight,anchor){ return '<text x="'+x+'" y="'+y+'" fill="'+(color||'var(--ink)')+'" font-family="Space Grotesk, sans-serif" font-size="'+(size||13)+'" font-weight="'+(weight||700)+'" text-anchor="'+(anchor||'middle')+'">'+s+'</text>'; }
+function poly(pts,color,w,fill){ return '<polygon points="'+pts+'" fill="'+(fill||'none')+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linejoin="round"/>'; }
+function pathEl(d,color,w,fill,dash){ return '<path d="'+d+'" fill="'+(fill||'none')+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'"'+(dash?' stroke-dasharray="5 4"':'')+' stroke-linecap="round" stroke-linejoin="round"/>'; }
+
+function diagHydrogenBonds(){
+  function mol(ox,oy){
+    var H1=[ox-32,oy+38], H2=[ox+32,oy+38];
+    var frag = lineEl(ox,oy,H1[0],H1[1],'var(--ink)',2.2)+lineEl(ox,oy,H2[0],H2[1],'var(--ink)',2.2)
+      + circleEl(ox,oy,14,'var(--blue-soft)','var(--blue)',1.8)
+      + circleEl(H1[0],H1[1],8,'#fff','var(--ink)',1.4)
+      + circleEl(H2[0],H2[1],8,'#fff','var(--ink)',1.4)
+      + txt(ox,oy+4,'O','var(--blue)',9,700)
+      + txt(H1[0],H1[1]+3.5,'H','var(--ink)',7,700)
+      + txt(H2[0],H2[1]+3.5,'H','var(--ink)',7,700);
+    return {frag:frag, O:[ox,oy], H1:H1, H2:H2};
+  }
+  var m1=mol(55,75), m2=mol(170,125);
+  var inner = m1.frag+m2.frag
+    + lineEl(m1.H2[0],m1.H2[1],m2.O[0],m2.O[1],'var(--coral)',2,true)
+    + txt(112,190,'Dashed line between molecules','var(--coral)',10.5,600);
+  return svg(inner,'0 0 230 210',175);
+}
+function diagHydrationSphere(){
+  var cx=150, cy=110;
+  var inner = '';
+  var n=6;
+  for(var i=0;i<n;i++){
+    var ang = (Math.PI*2/n)*i - Math.PI/2;
+    var wx = cx+Math.cos(ang)*68, wy=cy+Math.sin(ang)*68;
+    inner += circleEl(wx,wy,13,'var(--blue-soft)','var(--blue)',1.6) + txt(wx,wy+4,'H₂O','var(--blue)',7.5,700);
+  }
+  inner += circleEl(cx,cy,30,'var(--amber-soft)','var(--amber)',2.5) + txt(cx,cy+5,'Na+','var(--amber)',14,700);
+  return svg(inner,'0 0 300 190',160);
+}
+function diagPhospholipid(){
+  var head = circleEl(150,42,25,'var(--amber-soft)','var(--amber)',2.5)+txt(150,47,'Head','var(--amber)',10.5,700);
+  var tail1 = pathEl('M132,66 C120,86 142,100 128,118 C114,134 134,150 122,166','var(--ink)',2.5);
+  var tail2 = pathEl('M168,66 C180,86 158,100 172,118 C186,134 166,150 178,166','var(--ink)',2.5);
+  var inner = tail1+tail2+head
+    + txt(150,183,'Head: hydrophilic','var(--amber)',10.5,600)
+    + txt(150,198,'Tails: hydrophobic','var(--text-soft)',10.5,600);
+  return svg(inner,'0 0 300 210',175);
+}
+function diagDehydrationHydrolysis(){
+  var hexA = poly('40,110 60,75 100,75 120,110 100,145 60,145','var(--teal)');
+  var hexB = poly('180,110 200,75 240,75 260,110 240,145 200,145','var(--teal)');
+  var bond = lineEl(120,110,180,110,'var(--ink)',3);
+  var water = circleEl(150,72,11,'var(--blue-soft)','var(--blue)',1.8)+txt(150,75,'H₂O','var(--blue)',8,700);
+  var inner = hexA+hexB+bond+water
+    + txt(80,128,'Monomer','var(--text-soft)',9.5,600)
+    + txt(220,128,'Monomer','var(--text-soft)',9.5,600);
+  return svg(inner,'0 0 300 155',140);
+}
+function diagActivationEnergy(){
+  var base = lineEl(20,170,280,170,'var(--gray-line)',1.5);
+  var uncat = pathEl('M40,150 C90,150 110,25 150,25 C190,25 210,150 260,150','var(--coral)',3);
+  var cat = pathEl('M40,150 C80,150 100,85 150,85 C200,85 220,150 260,150','var(--blue)',3);
+  var inner = base+uncat+cat
+    + txt(40,190,'Reactants','var(--text-soft)',10.5,600,'start')
+    + txt(260,190,'Products','var(--text-soft)',10.5,600,'end')
+    + txt(150,18,'Uncatalyzed','var(--coral)',10.5,700)
+    + txt(150,80,'Catalyzed (enzyme)','var(--blue)',10.5,700);
+  return svg(inner,'0 0 300 205',170);
+}
+function diagLockKey(){
+  var enzyme = pathEl('M150,100 L107,75 A50,50 0 1 1 107,125 Z','var(--violet)',2.5,'var(--violet-soft)');
+  var substrate = poly('50,90 70,80 88,100 70,120 50,110','var(--teal)',2.5,'var(--teal-soft)');
+  var inner = enzyme+substrate
+    + txt(70,140,'Substrate','var(--teal)',10,700)
+    + txt(150,168,'Enzyme — notch is the active site','var(--violet)',10,700);
+  return svg(inner,'0 0 300 180',150);
+}
+function diagDenaturation(){
+  var enzymeOK = pathEl('M65,100 L28,78 A42,42 0 1 1 28,122 Z','var(--teal)',2.5,'var(--teal-soft)');
+  var subOK = poly('5,90 20,82 32,100 20,118 5,110','var(--blue)',2,'var(--blue-soft)');
+  var blob = pathEl('M225,55 C202,53 192,74 202,89 C188,103 197,127 216,130 C226,146 252,140 254,121 C271,111 263,86 246,80 C249,64 240,55 225,55 Z','var(--coral)',2.5,'var(--coral-soft)');
+  var subBad = poly('278,58 292,50 304,66 292,82 278,74','var(--blue)',2,'var(--blue-soft)');
+  var arrow = lineEl(108,100,168,100,'var(--ink)',2.2)+poly('162,93 162,107 174,100','none','1','var(--ink)');
+  var inner = enzymeOK+subOK+blob+subBad+arrow
+    + txt(18,145,'Normal','var(--teal)',10,700,'start')
+    + txt(240,168,'Denatured','var(--coral)',10,700);
+  return svg(inner,'0 0 320 185',155);
+}
+
+/* ---- question bank ---- */
+var Q = [
+  {kicker:'1.1 Bonding', text:'What is formed when one or more electrons are transferred from one atom to another?', opts:[
+    'Ionic bond','Covalent bond','Hydrogen bond','Polar bond'
+  ], correct:0, explain:'An ionic bond forms when electrons are transferred from one atom to another, creating ions (cations/anions) — like Na⁺ and Cl⁻.'},
+
+  {kicker:'1.1 Bonding', text:'What is a covalent bond?', opts:[
+    'Electrons are shared between atoms','Electrons are transferred between atoms','Two ions attract each other','Two nuclei fuse together'
+  ], correct:0, explain:'A covalent bond is the sharing of electrons — the electrons move about the nuclei of both atoms, like the O–H bonds in water.'},
+
+  {kicker:'1.1 Hydrogen Bonds', text:'True or false: a hydrogen bond forms between the hydrogen and oxygen atoms WITHIN a single water molecule.', diagram:'hbonds', opts:[
+    'True','False'
+  ], correct:1, explain:'False — a hydrogen bond is INTERmolecular, forming between a slightly positive H on one water molecule and a slightly negative O on a neighboring molecule. The bonds within one molecule are covalent.'},
+
+  {kicker:'1.1 Water Polarity', text:'Why is water considered a polar molecule?', opts:[
+    'Oxygen\'s larger nucleus pulls the shared electrons closer, creating uneven charge','Water has no charge at all','Hydrogen pulls electrons away from oxygen','Water molecules never touch each other'
+  ], correct:0, explain:'Oxygen has more protons than hydrogen, so it pulls the shared electrons closer — creating a slightly negative oxygen side (δ−) and slightly positive hydrogen side (δ+).'},
+
+  {kicker:'1.1 Cohesion/Adhesion', text:'Water molecules "sticking" to each other (not to another substance) is called:', opts:[
+    'Adhesion','Cohesion','Capillary action','Surfactant action'
+  ], correct:1, explain:'Cohesion is attraction between molecules of the SAME substance. Adhesion is attraction between molecules of DIFFERENT substances.'},
+
+  {kicker:'1.1 Hydration Sphere', text:'This diagram shows water molecules surrounding a dissolved ion. What is this structure called?', diagram:'hydration', opts:[
+    'Hydration sphere','Covalent shell','Polymer chain','Meniscus'
+  ], correct:0, explain:'Water molecules orient around each ion when it dissolves — the negative (oxygen) side faces a positive ion, the positive (hydrogen) side faces a negative ion — forming a hydration sphere.'},
+
+  {kicker:'1.3 Water Lab', text:'The ability of water to move along a surface, like up a strip of paper, is called:', opts:[
+    'Capillary action','Surface tension','Osmosis','Suspension'
+  ], correct:0, explain:'Capillary action is water\'s ability to move along a surface, powered by adhesion — the same force that helps water travel up a plant from its roots.'},
+
+  {kicker:'1.3 Water Lab', text:'When reading a graduated cylinder, you should read the number at the bottom of the:', opts:[
+    'Solute','Meniscus','Solvent','Suspension'
+  ], correct:1, explain:'The meniscus is the dip in the water\'s surface caused by adhesion to the container walls — always read at the bottom of it.'},
+
+  {kicker:'1.3 Water Lab', text:'In order to clean a surface using a surfactant like dish detergent, surface tension must be:', opts:[
+    'Increased','Reduced','Frozen','Evaporated'
+  ], correct:1, explain:'Surfactants reduce surface tension, making water "wetter" so it can spread and lift dirt away more effectively.'},
+
+  {kicker:'1.3 Water Lab', text:'Breaking the word down into its roots, what does "hydrophobic" mean?', opts:[
+    'Water-fearing (does not dissolve in water)','Water-loving (dissolves in water)','Water-producing','Water-freezing'
+  ], correct:0, explain:'"Hydro" = water, "phobic" = fearing. Hydrophobic (nonpolar) substances do not dissolve in water — like oil.'},
+
+  {kicker:'1.4 Macromolecules', text:'Carbon is able to form so many different structures in living things mainly because:', opts:[
+    'It has 4 valence electrons and can bond with many elements, including other carbon atoms','It is the rarest element in living things','It cannot bond with hydrogen','It only forms ionic bonds'
+  ], correct:0, explain:'Carbon\'s 4 valence electrons let it form stable bonds with H, O, P, S, N, and other carbon atoms — building chains, branches, and rings.'},
+
+  {kicker:'1.4 Monomers/Polymers', text:'Adding water to break a polymer down into its monomers is called:', diagram:'dehydhydro', opts:[
+    'Hydrolysis','Dehydration synthesis','Polymerization','Denaturation'
+  ], correct:0, explain:'Hydrolysis adds water to break bonds apart (this is how digestion works). Dehydration synthesis is the reverse — removing water to bond monomers together.'},
+
+  {kicker:'1.4 Macromolecules', text:'What is the monomer of nucleic acids?', opts:[
+    'Nucleotide','Amino acid','Monosaccharide','Fatty acid'
+  ], correct:0, explain:'A nucleotide (5-carbon sugar + phosphate group + nitrogenous base) is the monomer of nucleic acids like DNA and RNA.'},
+
+  {kicker:'1.4 Macromolecules', text:'A macromolecule whose monomer is the amino acid, forming polypeptides, is a:', opts:[
+    'Protein','Carbohydrate','Lipid','Nucleic Acid'
+  ], correct:0, explain:'Proteins are built from amino acid monomers, chained together into polypeptides.'},
+
+  {kicker:'1.4 Phospholipid', text:'In a phospholipid, which part is hydrophilic (attracts water)?', diagram:'phospholipid', opts:[
+    'The head','The tails','Both the head and tails','Neither'
+  ], correct:0, explain:'The phospholipid head is hydrophilic; the two tails are hydrophobic — this is what lets phospholipids form cell membranes.'},
+
+  {kicker:'1.6 Task Cards', text:'Which type of macromolecule consists of all hydrophobic molecules?', opts:[
+    'Lipids','Carbohydrates','Proteins','Nucleic Acids'
+  ], correct:0, explain:'Lipids are hydrophobic and used for long-term energy storage — consistent with how lipids are taught throughout this unit.'},
+
+  {kicker:'1.6 Task Cards', text:'Which macromolecule functions as an immediate (quick) energy source?', opts:[
+    'Carbohydrates','Lipids','Proteins','Nucleic Acids'
+  ], correct:0, explain:'Carbohydrates are the body\'s quick/immediate energy source, while lipids are for long-term energy storage.'},
+
+  {kicker:'1.8 Enzymes', text:'What effect does an enzyme have on activation energy?', diagram:'actenergy', opts:[
+    'It lowers the activation energy needed','It raises the activation energy needed','It has no effect on activation energy','It removes the need for any reactants'
+  ], correct:0, explain:'Enzymes are catalysts — they lower the activation energy required, which speeds up the reaction, without being consumed themselves.'},
+
+  {kicker:'1.8 Enzymes', text:'In an enzyme reaction, the substance the enzyme works on (and binds at the active site) is called the:', diagram:'lockkey', opts:[
+    'Substrate','Catalyst','Product','Allosteric site'
+  ], correct:0, explain:'The substrate binds to the enzyme at its active site — like a key fitting a specific lock. Example: lactase (enzyme) + lactose (substrate).'},
+
+  {kicker:'1.10 Enzyme Data', text:'Using the lactase data table (temperature vs. glucose produced), which temperature was ideal for this enzyme?', opts:[
+    '98°F — it produced the most glucose','86°F — it produced no glucose','102°F — it is the highest temperature tested','92°F — it is in the middle of the range'
+  ], correct:0, explain:'98°F produced the most glucose (3000 mg/dL), the highest amount of product — meaning the enzyme worked most efficiently at that temperature.'},
+
+  {kicker:'1.10 Denaturation', text:'In the lactase data table, test tubes at 86°F and 88°F produced zero glucose. Per this class\'s materials, what is this enzyme condition called?', diagram:'denature', opts:[
+    'Denatured','Catalyzed','Hydrolyzed','Allosteric'
+  ], correct:0, explain:'This class\'s materials call zero enzyme activity at ANY off-range temperature — too hot OR too cold — "denatured." (Some biologists reserve that word for heat/pH damage specifically, but this is how your teacher\'s key frames it.)'}
+];
+
+var idx = 0, score = 0, answered = false, missed = [];
+
+function diagramFor(key){
+  if(key==='hbonds') return diagHydrogenBonds();
+  if(key==='hydration') return diagHydrationSphere();
+  if(key==='dehydhydro') return diagDehydrationHydrolysis();
+  if(key==='phospholipid') return diagPhospholipid();
+  if(key==='actenergy') return diagActivationEnergy();
+  if(key==='lockkey') return diagLockKey();
+  if(key==='denature') return diagDenaturation();
+  return '';
+}
+
+function render(){
+  var q = Q[idx];
+  document.getElementById('qNum').textContent = idx+1;
+  document.getElementById('qTotal').textContent = Q.length;
+  document.getElementById('scoreLive').textContent = 'Score: '+score;
+  document.getElementById('progressFill').style.width = Math.round((idx/Q.length)*100)+'%';
+  document.getElementById('qKicker').textContent = q.kicker;
+  document.getElementById('qText').textContent = q.text;
+
+  var dWrap = document.getElementById('diagramWrap');
+  if(q.diagram){ dWrap.style.display='block'; dWrap.innerHTML = diagramFor(q.diagram); }
+  else { dWrap.style.display='none'; dWrap.innerHTML=''; }
+
+  var optsWrap = document.getElementById('optsWrap');
+  optsWrap.innerHTML='';
+  var letters=['A','B','C','D'];
+  q.opts.forEach(function(optText, i){
+    var b = document.createElement('button');
+    b.className='opt';
+    b.innerHTML = '<span class="letter">'+letters[i]+'</span><span>'+optText+'</span>';
+    b.addEventListener('click', function(){ selectAnswer(i); });
+    optsWrap.appendChild(b);
+  });
+
+  document.getElementById('explain').classList.remove('show');
+  document.getElementById('explain').textContent='';
+  document.getElementById('btnNext').disabled = true;
+  answered = false;
+}
+
+function selectAnswer(i){
+  if(answered) return;
+  answered = true;
+  var q = Q[idx];
+  var opts = document.querySelectorAll('.opt');
+  opts.forEach(function(el,i2){
+    el.classList.add('locked');
+    if(i2===q.correct) el.classList.add('correct');
+    else if(i2===i) el.classList.add('incorrect');
+    else el.classList.add('dim');
+  });
+  if(i===q.correct){ score++; }
+  else { missed.push(q); }
+  document.getElementById('scoreLive').textContent = 'Score: '+score;
+  var ex = document.getElementById('explain');
+  ex.innerHTML = '<b>'+(i===q.correct?'Correct. ':'Not quite. ')+'</b>'+q.explain;
+  ex.classList.add('show');
+  document.getElementById('btnNext').disabled = false;
+}
+
+function nextQuestion(){
+  if(idx < Q.length-1){ idx++; render(); }
+  else { showResults(); }
+}
+
+function showResults(){
+  document.getElementById('quizArea').style.display='none';
+  document.getElementById('resultsArea').style.display='block';
+  document.getElementById('finalScore').textContent = score+' / '+Q.length;
+  var pct = Math.round((score/Q.length)*100);
+  var msg;
+  if(pct===100) msg = 'Perfect score — Unit 1 is locked in.';
+  else if(pct>=80) msg = 'Strong work. Review the missed ones below and you\'ve got this unit.';
+  else if(pct>=60) msg = 'Good start — a few gaps to close. Check the missed questions below.';
+  else msg = 'Worth another pass through the flashcards before the next round.';
+  document.getElementById('finalMsg').textContent = msg+' ('+pct+'%)';
+
+  var list = document.getElementById('missedList');
+  list.innerHTML='';
+  if(missed.length===0){
+    var li=document.createElement('li'); li.textContent='No missed questions — nice.'; list.appendChild(li);
+  } else {
+    missed.forEach(function(q){
+      var li=document.createElement('li');
+      li.innerHTML = '<b>'+q.text+'</b>Correct answer: '+q.opts[q.correct];
+      list.appendChild(li);
+    });
+  }
+}
+
+document.getElementById('btnNext').addEventListener('click', nextQuestion);
+document.getElementById('btnRetake').addEventListener('click', function(){
+  idx=0; score=0; missed=[]; answered=false;
+  document.getElementById('resultsArea').style.display='none';
+  document.getElementById('quizArea').style.display='block';
+  render();
+});
+
+render();
+</script>
+</body>
+</html>

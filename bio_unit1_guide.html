@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biology Unit 1 Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FBFAF7;
+    --grid-line: rgba(28,43,74,0.055);
+    --ink: #1C2B4A;
+    --text: #2B3648;
+    --text-soft: #64707F;
+    --blue: #2E86AB;
+    --blue-soft: #E9F3F8;
+    --amber: #D98A2B;
+    --amber-soft: #FCF1DE;
+    --coral: #D65A5A;
+    --coral-soft: #FBEBEB;
+    --teal: #2C9C82;
+    --teal-soft: #E6F5F0;
+    --violet: #7C5CBF;
+    --violet-soft: #EFE9F8;
+    --card-bg: #FFFFFF;
+    --border: #E4E0D4;
+    --gray: #94A0AD;
+    --gray-line: #CBD3DC;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  h1, h2, h3, .display {
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--ink);
+  }
+
+  a { color: inherit; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--text-soft); text-decoration: none; font-size: 0.88rem; font-weight: 600; margin-bottom: 18px; }
+  .back-link:hover { color: var(--blue); }
+
+  .wrap {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: var(--ink);
+    border-radius: 18px;
+    padding: 28px 30px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-text h1 {
+    color: #fff;
+    font-size: 1.9rem;
+    margin: 0 0 6px;
+    line-height: 1.15;
+  }
+  .hero-text p {
+    margin: 0;
+    color: #C8D3E0;
+    font-size: 0.98rem;
+    max-width: 48ch;
+  }
+  .hero svg { flex-shrink: 0; }
+
+  /* ---------- Tabs ---------- */
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 26px 0 20px;
+  }
+  .tab-btn {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.86rem;
+    border: 1.5px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text-soft);
+    padding: 9px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    transition: transform 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+  }
+  .tab-btn:hover { transform: translateY(-1px); }
+  .tab-btn.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: #fff;
+  }
+  .tab-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  /* ---------- Panels ---------- */
+  .panel { display: none; animation: fade .18s ease; }
+  .panel.active { display: block; }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+  .section-title {
+    font-size: 1.3rem;
+    margin: 0 0 4px;
+  }
+  .section-sub {
+    color: var(--text-soft);
+    font-size: 0.92rem;
+    margin: 0 0 18px;
+  }
+
+  /* ---------- Callout boxes ---------- */
+  .box {
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin: 14px 0;
+    border-left: 4px solid transparent;
+  }
+  .box h4 {
+    margin: 0 0 6px;
+    font-size: 0.98rem;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .box p, .box ul { margin: 0; font-size: 0.93rem; line-height: 1.55; }
+  .box ul { padding-left: 20px; }
+
+  .box.theorem { background: var(--blue-soft); border-color: var(--blue); }
+  .box.theorem h4 { color: var(--blue); }
+  .box.postulate { background: var(--teal-soft); border-color: var(--teal); }
+  .box.postulate h4 { color: var(--teal); }
+  .box.watch { background: var(--coral-soft); border-color: var(--coral); }
+  .box.watch h4 { color: var(--coral); }
+  .box.tip { background: var(--amber-soft); border-color: var(--amber); }
+  .box.tip h4 { color: var(--amber); }
+
+  /* ---------- Definition grid ---------- */
+  .def-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 10px;
+    margin: 14px 0;
+  }
+  .def-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .def-card .term {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--ink);
+    display: block;
+    margin-bottom: 3px;
+  }
+  .def-card .desc { font-size: 0.85rem; color: var(--text-soft); }
+
+  /* ---------- Tables ---------- */
+  .proof-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--ink);
+    margin: 18px 0 8px;
+  }
+  table.proof {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 6px;
+    font-size: 0.85rem;
+    background: var(--card-bg);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .table-scroll { overflow-x: auto; border-radius: 10px; }
+  table.proof th {
+    text-align: left;
+    background: var(--ink);
+    color: #fff;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.76rem;
+    letter-spacing: 0.02em;
+    padding: 8px 10px;
+    white-space: nowrap;
+  }
+  table.proof td {
+    padding: 8px 10px;
+    border-top: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  table.proof tr:nth-child(even) td { background: #FAF9F5; }
+
+  /* ---------- Numeric / worked example ---------- */
+  .numex {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 10px 0;
+    font-size: 0.9rem;
+  }
+  .numex .setup { color: var(--text-soft); margin-bottom: 6px; }
+  .numex .steps { font-family: 'Space Grotesk', sans-serif; color: var(--ink); line-height: 1.7; }
+
+  /* ---------- Diagram wrap ---------- */
+  .diagram-wrap {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px;
+    margin: 14px 0;
+    max-width: 420px;
+  }
+  .diagram-wrap svg { display: block; width: 100%; height: auto; }
+  .diagram-row { display: flex; flex-wrap: wrap; gap: 14px; }
+  .diagram-row .diagram-wrap { flex: 1 1 260px; }
+
+  /* ---------- Footer: reasons bank + checklist ---------- */
+  .foot-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 16px;
+    margin-top: 34px;
+  }
+  @media (max-width: 700px) { .foot-grid { grid-template-columns: 1fr; } }
+
+  .foot-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+  }
+  .foot-card h3 { font-size: 1rem; margin: 0 0 10px; }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    font-size: 0.78rem;
+    background: var(--blue-soft);
+    color: var(--blue);
+    border-radius: 999px;
+    padding: 5px 11px;
+    font-weight: 600;
+  }
+  .checklist { list-style: none; margin: 0; padding: 0; font-size: 0.87rem; }
+  .checklist li {
+    display: flex;
+    gap: 9px;
+    align-items: flex-start;
+    padding: 6px 0;
+    border-bottom: 1px dashed var(--border);
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checkmark {
+    flex-shrink: 0;
+    width: 18px; height: 18px;
+    border-radius: 5px;
+    background: var(--teal-soft);
+    color: var(--teal);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem;
+    margin-top: 1px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="biology.html">&larr; Back to Biology</a>
+
+  <div class="hero">
+    <div class="hero-text">
+      <h1>Biology Unit 1 &mdash; Life's Chemistry</h1>
+      <p>Bonding &amp; water, the four macromolecules, and enzymes &mdash; how living things are built and how reactions inside them are controlled.</p>
+    </div>
+    <svg width="100" height="100" viewBox="0 0 100 100" fill="none">
+      <circle cx="50" cy="28" r="12" fill="#E9F3F8" stroke="#2E86AB" stroke-width="2.5"/>
+      <line x1="50" y1="40" x2="30" y2="70" stroke="#fff" stroke-width="3"/>
+      <line x1="50" y1="40" x2="70" y2="70" stroke="#fff" stroke-width="3"/>
+      <circle cx="30" cy="70" r="7" fill="#fff"/>
+      <circle cx="70" cy="70" r="7" fill="#fff"/>
+    </svg>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+  <div id="panels"></div>
+
+  <div class="foot-grid">
+    <div class="foot-card">
+      <h3>Vocabulary bank</h3>
+      <div class="chip-row">
+        <span class="chip">Ionic Bond</span>
+        <span class="chip">Covalent Bond</span>
+        <span class="chip">Hydrogen Bond</span>
+        <span class="chip">Cohesion</span>
+        <span class="chip">Adhesion</span>
+        <span class="chip">Hydration Sphere</span>
+        <span class="chip">Monomer / Polymer</span>
+        <span class="chip">Dehydration Synthesis</span>
+        <span class="chip">Hydrolysis</span>
+        <span class="chip">Enzyme / Substrate</span>
+        <span class="chip">Activation Energy</span>
+        <span class="chip">Denaturation</span>
+      </div>
+    </div>
+    <div class="foot-card">
+      <h3>Before you answer</h3>
+      <ul class="checklist">
+        <li><span class="checkmark">✓</span>Hydrogen bonds happen BETWEEN separate water molecules, not inside one — the bonds inside a molecule (O&ndash;H) are covalent.</li>
+        <li><span class="checkmark">✓</span>Lipids = hydrophobic, long-term energy, membranes. Carbohydrates = quick/immediate energy. Don't mix those two up.</li>
+        <li><span class="checkmark">✓</span>Dehydration synthesis REMOVES water to build a polymer; hydrolysis ADDS water to break one apart.</li>
+        <li><span class="checkmark">✓</span>An enzyme LOWERS activation energy and speeds up a reaction — it is not used up or changed by the reaction.</li>
+        <li><span class="checkmark">✓</span>Check a data table's actual numbers before answering "what's the ideal temperature/pH" — it's whichever condition produced the MOST product.</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ============ Diagram helpers (shared low-level pieces) ============ */
+function svg(inner, vb, h) {
+  return '<svg viewBox="'+vb+'" width="100%" height="'+(h||180)+'" xmlns="http://www.w3.org/2000/svg">'+inner+'</svg>';
+}
+function lineEl(x1,y1,x2,y2,color,w,dash){ return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round"'+(dash?' stroke-dasharray="5 4"':'')+'/>'; }
+function circleEl(cx,cy,r,fill,stroke,sw){ return '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(sw==null?2:sw)+'"/>'; }
+function txt(x,y,s,color,size,weight,anchor){ return '<text x="'+x+'" y="'+y+'" fill="'+(color||'var(--ink)')+'" font-family="Space Grotesk, sans-serif" font-size="'+(size||13)+'" font-weight="'+(weight||700)+'" text-anchor="'+(anchor||'middle')+'">'+s+'</text>'; }
+function poly(pts,color,w,fill){ return '<polygon points="'+pts+'" fill="'+(fill||'none')+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linejoin="round"/>'; }
+function pathEl(d,color,w,fill,dash){ return '<path d="'+d+'" fill="'+(fill||'none')+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'"'+(dash?' stroke-dasharray="5 4"':'')+' stroke-linecap="round" stroke-linejoin="round"/>'; }
+
+/* ============ Biology diagram functions ============ */
+
+/* --- Water molecule: bent shape with delta charges --- */
+function diagWaterMolecule(){
+  var O=[150,62], H1=[95,150], H2=[205,150];
+  var inner = lineEl(O[0],O[1],H1[0],H1[1],'var(--ink)',3)
+    + lineEl(O[0],O[1],H2[0],H2[1],'var(--ink)',3)
+    + circleEl(O[0],O[1],22,'var(--blue-soft)','var(--blue)',2.5)
+    + circleEl(H1[0],H1[1],14,'#fff','var(--ink)',2)
+    + circleEl(H2[0],H2[1],14,'#fff','var(--ink)',2)
+    + txt(O[0],O[1]+5,'O','var(--blue)',15,700)
+    + txt(H1[0],H1[1]+5,'H','var(--ink)',12,700)
+    + txt(H2[0],H2[1]+5,'H','var(--ink)',12,700)
+    + txt(O[0],O[1]-32,'δ−','var(--coral)',15,700)
+    + txt(H1[0]-16,H1[1]+27,'δ+','var(--coral)',13,700)
+    + txt(H2[0]+16,H2[1]+27,'δ+','var(--coral)',13,700)
+    + txt(150,200,'Bent shape · unequal electron sharing = polar molecule','var(--text-soft)',11,600);
+  return svg(inner,'0 0 300 215',175);
+}
+
+/* --- Hydrogen bonds between chained water molecules --- */
+function diagHydrogenBonds(){
+  function mol(ox,oy){
+    var H1=[ox-32,oy+38], H2=[ox+32,oy+38];
+    var frag = lineEl(ox,oy,H1[0],H1[1],'var(--ink)',2.2)+lineEl(ox,oy,H2[0],H2[1],'var(--ink)',2.2)
+      + circleEl(ox,oy,14,'var(--blue-soft)','var(--blue)',1.8)
+      + circleEl(H1[0],H1[1],8,'#fff','var(--ink)',1.4)
+      + circleEl(H2[0],H2[1],8,'#fff','var(--ink)',1.4)
+      + txt(ox,oy+4,'O','var(--blue)',9,700)
+      + txt(H1[0],H1[1]+3.5,'H','var(--ink)',7,700)
+      + txt(H2[0],H2[1]+3.5,'H','var(--ink)',7,700);
+    return {frag:frag, O:[ox,oy], H1:H1, H2:H2};
+  }
+  var m1=mol(55,75), m2=mol(170,125), m3=mol(285,75);
+  var inner = m1.frag+m2.frag+m3.frag
+    + lineEl(m1.H2[0],m1.H2[1],m2.O[0],m2.O[1],'var(--coral)',2,true)
+    + lineEl(m2.H2[0],m2.H2[1],m3.O[0],m3.O[1],'var(--coral)',2,true)
+    + txt(170,190,'Dashed = hydrogen bonds (between molecules)','var(--coral)',10.5,600)
+    + txt(170,205,'Solid = covalent bonds (within a molecule)','var(--ink)',10.5,600);
+  return svg(inner,'0 0 340 220',180);
+}
+
+/* --- Hydration sphere around a dissolved ion --- */
+function diagHydrationSphere(ionLabel, ionColor, ionColorSoft){
+  ionLabel = ionLabel || 'Na+'; ionColor = ionColor || 'var(--amber)'; ionColorSoft = ionColorSoft || 'var(--amber-soft)';
+  var cx=150, cy=110;
+  var inner = '';
+  var n=6;
+  for(var i=0;i<n;i++){
+    var ang = (Math.PI*2/n)*i - Math.PI/2;
+    var wx = cx+Math.cos(ang)*68, wy=cy+Math.sin(ang)*68;
+    inner += circleEl(wx,wy,13,'var(--blue-soft)','var(--blue)',1.6) + txt(wx,wy+4,'H₂O','var(--blue)',7.5,700);
+  }
+  inner += circleEl(cx,cy,30,ionColorSoft,ionColor,2.5) + txt(cx,cy+5,ionLabel,ionColor,14,700);
+  inner += txt(150,205,'Water orients around a dissolved ion','var(--text-soft)',10.5,600);
+  return svg(inner,'0 0 300 215',175);
+}
+
+/* --- Monomer -> polymer --- */
+function diagMonomerPolymer(){
+  var top = '';
+  var pos = [[50,45],[110,60],[170,42],[230,58]];
+  pos.forEach(function(p){ top += circleEl(p[0],p[1],16,'var(--teal-soft)','var(--teal)',2); });
+  var bottom='';
+  var bx=[60,110,160,210];
+  for(var i=0;i<bx.length;i++){
+    bottom += circleEl(bx[i],175,16,'var(--teal-soft)','var(--teal)',2);
+    if(i<bx.length-1) bottom += lineEl(bx[i]+16,175,bx[i+1]-16,175,'var(--ink)',2.5);
+  }
+  var inner = top + bottom
+    + txt(140,95,'Monomers','var(--text-soft)',11,600)
+    + lineEl(140,105,140,140,'var(--ink)',2.2)
+    + poly('134,134 146,134 140,146','var(--ink)','1','var(--ink)')
+    + txt(200,125,'Polymerization','var(--ink)',10,600,'start')
+    + txt(135,205,'Polymer','var(--text-soft)',11,600);
+  return svg(inner,'0 0 300 220',180);
+}
+
+/* --- Dehydration synthesis / hydrolysis --- */
+function diagDehydrationHydrolysis(){
+  var hexA = poly('40,110 60,75 100,75 120,110 100,145 60,145','var(--teal)');
+  var hexB = poly('180,110 200,75 240,75 260,110 240,145 200,145','var(--teal)');
+  var bond = lineEl(120,110,180,110,'var(--ink)',3);
+  var water = circleEl(150,72,11,'var(--blue-soft)','var(--blue)',1.8)+txt(150,75,'H₂O','var(--blue)',8,700);
+  var arrowUp = lineEl(150,92,150,60,'var(--blue)',1.6)+poly('145,62 155,62 150,52','none','1','var(--blue)');
+  var inner = hexA+hexB+bond+water+arrowUp
+    + txt(80,128,'Monomer','var(--text-soft)',9.5,600)
+    + txt(220,128,'Monomer','var(--text-soft)',9.5,600)
+    + txt(150,178,'Dehydration synthesis: removes water','var(--teal)',10,700)
+    + txt(150,197,'Hydrolysis: adds water back (digestion)','var(--coral)',10,700);
+  return svg(inner,'0 0 300 210',175);
+}
+
+/* --- Carbon skeletons: straight chain, branched, ring --- */
+function diagCarbonSkeletons(){
+  var chain = lineEl(15,55,45,30,'var(--ink)',3)+lineEl(45,30,75,55,'var(--ink)',3)+lineEl(75,55,105,30,'var(--ink)',3)+lineEl(105,30,135,55,'var(--ink)',3);
+  var bx=175;
+  var branch = lineEl(bx,55,bx+30,30,'var(--ink)',3)+lineEl(bx+30,30,bx+60,55,'var(--ink)',3)+lineEl(bx+30,30,bx+30,3,'var(--ink)',3)+lineEl(bx+60,55,bx+90,30,'var(--ink)',3);
+  var ring = poly('285,105 310,90 335,105 335,135 310,150 285,135','var(--ink)');
+  var inner = chain+branch+ring
+    + txt(75,80,'Straight chain','var(--text-soft)',10,600)
+    + txt(bx+45,80,'Branched chain','var(--text-soft)',10,600)
+    + txt(310,170,'Ring','var(--text-soft)',10,600);
+  return svg(inner,'0 0 350 185',150);
+}
+
+/* --- Phospholipid: head + two wavy tails --- */
+function diagPhospholipid(){
+  var head = circleEl(150,42,25,'var(--amber-soft)','var(--amber)',2.5)+txt(150,47,'Head','var(--amber)',10.5,700);
+  var tail1 = pathEl('M132,66 C120,86 142,100 128,118 C114,134 134,150 122,166','var(--ink)',2.5);
+  var tail2 = pathEl('M168,66 C180,86 158,100 172,118 C186,134 166,150 178,166','var(--ink)',2.5);
+  var inner = tail1+tail2+head
+    + txt(150,183,'Head: hydrophilic (attracts water)','var(--amber)',10.5,600)
+    + txt(150,198,'Tails: hydrophobic (repel water)','var(--text-soft)',10.5,600);
+  return svg(inner,'0 0 300 210',175);
+}
+
+/* --- DNA vs RNA --- */
+function diagDnaRna(){
+  var rnaStrand = pathEl('M25,60 C45,42 65,78 85,60 C105,42 125,78 145,60','var(--teal)',3);
+  var rnaBases = circleEl(45,54,5,'var(--teal)','none',0)+circleEl(85,54,5,'var(--teal)','none',0)+circleEl(125,54,5,'var(--teal)','none',0);
+  var dnaStrand1 = pathEl('M195,35 C215,55 235,15 255,35 C275,55 295,15 315,35','var(--blue)',3);
+  var dnaStrand2 = pathEl('M195,90 C215,70 235,110 255,90 C275,70 295,110 315,90','var(--blue)',3);
+  var rungs = lineEl(205,45,205,80,'var(--gray-line)',2)+lineEl(235,38,235,102,'var(--gray-line)',2)+lineEl(265,38,265,102,'var(--gray-line)',2)+lineEl(295,45,295,80,'var(--gray-line)',2);
+  var inner = rnaStrand+rnaBases+dnaStrand1+dnaStrand2+rungs
+    + txt(85,90,'RNA — single strand','var(--teal)',11,700)
+    + txt(255,130,'DNA — double helix','var(--blue)',11,700);
+  return svg(inner,'0 0 340 145',135);
+}
+
+/* --- Activation energy: catalyzed vs uncatalyzed --- */
+function diagActivationEnergy(){
+  var base = lineEl(20,170,280,170,'var(--gray-line)',1.5);
+  var uncat = pathEl('M40,150 C90,150 110,25 150,25 C190,25 210,150 260,150','var(--coral)',3);
+  var cat = pathEl('M40,150 C80,150 100,85 150,85 C200,85 220,150 260,150','var(--blue)',3);
+  var inner = base+uncat+cat
+    + txt(40,190,'Reactants','var(--text-soft)',10.5,600,'start')
+    + txt(260,190,'Products','var(--text-soft)',10.5,600,'end')
+    + txt(150,18,'Uncatalyzed','var(--coral)',10.5,700)
+    + txt(150,80,'Catalyzed (enzyme)','var(--blue)',10.5,700)
+    + lineEl(120,150,120,26,'var(--coral)',1,true)
+    + lineEl(180,150,180,86,'var(--blue)',1,true)
+    + txt(112,90,'higher Eₐ','var(--coral)',9.5,600,'end')
+    + txt(188,120,'lower Eₐ','var(--blue)',9.5,600,'start');
+  return svg(inner,'0 0 300 205',170);
+}
+
+/* --- Lock-and-key: substrate + enzyme active site --- */
+function diagLockKey(){
+  var enzyme = pathEl('M150,100 L107,75 A50,50 0 1 1 107,125 Z','var(--violet)',2.5,'var(--violet-soft)');
+  var substrate = poly('50,90 70,80 88,100 70,120 50,110','var(--teal)',2.5,'var(--teal-soft)');
+  var inner = enzyme+substrate
+    + txt(70,140,'Substrate (lactose)','var(--teal)',10,700)
+    + txt(150,168,'Enzyme (lactase) — notch is the active site','var(--violet)',10,700)
+    + txt(150,20,'Lactase + Lactose → Glucose + Galactose','var(--ink)',11,700);
+  return svg(inner,'0 0 300 180',150);
+}
+
+/* --- Denaturation: active site shape change --- */
+function diagDenaturation(){
+  var enzymeOK = pathEl('M65,100 L28,78 A42,42 0 1 1 28,122 Z','var(--teal)',2.5,'var(--teal-soft)');
+  var subOK = poly('5,90 20,82 32,100 20,118 5,110','var(--blue)',2,'var(--blue-soft)');
+  var blob = pathEl('M225,55 C202,53 192,74 202,89 C188,103 197,127 216,130 C226,146 252,140 254,121 C271,111 263,86 246,80 C249,64 240,55 225,55 Z','var(--coral)',2.5,'var(--coral-soft)');
+  var subBad = poly('278,58 292,50 304,66 292,82 278,74','var(--blue)',2,'var(--blue-soft)');
+  var arrow = lineEl(108,100,168,100,'var(--ink)',2.2)+poly('162,93 162,107 174,100','none','1','var(--ink)');
+  var inner = enzymeOK+subOK+blob+subBad+arrow
+    + txt(18,145,'Normal active site','var(--teal)',10,700,'start')
+    + txt(138,88,'heat / pH','var(--text-soft)',9.5,600)
+    + txt(240,168,'Denatured — shape changed','var(--coral)',10,700);
+  return svg(inner,'0 0 320 185',155);
+}
+</script>
+<script>
+const sections = [
+  {
+    id: "s11",
+    label: "1.1 Bonding & Water",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="3"/><line x1="12" y1="10" x2="7" y2="18"/><line x1="12" y1="10" x2="17" y2="18"/></svg>',
+    title: "Bonding & Water",
+    sub: "Atoms build bonds; bonds build water molecules; water's polarity gives it its special properties.",
+    body: `
+      <div class="def-grid">
+        <div class="def-card"><span class="term">Atom</span><span class="desc">The basic unit of matter. Nucleus holds protons (+) and neutrons (neutral); electrons (−) move around it in orbitals, following the "2, 8, 8 rule."</span></div>
+        <div class="def-card"><span class="term">Chemical Element</span><span class="desc">A pure substance made entirely of one type of atom, represented by a letter symbol.</span></div>
+        <div class="def-card"><span class="term">Chemical Compound</span><span class="desc">A substance formed by the chemical combination of two or more elements in definite proportions. Examples: water (H₂O), salt (NaCl).</span></div>
+      </div>
+
+      <div class="box theorem">
+        <h4>Ionic Bond</h4>
+        <p>Formed when one or more electrons are TRANSFERRED from one atom to another. Neutral atoms become ions (cations/anions) when they gain or lose electrons. Example: Na gives up an electron to Cl, forming Na⁺ and Cl⁻.</p>
+      </div>
+      <div class="box postulate">
+        <h4>Covalent Bond</h4>
+        <p>Electrons are SHARED between atoms — the electrons move about the nuclei of both atoms. Molecules form when atoms join together through covalent bonds (like the O–H bonds inside a water molecule).</p>
+      </div>
+
+      <div class="proof-label">Water molecule: bent shape, polar charges</div>
+      <div class="diagram-wrap">${diagWaterMolecule()}</div>
+      <p style="font-size:0.9rem;color:var(--text-soft);margin:8px 0 0;">Oxygen's nucleus has more protons than hydrogen's, so it pulls the shared electrons closer — electrons spend more time on the oxygen side. That creates a slightly negative (δ−) region at oxygen and a slightly positive (δ+) region at each hydrogen. A molecule with this uneven charge distribution is a <b>polar molecule</b>.</p>
+
+      <div class="box watch">
+        <h4>Hydrogen bonds are BETWEEN molecules, not inside one</h4>
+        <p>A hydrogen bond forms between a slightly positive hydrogen atom on ONE water molecule and a slightly negative oxygen atom on a DIFFERENT, neighboring water molecule. Don't confuse it with the covalent O&ndash;H bonds inside a single water molecule — those are separate and much stronger.</p>
+      </div>
+
+      <div class="proof-label">Hydrogen bonds chain water molecules together</div>
+      <div class="diagram-wrap">${diagHydrogenBonds()}</div>
+
+      <div class="proof-label">Special properties of water (all caused by hydrogen bonding)</div>
+      <div class="def-grid">
+        <div class="def-card"><span class="term">Cohesion</span><span class="desc">Attraction between molecules of the SAME substance — water molecules "stick" to each other. Produces surface tension.</span></div>
+        <div class="def-card"><span class="term">Adhesion</span><span class="desc">Attraction between molecules of DIFFERENT substances — water "sticks" to other surfaces (like the window when it rains). Produces capillary action, the force that draws water from roots to the tops of plants.</span></div>
+        <div class="def-card"><span class="term">High Specific Heat</span><span class="desc">The amount of heat needed to raise 1 gram of a substance 1°C. Water's is very high, so large bodies of water stay at a relatively stable temperature — protecting plant and animal life.</span></div>
+        <div class="def-card"><span class="term">High Heat of Vaporization</span><span class="desc">The energy needed to change 1 gram of liquid to gas at constant temperature. As water evaporates, the surface it leaves gets cooler — this is why sweat cools your body.</span></div>
+        <div class="def-card"><span class="term">Universal Solvent</span><span class="desc">Water's polarity lets it dissolve ionic compounds and other polar molecules. Solvent = does the dissolving. Solute = gets dissolved. Solution = ions dispersed completely in a mixture. Suspension = particles that don't dissolve, just separate into tiny pieces (example: blood).</span></div>
+      </div>
+
+      <div class="proof-label">Hydration sphere: water dissolving an ionic compound</div>
+      <div class="diagram-wrap">${diagHydrationSphere('Na+','var(--amber)','var(--amber-soft)')}</div>
+      <p style="font-size:0.9rem;color:var(--text-soft);margin:8px 0 0;">When salt (NaCl) dissolves, water molecules surround each ion — the negative (oxygen) side of water orients toward the positive Na⁺, and the positive (hydrogen) side orients toward the negative Cl⁻. This ring of oriented water molecules is called a <b>hydration sphere</b>. If the water evaporates, the ions come back together as salt crystals.</p>
+
+      <div class="box tip">
+        <h4>Why water matters for life</h4>
+        <ul>
+          <li>Water makes up 99% of some marine invertebrates, 85% of some mammals, and 66% of most vertebrates.</li>
+          <li>Water supplies hydrogen for building organic compounds, and oxygen to the air.</li>
+          <li>Water is a circulatory medium — it carries nutrients around and carries away waste from metabolism.</li>
+          <li>Water acts as a solvent for mineral nutrients that plants absorb through their roots.</li>
+        </ul>
+      </div>
+    `
+  },
+  {
+    id: "s13",
+    label: "1.3 Water Properties Lab",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 C12 3 6 11 6 15 a6 6 0 0 0 12 0 C18 11 12 3 12 3 Z"/></svg>',
+    title: "Water Properties Lab Stations",
+    sub: "Nine hands-on stations testing polarity, adhesion, cohesion, surface tension, and heat properties.",
+    body: `
+      <div class="box tip">
+        <h4>INTRA- vs INTER-molecular bonds (the lab's own framing)</h4>
+        <p><b>Intramolecular bonds</b> hold the hydrogen and oxygen atoms together WITHIN one water molecule — these are covalent bonds. <b>Intermolecular bonds</b> hold separate water molecules to EACH OTHER — these are the hydrogen bonds, caused by water's unequal (polar) sharing of electrons.</p>
+      </div>
+
+      <div class="def-grid">
+        <div class="def-card"><span class="term">Hydrophobic</span><span class="desc">Nonpolar substances that do NOT dissolve in water ("hydro" + "phobic" = water-fearing) — like oil.</span></div>
+        <div class="def-card"><span class="term">Hydrophilic</span><span class="desc">Substances that mix/dissolve well with water ("hydro" + "philic" = water-loving) — like salt.</span></div>
+        <div class="def-card"><span class="term">Meniscus</span><span class="desc">The dip in a liquid's surface where it's attracted to (adheres to) the sides of its container. Always read a graduated cylinder at the BOTTOM of the meniscus.</span></div>
+        <div class="def-card"><span class="term">Capillary Action</span><span class="desc">Water's ability to move along a surface (like paper, or up a plant stem), powered by adhesion.</span></div>
+        <div class="def-card"><span class="term">Surface Tension</span><span class="desc">Caused by water's polarity + hydrogen bonding. Interior water molecules are pulled equally in all directions, but surface molecules are only pulled sideways/down — creating tension that makes drops bead up (like on a penny).</span></div>
+        <div class="def-card"><span class="term">Surfactant</span><span class="desc">A "surface active agent" (like dish detergent) with a polar end (attracted to water) and a nonpolar end (attracted to grease/dirt) — it REDUCES surface tension, making water "wetter" for cleaning.</span></div>
+      </div>
+
+      <div class="proof-label">Station highlights</div>
+      <div class="box postulate">
+        <h4>Stations 1–2: Polarity & solubility</h4>
+        <p>A charged balloon deflects a stream of water — proof water molecules are polar. Salt (polar/ionic) dissolves in water; oil and vinegar (nonpolar) don't mix — this is why water is called the "universal solvent."</p>
+      </div>
+      <div class="box postulate">
+        <h4>Stations 3–4: Adhesion & capillary action</h4>
+        <p>Water forms a meniscus against glass or plastic due to adhesion. A paper strip standing in water demonstrates capillary action — the same force that helps water travel from a plant's roots to its leaves.</p>
+      </div>
+      <div class="box postulate">
+        <h4>Stations 5, 8: Surface tension</h4>
+        <p>A paperclip can float on water's surface because of surface tension. A water drop holds a dome shape on a penny for the same reason — this is Station 8's formal definition, built from polarity + hydrogen bonding.</p>
+      </div>
+      <div class="box postulate">
+        <h4>Station 6: Surfactants</h4>
+        <p>Pepper sprinkled on water sits on the surface due to surface tension; a toothpick soaked in dish detergent (a surfactant) breaks that tension and the pepper scatters. To clean a surface, surface tension must be <b>REDUCED</b>.</p>
+      </div>
+      <div class="box postulate">
+        <h4>Stations 7, 9: Heat properties</h4>
+        <p>Water heats up more slowly than sand (high specific heat) thanks to hydrogen bonds. Water also evaporates more slowly than rubbing alcohol (high heat of vaporization).</p>
+      </div>
+    `
+  },
+  {
+    id: "s1467",
+    label: "1.4 / 1.6 / 1.7 Macromolecules",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,3 20,8 20,16 12,21 4,16 4,8"/></svg>',
+    title: "The Four Macromolecules",
+    sub: "Carbon's bonding ability builds monomers into polymers — carbohydrates, lipids, proteins, and nucleic acids.",
+    body: `
+      <div class="box tip">
+        <h4>Why carbon?</h4>
+        <p>Carbon is the most abundant element in living things — compounds containing carbon are called "organic." Carbon has 4 valence electrons, so it forms stable bonds with many elements (H, O, P, S, N) and even with other carbon atoms, building chains, branches, and rings.</p>
+      </div>
+      <div class="diagram-wrap">${diagCarbonSkeletons()}</div>
+
+      <div class="proof-label">Monomers build polymers</div>
+      <div class="diagram-wrap">${diagMonomerPolymer()}</div>
+      <p style="font-size:0.9rem;color:var(--text-soft);margin:8px 0 0;">A <b>monomer</b> is the basic building-block unit of a macromolecule. Many monomers bonded together form a <b>polymer</b>. We usually eat macromolecules in polymer form; digestion breaks polymers down into monomers, and cells reassemble monomers into new polymers.</p>
+
+      <div class="proof-label">Dehydration synthesis & hydrolysis</div>
+      <div class="diagram-wrap">${diagDehydrationHydrolysis()}</div>
+
+      <div class="proof-label">The four macromolecules</div>
+      <div class="table-scroll">
+      <table class="proof">
+        <tr><th>Macromolecule</th><th>Elements</th><th>Monomer</th><th>Polymer</th><th>Function</th></tr>
+        <tr><td>Carbohydrates</td><td>C, H, O</td><td>Monosaccharide</td><td>Polysaccharide</td><td>Quick energy; structural support/protection</td></tr>
+        <tr><td>Lipids</td><td>C, H, O</td><td>No true monomer — glycerol + fatty acids</td><td>Triglycerides, phospholipids, cholesterol</td><td>Long-term energy storage; membranes; waterproofing; hormones</td></tr>
+        <tr><td>Proteins</td><td>C, H, O, N</td><td>Amino acid</td><td>Polypeptide</td><td>Enzymes; regulate cell processes; transport; structure (hair, nails)</td></tr>
+        <tr><td>Nucleic Acids</td><td>C, H, O, N, P</td><td>Nucleotide</td><td>DNA or RNA</td><td>Store and transmit hereditary (genetic) information</td></tr>
+      </table>
+      </div>
+
+      <div class="box watch">
+        <h4>Heads up: task cards 27–28</h4>
+        <p>The teacher's printed answer key for cards 27&ndash;28 has these two answers swapped compared to how the rest of the unit teaches it. We've used the version that matches everything else you learned (lipids = hydrophobic/long-term energy, carbs = quick energy) &mdash; check with your teacher if your key says otherwise.</p>
+      </div>
+
+      <div class="proof-label">Carbohydrates</div>
+      <p style="font-size:0.93rem;">Ring carbon structures. Types by size: <b>Monosaccharide</b> (1 sugar, e.g. glucose), <b>Disaccharide</b> (2 sugars, e.g. sucrose = glucose + fructose), <b>Polysaccharide</b> (many sugars, e.g. starch, glycogen, cellulose).</p>
+
+      <div class="proof-label">Lipids & the phospholipid</div>
+      <p style="font-size:0.93rem;">A <b>triglyceride</b> (fat) = 1 glycerol + 3 fatty acids. A <b>phospholipid</b> (forms the cell membrane) = glycerol + phosphate group + 2 fatty acids, with a hydrophilic head and hydrophobic tails.</p>
+      <div class="diagram-wrap">${diagPhospholipid()}</div>
+
+      <div class="proof-label">Proteins</div>
+      <p style="font-size:0.93rem;">The most diverse macromolecule. Monomers are <b>amino acids</b> (more than 20 found in nature); chains of them are <b>polypeptides</b>. Functions: enzymes (control reaction rates), receptors, transport, structures like hair and nails.</p>
+
+      <div class="proof-label">Nucleic acids: DNA vs RNA</div>
+      <div class="diagram-wrap">${diagDnaRna()}</div>
+      <p style="font-size:0.93rem;color:var(--text-soft);margin:8px 0 0;">A <b>nucleotide</b> (the monomer) is made of a 5-carbon sugar, a phosphate group, and a nitrogenous base. Nucleotides link into DNA (double helix, deoxyribonucleic acid) or RNA (single strand, ribonucleic acid).</p>
+
+      <div class="proof-label">Food poisoning lab: macromolecule indicator tests</div>
+      <div class="table-scroll">
+      <table class="proof">
+        <tr><th></th><th>Sugar</th><th>Starch</th><th>Protein</th><th>Lipids</th></tr>
+        <tr><td>Indicator</td><td>Benedict's</td><td>Iodine</td><td>Biuret</td><td>Brown paper bag</td></tr>
+        <tr><td>Negative test</td><td>Blue</td><td>Yellow/Brown</td><td>Blue</td><td>Not translucent</td></tr>
+        <tr><td>Positive test</td><td>Orange</td><td>Purple/Black</td><td>Lavender</td><td>Translucent</td></tr>
+      </table>
+      </div>
+      <p style="font-size:0.9rem;color:var(--text-soft);margin:8px 0 0;">The lab's scenario: a friend got food poisoning after eating egg whites &amp; fruit (First Watch), a barbeque chicken sandwich (Jim n' Nicks), or bread/olive oil/creamy pasta (Provino's) — you run the four tests on a stomach sample and use the results to figure out which meal it was.</p>
+    `
+  },
+  {
+    id: "s810",
+    label: "1.8 / 1.10 Enzymes",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3 A6 6 0 1 1 8 15 L14 9 Z"/></svg>',
+    title: "Enzymes",
+    sub: "Enzymes are catalysts that lower activation energy — specific to their substrate, and sensitive to temperature and pH.",
+    body: `
+      <div class="box theorem">
+        <h4>Activation energy (Eₐ)</h4>
+        <p>The energy needed to get a chemical reaction started — like pushing a boulder up a hill before it can roll down the other side. Before a reaction can happen, energy must be put into the system.</p>
+      </div>
+
+      <div class="box postulate">
+        <h4>Enzyme</h4>
+        <p>A molecule that acts as a <b>catalyst</b> during a chemical reaction in a living organism. Enzymes speed up the rate of a reaction WITHOUT being consumed — they do this by LOWERING the activation energy. Enzymes are proteins, and each one is specific to its reaction.</p>
+      </div>
+
+      <div class="proof-label">Catalyzed vs. uncatalyzed reaction</div>
+      <div class="diagram-wrap">${diagActivationEnergy()}</div>
+
+      <div class="proof-label">Substrate, active site, and lock-and-key specificity</div>
+      <p style="font-size:0.93rem;">Just like a house key only works in a matching lock, an enzyme is specific to the substance it works with — called the <b>substrate</b>. The substrate binds to the enzyme at its <b>active site</b>.</p>
+      <div class="diagram-wrap">${diagLockKey()}</div>
+      <p style="font-size:0.9rem;color:var(--text-soft);margin:8px 0 0;">Example: <b>Lactase</b> (enzyme) breaks down <b>Lactose</b> (substrate, a disaccharide) into <b>Glucose</b> and <b>Galactose</b> (products) to be used in cellular respiration.</p>
+
+      <div class="box tip">
+        <h4>Enzymes are named for their substrate</h4>
+        <p>Lactase acts on lactose. Amylase acts on amylose. Pepsin acts on peptides. Protease acts on proteins. Lipase acts on lipids.</p>
+      </div>
+
+      <div class="proof-label">Denaturation</div>
+      <p style="font-size:0.93rem;">Enzymes have optimal temperature and pH ranges. Outside that range, the bonds in the enzyme's active site weaken and its overall shape changes — this is called being <b>denatured</b>. A denatured enzyme's active site is no longer complementary to its substrate, so the substrate cannot bind and no reaction occurs.</p>
+      <div class="diagram-wrap">${diagDenaturation()}</div>
+
+      <div class="box watch">
+        <h4>Heads up: "denatured" at cold temperatures</h4>
+        <p>In this class, an enzyme showing zero activity at ANY off-range temperature (too hot OR too cold) is called "denatured." Some biologists reserve that word for heat/pH damage specifically — but for this unit, use your teacher's definition, since that's what you'll be tested on.</p>
+      </div>
+
+      <div class="proof-label">Lactase temperature data (from 1.10 practice)</div>
+      <div class="table-scroll">
+      <table class="proof">
+        <tr><th>Temp (°F)</th><th>86</th><th>88</th><th>90</th><th>92</th><th>94</th><th>96</th><th>98</th><th>100</th><th>102</th></tr>
+        <tr><td>Glucose (mg/dL)</td><td>0</td><td>0</td><td>100</td><td>300</td><td>300</td><td>1000</td><td><b>3000</b></td><td>1000</td><td>300</td></tr>
+      </table>
+      </div>
+      <p style="font-size:0.9rem;color:var(--text-soft);margin:8px 0 0;">Ideal temperature = <b>98°F</b> — it produced the most glucose (the product), meaning the enzyme worked most efficiently there. At 86–88°F, zero glucose was produced, so the enzyme is considered "denatured" at those low temperatures per this class's data.</p>
+
+      <div class="box tip">
+        <h4>Allosteric sites (lightly tested)</h4>
+        <p>Enzymes can be turned off or on depending on inhibitors or activators binding at an <b>allosteric site</b> — a location separate from the active site. An inhibitor binding there alters the active site so the substrate is rejected; an activator binding there can make the active site accept the substrate.</p>
+      </div>
+
+      <div class="box watch">
+        <h4>Case study takeaway: "not enough enzyme" vs. "broken enzyme"</h4>
+        <p>In the Claire (the dog) case study, her purified protease worked perfectly fine on its own — ruling out a defective active site. The real problem was her pancreas producing too LITTLE enzyme overall. Low enzyme production and a denatured/defective enzyme are two different problems with different evidence.</p>
+      </div>
+    `
+  }
+];
+
+const tabsEl = document.getElementById('tabs');
+const panelsEl = document.getElementById('panels');
+
+sections.forEach((s, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
+  btn.innerHTML = s.icon + '<span>' + s.label + '</span>';
+  btn.onclick = () => selectTab(s.id);
+  btn.dataset.id = s.id;
+  tabsEl.appendChild(btn);
+
+  const panel = document.createElement('div');
+  panel.className = 'panel' + (i === 0 ? ' active' : '');
+  panel.id = s.id;
+  panel.innerHTML =
+    '<h2 class="section-title">' + s.title + '</h2>' +
+    '<p class="section-sub">' + s.sub + '</p>' +
+    s.body;
+  panelsEl.appendChild(panel);
+});
+
+function selectTab(id) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.id === id));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === id));
+}
+</script>
+</body>
+</html>

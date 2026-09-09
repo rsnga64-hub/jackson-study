@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biology Unit 1 Flashcards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FBFAF7;
+    --grid-line: rgba(28,43,74,0.055);
+    --ink: #1C2B4A;
+    --text: #2B3648;
+    --text-soft: #64707F;
+    --blue: #2E86AB;
+    --blue-soft: #E9F3F8;
+    --amber: #D98A2B;
+    --amber-soft: #FCF1DE;
+    --coral: #D65A5A;
+    --coral-soft: #FBEBEB;
+    --teal: #2C9C82;
+    --teal-soft: #E6F5F0;
+    --violet: #7C5CBF;
+    --violet-soft: #EFE9F8;
+    --card-bg: #FFFFFF;
+    --border: #E4E0D4;
+    --gray: #94A0AD;
+    --gray-line: #CBD3DC;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  h1, h2, h3, .display { font-family: 'Space Grotesk', sans-serif; color: var(--ink); }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 32px 20px 80px; }
+  a { color: inherit; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--text-soft); text-decoration: none; font-size: 0.88rem; font-weight: 600; margin-bottom: 18px; }
+  .back-link:hover { color: var(--blue); }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    background: var(--ink);
+    border-radius: 18px;
+    padding: 26px 28px;
+    color: #fff;
+    margin-bottom: 22px;
+  }
+  .hero h1 { color: #fff; font-size: 1.7rem; margin: 0 0 6px; line-height: 1.15; }
+  .hero p { margin: 0; color: #C8D3E0; font-size: 0.96rem; max-width: 52ch; }
+
+  /* ---------- Category tabs ---------- */
+  .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 20px; }
+  .tab-btn {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.84rem;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text-soft);
+    border-radius: 999px;
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .tab-btn:hover { border-color: var(--ink); color: var(--ink); }
+  .tab-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  /* ---------- Progress / stats ---------- */
+  .statline {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.82rem; color: var(--text-soft); margin-bottom: 10px; flex-wrap: wrap; gap: 6px;
+  }
+  .statline b { color: var(--ink); }
+  .progress-track { height: 6px; background: var(--border); border-radius: 999px; overflow: hidden; margin-bottom: 18px; }
+  .progress-fill { height: 100%; background: var(--blue); border-radius: 999px; transition: width 0.2s ease; }
+
+  /* ---------- Flashcard ---------- */
+  .stage { perspective: 1600px; margin-bottom: 18px; }
+  .flashcard {
+    position: relative;
+    min-height: 520px;
+    border-radius: 18px;
+    cursor: pointer;
+    transition: transform 0.5s cubic-bezier(.4,.2,.2,1);
+    transform-style: preserve-3d;
+  }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .face {
+    position: absolute; inset: 0;
+    -webkit-backface-visibility: hidden; backface-visibility: hidden;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    box-shadow: 0 4px 18px rgba(28,43,74,0.07);
+    padding: 26px 28px;
+    display: flex; flex-direction: column;
+    overflow-y: auto;
+  }
+  .face.back { transform: rotateY(180deg); }
+  .cat-tag {
+    display: inline-flex; align-self: flex-start;
+    font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.72rem;
+    letter-spacing: 0.02em; text-transform: uppercase;
+    padding: 4px 11px; border-radius: 999px; margin-bottom: 14px;
+  }
+  .face.front { align-items: center; text-align: center; justify-content: center; }
+  .term { font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: var(--ink); font-size: 1.55rem; line-height: 1.25; margin: 0; }
+  .flip-hint { margin-top: 18px; font-size: 0.8rem; color: var(--gray); }
+  .def { font-size: 1.05rem; font-weight: 600; color: var(--ink); line-height: 1.4; margin: 0 0 10px; }
+  .extra { font-size: 0.9rem; color: var(--text-soft); line-height: 1.45; margin: 0 0 14px; }
+  .diagram-wrap { margin-top: auto; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 6px; }
+  .diagram-wrap svg { display: block; width: auto; height: auto; max-width: 100%; max-height: 190px; margin: 0 auto; }
+
+  /* ---------- Controls ---------- */
+  .controls { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  .btn {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.88rem;
+    border: 1px solid var(--border); background: var(--card-bg); color: var(--ink);
+    border-radius: 10px; padding: 10px 16px; cursor: pointer; transition: all 0.15s ease;
+  }
+  .btn:hover { border-color: var(--ink); }
+  .btn:disabled { opacity: 0.4; cursor: default; }
+  .btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .btn.primary:hover { opacity: 0.9; }
+  .rate-row { display: flex; gap: 10px; justify-content: center; margin-bottom: 6px; }
+  .btn.rate-bad { border-color: var(--coral); color: var(--coral); }
+  .btn.rate-bad:hover { background: var(--coral-soft); }
+  .btn.rate-good { border-color: var(--teal); color: var(--teal); }
+  .btn.rate-good:hover { background: var(--teal-soft); }
+
+  .tally { text-align: center; font-size: 0.82rem; color: var(--text-soft); margin-top: 4px; }
+  .tally b.good { color: var(--teal); }
+  .tally b.bad { color: var(--coral); }
+
+  @media (max-width: 480px) {
+    .flashcard { min-height: 560px; }
+    .term { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="biology.html">&larr; Back to Biology</a>
+  <div class="hero">
+    <h1>Unit 1 Flashcards</h1>
+    <p>Bonding &amp; water, the four macromolecules, and enzymes &mdash; tap a card to flip it.</p>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="statline">
+    <span>Card <b id="cardNum">1</b> of <b id="cardTotal">20</b></span>
+    <span id="filterLabel">All cards</span>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+  <div class="stage">
+    <div class="flashcard" id="flashcard">
+      <div class="face front">
+        <span class="cat-tag" id="catTagFront"></span>
+        <p class="term" id="termText"></p>
+        <p class="flip-hint">Tap the card to see the definition</p>
+      </div>
+      <div class="face back">
+        <span class="cat-tag" id="catTagBack"></span>
+        <p class="def" id="defText"></p>
+        <p class="extra" id="extraText"></p>
+        <div class="diagram-wrap" id="diagramWrap" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rate-row" id="rateRow" style="visibility:hidden;">
+    <button class="btn rate-bad" id="btnBad">Still learning</button>
+    <button class="btn rate-good" id="btnGood">Got it</button>
+  </div>
+
+  <div class="controls">
+    <button class="btn" id="btnPrev">&larr; Prev</button>
+    <button class="btn primary" id="btnShuffle">Shuffle</button>
+    <button class="btn" id="btnNext">Next &rarr;</button>
+  </div>
+
+  <p class="tally" id="tally"></p>
+</div>
+
+<script>
+/* ============ Diagram helpers ============ */
+function svg(inner, vb, h) {
+  return '<svg viewBox="'+vb+'" width="100%" height="'+(h||180)+'" xmlns="http://www.w3.org/2000/svg">'+inner+'</svg>';
+}
+function lineEl(x1,y1,x2,y2,color,w,dash){ return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round"'+(dash?' stroke-dasharray="5 4"':'')+'/>'; }
+function circleEl(cx,cy,r,fill,stroke,sw){ return '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(sw==null?2:sw)+'"/>'; }
+function txt(x,y,s,color,size,weight,anchor){ return '<text x="'+x+'" y="'+y+'" fill="'+(color||'var(--ink)')+'" font-family="Space Grotesk, sans-serif" font-size="'+(size||13)+'" font-weight="'+(weight||700)+'" text-anchor="'+(anchor||'middle')+'">'+s+'</text>'; }
+function poly(pts,color,w,fill){ return '<polygon points="'+pts+'" fill="'+(fill||'none')+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linejoin="round"/>'; }
+function pathEl(d,color,w,fill,dash){ return '<path d="'+d+'" fill="'+(fill||'none')+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'"'+(dash?' stroke-dasharray="5 4"':'')+' stroke-linecap="round" stroke-linejoin="round"/>'; }
+
+/* ============ Biology diagram functions ============ */
+
+function diagWaterMolecule(){
+  var O=[150,62], H1=[95,150], H2=[205,150];
+  var inner = lineEl(O[0],O[1],H1[0],H1[1],'var(--ink)',3)
+    + lineEl(O[0],O[1],H2[0],H2[1],'var(--ink)',3)
+    + circleEl(O[0],O[1],22,'var(--blue-soft)','var(--blue)',2.5)
+    + circleEl(H1[0],H1[1],14,'#fff','var(--ink)',2)
+    + circleEl(H2[0],H2[1],14,'#fff','var(--ink)',2)
+    + txt(O[0],O[1]+5,'O','var(--blue)',15,700)
+    + txt(H1[0],H1[1]+5,'H','var(--ink)',12,700)
+    + txt(H2[0],H2[1]+5,'H','var(--ink)',12,700)
+    + txt(O[0],O[1]-32,'δ−','var(--coral)',15,700)
+    + txt(H1[0]-16,H1[1]+27,'δ+','var(--coral)',13,700)
+    + txt(H2[0]+16,H2[1]+27,'δ+','var(--coral)',13,700)
+    + txt(150,200,'Bent shape · unequal electron sharing = polar molecule','var(--text-soft)',11,600);
+  return svg(inner,'0 0 300 215',175);
+}
+
+function diagHydrogenBonds(){
+  function mol(ox,oy){
+    var H1=[ox-32,oy+38], H2=[ox+32,oy+38];
+    var frag = lineEl(ox,oy,H1[0],H1[1],'var(--ink)',2.2)+lineEl(ox,oy,H2[0],H2[1],'var(--ink)',2.2)
+      + circleEl(ox,oy,14,'var(--blue-soft)','var(--blue)',1.8)
+      + circleEl(H1[0],H1[1],8,'#fff','var(--ink)',1.4)
+      + circleEl(H2[0],H2[1],8,'#fff','var(--ink)',1.4)
+      + txt(ox,oy+4,'O','var(--blue)',9,700)
+      + txt(H1[0],H1[1]+3.5,'H','var(--ink)',7,700)
+      + txt(H2[0],H2[1]+3.5,'H','var(--ink)',7,700);
+    return {frag:frag, O:[ox,oy], H1:H1, H2:H2};
+  }
+  var m1=mol(55,75), m2=mol(170,125), m3=mol(285,75);
+  var inner = m1.frag+m2.frag+m3.frag
+    + lineEl(m1.H2[0],m1.H2[1],m2.O[0],m2.O[1],'var(--coral)',2,true)
+    + lineEl(m2.H2[0],m2.H2[1],m3.O[0],m3.O[1],'var(--coral)',2,true)
+    + txt(170,190,'Dashed = hydrogen bonds (between molecules)','var(--coral)',10.5,600)
+    + txt(170,205,'Solid = covalent bonds (within a molecule)','var(--ink)',10.5,600);
+  return svg(inner,'0 0 340 220',180);
+}
+
+function diagHydrationSphere(ionLabel, ionColor, ionColorSoft){
+  ionLabel = ionLabel || 'Na+'; ionColor = ionColor || 'var(--amber)'; ionColorSoft = ionColorSoft || 'var(--amber-soft)';
+  var cx=150, cy=110;
+  var inner = '';
+  var n=6;
+  for(var i=0;i<n;i++){
+    var ang = (Math.PI*2/n)*i - Math.PI/2;
+    var wx = cx+Math.cos(ang)*68, wy=cy+Math.sin(ang)*68;
+    inner += circleEl(wx,wy,13,'var(--blue-soft)','var(--blue)',1.6) + txt(wx,wy+4,'H₂O','var(--blue)',7.5,700);
+  }
+  inner += circleEl(cx,cy,30,ionColorSoft,ionColor,2.5) + txt(cx,cy+5,ionLabel,ionColor,14,700);
+  inner += txt(150,205,'Water orients around a dissolved ion','var(--text-soft)',10.5,600);
+  return svg(inner,'0 0 300 215',175);
+}
+
+function diagMonomerPolymer(){
+  var top = '';
+  var pos = [[50,45],[110,60],[170,42],[230,58]];
+  pos.forEach(function(p){ top += circleEl(p[0],p[1],16,'var(--teal-soft)','var(--teal)',2); });
+  var bottom='';
+  var bx=[60,110,160,210];
+  for(var i=0;i<bx.length;i++){
+    bottom += circleEl(bx[i],175,16,'var(--teal-soft)','var(--teal)',2);
+    if(i<bx.length-1) bottom += lineEl(bx[i]+16,175,bx[i+1]-16,175,'var(--ink)',2.5);
+  }
+  var inner = top + bottom
+    + txt(140,95,'Monomers','var(--text-soft)',11,600)
+    + lineEl(140,105,140,140,'var(--ink)',2.2)
+    + poly('134,134 146,134 140,146','var(--ink)','1','var(--ink)')
+    + txt(200,125,'Polymerization','var(--ink)',10,600,'start')
+    + txt(135,205,'Polymer','var(--text-soft)',11,600);
+  return svg(inner,'0 0 300 220',180);
+}
+
+function diagDehydrationHydrolysis(){
+  var hexA = poly('40,110 60,75 100,75 120,110 100,145 60,145','var(--teal)');
+  var hexB = poly('180,110 200,75 240,75 260,110 240,145 200,145','var(--teal)');
+  var bond = lineEl(120,110,180,110,'var(--ink)',3);
+  var water = circleEl(150,72,11,'var(--blue-soft)','var(--blue)',1.8)+txt(150,75,'H₂O','var(--blue)',8,700);
+  var arrowUp = lineEl(150,92,150,60,'var(--blue)',1.6)+poly('145,62 155,62 150,52','none','1','var(--blue)');
+  var inner = hexA+hexB+bond+water+arrowUp
+    + txt(80,128,'Monomer','var(--text-soft)',9.5,600)
+    + txt(220,128,'Monomer','var(--text-soft)',9.5,600)
+    + txt(150,178,'Dehydration synthesis: removes water','var(--teal)',10,700)
+    + txt(150,197,'Hydrolysis: adds water back (digestion)','var(--coral)',10,700);
+  return svg(inner,'0 0 300 210',175);
+}
+
+function diagCarbonSkeletons(){
+  var chain = lineEl(15,55,45,30,'var(--ink)',3)+lineEl(45,30,75,55,'var(--ink)',3)+lineEl(75,55,105,30,'var(--ink)',3)+lineEl(105,30,135,55,'var(--ink)',3);
+  var bx=175;
+  var branch = lineEl(bx,55,bx+30,30,'var(--ink)',3)+lineEl(bx+30,30,bx+60,55,'var(--ink)',3)+lineEl(bx+30,30,bx+30,3,'var(--ink)',3)+lineEl(bx+60,55,bx+90,30,'var(--ink)',3);
+  var ring = poly('285,105 310,90 335,105 335,135 310,150 285,135','var(--ink)');
+  var inner = chain+branch+ring
+    + txt(75,80,'Straight chain','var(--text-soft)',10,600)
+    + txt(bx+45,80,'Branched chain','var(--text-soft)',10,600)
+    + txt(310,170,'Ring','var(--text-soft)',10,600);
+  return svg(inner,'0 0 350 185',150);
+}
+
+function diagPhospholipid(){
+  var head = circleEl(150,42,25,'var(--amber-soft)','var(--amber)',2.5)+txt(150,47,'Head','var(--amber)',10.5,700);
+  var tail1 = pathEl('M132,66 C120,86 142,100 128,118 C114,134 134,150 122,166','var(--ink)',2.5);
+  var tail2 = pathEl('M168,66 C180,86 158,100 172,118 C186,134 166,150 178,166','var(--ink)',2.5);
+  var inner = tail1+tail2+head
+    + txt(150,183,'Head: hydrophilic (attracts water)','var(--amber)',10.5,600)
+    + txt(150,198,'Tails: hydrophobic (repel water)','var(--text-soft)',10.5,600);
+  return svg(inner,'0 0 300 210',175);
+}
+
+function diagDnaRna(){
+  var rnaStrand = pathEl('M25,60 C45,42 65,78 85,60 C105,42 125,78 145,60','var(--teal)',3);
+  var rnaBases = circleEl(45,54,5,'var(--teal)','none',0)+circleEl(85,54,5,'var(--teal)','none',0)+circleEl(125,54,5,'var(--teal)','none',0);
+  var dnaStrand1 = pathEl('M195,35 C215,55 235,15 255,35 C275,55 295,15 315,35','var(--blue)',3);
+  var dnaStrand2 = pathEl('M195,90 C215,70 235,110 255,90 C275,70 295,110 315,90','var(--blue)',3);
+  var rungs = lineEl(205,45,205,80,'var(--gray-line)',2)+lineEl(235,38,235,102,'var(--gray-line)',2)+lineEl(265,38,265,102,'var(--gray-line)',2)+lineEl(295,45,295,80,'var(--gray-line)',2);
+  var inner = rnaStrand+rnaBases+dnaStrand1+dnaStrand2+rungs
+    + txt(85,90,'RNA — single strand','var(--teal)',11,700)
+    + txt(255,130,'DNA — double helix','var(--blue)',11,700);
+  return svg(inner,'0 0 340 145',135);
+}
+
+function diagActivationEnergy(){
+  var base = lineEl(20,170,280,170,'var(--gray-line)',1.5);
+  var uncat = pathEl('M40,150 C90,150 110,25 150,25 C190,25 210,150 260,150','var(--coral)',3);
+  var cat = pathEl('M40,150 C80,150 100,85 150,85 C200,85 220,150 260,150','var(--blue)',3);
+  var inner = base+uncat+cat
+    + txt(40,190,'Reactants','var(--text-soft)',10.5,600,'start')
+    + txt(260,190,'Products','var(--text-soft)',10.5,600,'end')
+    + txt(150,18,'Uncatalyzed','var(--coral)',10.5,700)
+    + txt(150,80,'Catalyzed (enzyme)','var(--blue)',10.5,700)
+    + lineEl(120,150,120,26,'var(--coral)',1,true)
+    + lineEl(180,150,180,86,'var(--blue)',1,true)
+    + txt(112,90,'higher Eₐ','var(--coral)',9.5,600,'end')
+    + txt(188,120,'lower Eₐ','var(--blue)',9.5,600,'start');
+  return svg(inner,'0 0 300 205',170);
+}
+
+function diagLockKey(){
+  var enzyme = pathEl('M150,100 L107,75 A50,50 0 1 1 107,125 Z','var(--violet)',2.5,'var(--violet-soft)');
+  var substrate = poly('50,90 70,80 88,100 70,120 50,110','var(--teal)',2.5,'var(--teal-soft)');
+  var inner = enzyme+substrate
+    + txt(70,140,'Substrate (lactose)','var(--teal)',10,700)
+    + txt(150,168,'Enzyme (lactase) — notch is the active site','var(--violet)',10,700)
+    + txt(150,20,'Lactase + Lactose → Glucose + Galactose','var(--ink)',11,700);
+  return svg(inner,'0 0 300 180',150);
+}
+
+function diagDenaturation(){
+  var enzymeOK = pathEl('M65,100 L28,78 A42,42 0 1 1 28,122 Z','var(--teal)',2.5,'var(--teal-soft)');
+  var subOK = poly('5,90 20,82 32,100 20,118 5,110','var(--blue)',2,'var(--blue-soft)');
+  var blob = pathEl('M225,55 C202,53 192,74 202,89 C188,103 197,127 216,130 C226,146 252,140 254,121 C271,111 263,86 246,80 C249,64 240,55 225,55 Z','var(--coral)',2.5,'var(--coral-soft)');
+  var subBad = poly('278,58 292,50 304,66 292,82 278,74','var(--blue)',2,'var(--blue-soft)');
+  var arrow = lineEl(108,100,168,100,'var(--ink)',2.2)+poly('162,93 162,107 174,100','none','1','var(--ink)');
+  var inner = enzymeOK+subOK+blob+subBad+arrow
+    + txt(18,145,'Normal active site','var(--teal)',10,700,'start')
+    + txt(138,88,'heat / pH','var(--text-soft)',9.5,600)
+    + txt(240,168,'Denatured — shape changed','var(--coral)',10,700);
+  return svg(inner,'0 0 320 185',155);
+}
+
+/* ============ Card data ============ */
+var CATS = [
+  {key:'bonding', label:'Bonding & Water', color:'var(--blue)'},
+  {key:'macromolecules', label:'Macromolecules', color:'var(--teal)'},
+  {key:'enzymes', label:'Enzymes', color:'var(--coral)'}
+];
+function catInfo(key){ for(var i=0;i<CATS.length;i++) if(CATS[i].key===key) return CATS[i]; return CATS[0]; }
+
+var CARDS = [
+  {cat:'bonding', term:'Atom', def:'The basic unit of matter.', extra:'Nucleus holds protons (+) and neutrons (neutral). Electrons (−) move around it in orbitals, following the "2, 8, 8 rule."', diagram:null},
+  {cat:'bonding', term:'Ionic Bond', def:'Formed when one or more electrons are transferred from one atom to another.', extra:'Neutral atoms become ions (cations/anions) when they gain or lose electrons. Example: Na transfers an electron to Cl, forming Na⁺ and Cl⁻.', diagram:null},
+  {cat:'bonding', term:'Covalent Bond', def:'Electrons are shared between atoms — they move about the nuclei of both.', extra:'Molecules form when atoms join together through covalent bonds, like the O–H bonds inside a single water molecule.', diagram:null},
+  {cat:'bonding', term:'Hydrogen Bond', def:'An attraction between a slightly positive hydrogen on ONE water molecule and a slightly negative oxygen on a NEIGHBORING water molecule.', extra:'This is INTERmolecular (between separate molecules) — not the same as the covalent bonds inside a single water molecule.', diagram:diagHydrogenBonds},
+  {cat:'bonding', term:'Polar Molecule (Water)', def:'A molecule with an uneven distribution of charge.', extra:'Oxygen\'s larger nucleus pulls shared electrons closer, creating a δ− region at oxygen and δ+ regions at each hydrogen.', diagram:diagWaterMolecule},
+  {cat:'bonding', term:'Cohesion', def:'Attraction between molecules of the SAME substance — water molecules "stick" to each other.', extra:'Caused by hydrogen bonding. Produces surface tension. Example: an insect standing on a water surface.', diagram:null},
+  {cat:'bonding', term:'Adhesion', def:'Attraction between molecules of DIFFERENT substances — water "sticks" to other surfaces.', extra:'Produces capillary action, the force that draws water from a plant\'s roots to its leaves.', diagram:null},
+  {cat:'bonding', term:'Hydration Sphere', def:'A ring of water molecules surrounding a dissolved ion, oriented by charge.', extra:'Water\'s negative (oxygen) side faces a positive ion; water\'s positive (hydrogen) side faces a negative ion. This is how water dissolves ionic compounds like salt.', diagram:diagHydrationSphere},
+
+  {cat:'macromolecules', term:'Organic Compounds & Carbon', def:'Carbon-containing compounds are called "organic." Carbon is the most abundant element in living things.', extra:'Carbon has 4 valence electrons, so it bonds with many elements (H, O, P, S, N) and even other carbon atoms — forming straight chains, branched chains, and rings.', diagram:diagCarbonSkeletons},
+  {cat:'macromolecules', term:'Monomer & Polymer', def:'A monomer is the basic building-block unit of a macromolecule. Many monomers bonded together form a polymer.', extra:'We usually eat macromolecules in polymer form; digestion breaks polymers into monomers, and cells reassemble monomers into new polymers.', diagram:diagMonomerPolymer},
+  {cat:'macromolecules', term:'Dehydration Synthesis vs. Hydrolysis', def:'Dehydration synthesis REMOVES water to bond monomers into a polymer. Hydrolysis ADDS water to break a polymer into monomers.', extra:'Hydrolysis is how digestion works — water is added to break bonds apart.', diagram:diagDehydrationHydrolysis},
+  {cat:'macromolecules', term:'Carbohydrates', def:'Ring carbon structures (C, H, O). Monomer: monosaccharide. Polymer: polysaccharide.', extra:'Function: source of QUICK energy; structural support and protection. Examples: fructose, glucose, cellulose.', diagram:null},
+  {cat:'macromolecules', term:'Lipids', def:'Chains or ring structures (C, H, O). No true monomer — made of glycerol and fatty acids.', extra:'Function: LONG-TERM energy storage, forms membranes, waterproof coverings, hormones. Examples: cholesterol, triglycerides, phospholipids.', diagram:null},
+  {cat:'macromolecules', term:'Phospholipid', def:'Glycerol + phosphate group + 2 fatty acids. Forms the cell membrane.', extra:'Head: hydrophilic (attracts water). Tails: hydrophobic (repel water).', diagram:diagPhospholipid},
+  {cat:'macromolecules', term:'Proteins', def:'The most diverse macromolecule (C, H, O, N). Monomer: amino acid. Polymer: polypeptide.', extra:'Function: enzymes (control reaction rates), regulate cell processes, transport substances, structures like hair and nails.', diagram:null},
+  {cat:'macromolecules', term:'Nucleic Acids', def:'Monomer: nucleotide (5-carbon sugar + phosphate group + nitrogenous base). Polymer: DNA or RNA.', extra:'Function: store and transmit hereditary (genetic) information. DNA is a double helix; RNA is a single strand.', diagram:diagDnaRna},
+
+  {cat:'enzymes', term:'Activation Energy (Eₐ)', def:'The energy needed to get a chemical reaction started.', extra:'Like pushing a boulder up a hill before it can roll down the other side — energy must be put in before the reaction can proceed.', diagram:null},
+  {cat:'enzymes', term:'Enzyme', def:'A molecule that acts as a catalyst during a chemical reaction in a living organism.', extra:'Speeds up the reaction rate WITHOUT being consumed, by LOWERING the activation energy. Enzymes are proteins and are specific to their reaction.', diagram:diagActivationEnergy},
+  {cat:'enzymes', term:'Substrate & Active Site', def:'The substrate is the substance an enzyme works on. It bonds to the enzyme at the active site.', extra:'Like a key fitting a specific lock. Example: Lactase (enzyme) + Lactose (substrate) → Glucose + Galactose (products).', diagram:diagLockKey},
+  {cat:'enzymes', term:'Denaturation', def:'When bonds in an enzyme\'s active site weaken and its overall shape changes, outside its optimal temperature/pH range.', extra:'A denatured enzyme\'s active site no longer matches its substrate\'s shape, so no reaction occurs. In this class, zero activity at ANY off-range temperature — too hot OR too cold — is called "denatured."', diagram:diagDenaturation},
+  {cat:'enzymes', term:'Enzyme Naming', def:'Most enzymes are named for the substrate they act on.', extra:'Lactase → lactose. Amylase → amylose. Pepsin → peptides. Protease → proteins. Lipase → lipids.', diagram:null},
+  {cat:'enzymes', term:'Allosteric Site', def:'A location on an enzyme separate from the active site, where inhibitors or activators can bind.', extra:'An inhibitor binding here alters the active site so the substrate is rejected; an activator binding here can make the active site accept the substrate.', diagram:null}
+];
+
+/* ============ Deck state & rendering ============ */
+var activeCat = 'all';
+var order = CARDS.map(function(_,i){return i;});
+var pos = 0;
+var flipped = false;
+var goodCount = 0, badCount = 0;
+var seenRated = {};
+
+function currentIndices(){
+  if(activeCat==='all') return order;
+  return order.filter(function(i){ return CARDS[i].cat===activeCat; });
+}
+
+function buildTabs(){
+  var tabsEl = document.getElementById('tabs');
+  var allBtn = document.createElement('button');
+  allBtn.className='tab-btn active'; allBtn.textContent='All'; allBtn.dataset.key='all';
+  tabsEl.appendChild(allBtn);
+  CATS.forEach(function(c){
+    var b=document.createElement('button');
+    b.className='tab-btn'; b.textContent=c.label; b.dataset.key=c.key;
+    tabsEl.appendChild(b);
+  });
+  tabsEl.addEventListener('click', function(e){
+    if(e.target.tagName!=='BUTTON') return;
+    activeCat = e.target.dataset.key;
+    Array.prototype.forEach.call(tabsEl.children, function(b){ b.classList.toggle('active', b.dataset.key===activeCat); });
+    document.getElementById('filterLabel').textContent = activeCat==='all' ? 'All cards' : catInfo(activeCat).label;
+    pos = 0; flipped=false;
+    renderCard();
+  });
+}
+
+function renderCard(){
+  var idxs = currentIndices();
+  if(idxs.length===0) return;
+  if(pos>=idxs.length) pos=0;
+  var card = CARDS[idxs[pos]];
+  var info = catInfo(card.cat);
+
+  document.getElementById('flashcard').classList.remove('flipped');
+  flipped=false;
+
+  document.getElementById('catTagFront').textContent = info.label;
+  document.getElementById('catTagFront').style.background = info.color;
+  document.getElementById('catTagFront').style.color = '#fff';
+  document.getElementById('catTagBack').textContent = info.label;
+  document.getElementById('catTagBack').style.background = info.color;
+  document.getElementById('catTagBack').style.color = '#fff';
+
+  document.getElementById('termText').textContent = card.term;
+  document.getElementById('defText').textContent = card.def;
+  document.getElementById('extraText').textContent = card.extra || '';
+
+  var dWrap = document.getElementById('diagramWrap');
+  if(card.diagram){
+    dWrap.style.display='block';
+    dWrap.innerHTML = card.diagram();
+  } else {
+    dWrap.style.display='none';
+    dWrap.innerHTML='';
+  }
+
+  document.getElementById('cardNum').textContent = pos+1;
+  document.getElementById('cardTotal').textContent = idxs.length;
+  document.getElementById('progressFill').style.width = Math.round(((pos+1)/idxs.length)*100)+'%';
+
+  document.getElementById('rateRow').style.visibility='hidden';
+  updateTally();
+}
+
+function updateTally(){
+  var t = document.getElementById('tally');
+  if(goodCount+badCount===0){ t.textContent=''; return; }
+  t.innerHTML = '<b class="good">'+goodCount+'</b> got it &middot; <b class="bad">'+badCount+'</b> still learning';
+}
+
+function nextCard(){ var idxs=currentIndices(); pos=(pos+1)%idxs.length; renderCard(); }
+function prevCard(){ var idxs=currentIndices(); pos=(pos-1+idxs.length)%idxs.length; renderCard(); }
+function shuffleDeck(){
+  for(var i=order.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=order[i]; order[i]=order[j]; order[j]=t; }
+  pos=0; goodCount=0; badCount=0; seenRated={}; renderCard();
+}
+
+document.getElementById('flashcard').addEventListener('click', function(){
+  flipped=!flipped;
+  this.classList.toggle('flipped', flipped);
+  document.getElementById('rateRow').style.visibility = flipped ? 'visible' : 'hidden';
+});
+document.getElementById('btnNext').addEventListener('click', function(e){ e.stopPropagation(); nextCard(); });
+document.getElementById('btnPrev').addEventListener('click', function(e){ e.stopPropagation(); prevCard(); });
+document.getElementById('btnShuffle').addEventListener('click', function(e){ e.stopPropagation(); shuffleDeck(); });
+document.getElementById('btnGood').addEventListener('click', function(e){
+  e.stopPropagation();
+  var idxs=currentIndices(); var key=idxs[pos];
+  if(seenRated[key]==='bad') badCount--; if(seenRated[key]!=='good'){ goodCount++; seenRated[key]='good'; }
+  updateTally(); nextCard();
+});
+document.getElementById('btnBad').addEventListener('click', function(e){
+  e.stopPropagation();
+  var idxs=currentIndices(); var key=idxs[pos];
+  if(seenRated[key]==='good') goodCount--; if(seenRated[key]!=='bad'){ badCount++; seenRated[key]='bad'; }
+  updateTally(); nextCard();
+});
+
+buildTabs();
+renderCard();
+</script>
+</body>
+</html>

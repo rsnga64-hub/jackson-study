@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 2 Flashcards: Cells &amp; Organelles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FBFAF7;
+    --grid-line: rgba(28,43,74,0.055);
+    --ink: #1C2B4A;
+    --text: #2B3648;
+    --text-soft: #64707F;
+    --blue: #2E86AB;
+    --blue-soft: #E9F3F8;
+    --amber: #D98A2B;
+    --amber-soft: #FCF1DE;
+    --coral: #D65A5A;
+    --coral-soft: #FBEBEB;
+    --teal: #2C9C82;
+    --teal-soft: #E6F5F0;
+    --violet: #7C5CBF;
+    --violet-soft: #EFE9F8;
+    --card-bg: #FFFFFF;
+    --border: #E4E0D4;
+    --gray: #94A0AD;
+    --gray-line: #CBD3DC;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  h1, h2, h3, .display { font-family: 'Space Grotesk', sans-serif; color: var(--ink); }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 32px 20px 80px; }
+  a { color: inherit; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--text-soft); text-decoration: none; font-size: 0.88rem; font-weight: 600; margin-bottom: 18px; }
+  .back-link:hover { color: var(--blue); }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    background: var(--ink);
+    border-radius: 18px;
+    padding: 26px 28px;
+    color: #fff;
+    margin-bottom: 22px;
+  }
+  .hero h1 { color: #fff; font-size: 1.7rem; margin: 0 0 6px; line-height: 1.15; }
+  .hero p { margin: 0; color: #C8D3E0; font-size: 0.96rem; max-width: 52ch; }
+
+  /* ---------- Category tabs ---------- */
+  .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 20px; }
+  .tab-btn {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.84rem;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text-soft);
+    border-radius: 999px;
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .tab-btn:hover { border-color: var(--ink); color: var(--ink); }
+  .tab-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  /* ---------- Progress / stats ---------- */
+  .statline {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.82rem; color: var(--text-soft); margin-bottom: 10px; flex-wrap: wrap; gap: 6px;
+  }
+  .statline b { color: var(--ink); }
+  .progress-track { height: 6px; background: var(--border); border-radius: 999px; overflow: hidden; margin-bottom: 18px; }
+  .progress-fill { height: 100%; background: var(--blue); border-radius: 999px; transition: width 0.2s ease; }
+
+  /* ---------- Flashcard ---------- */
+  .stage { perspective: 1600px; margin-bottom: 18px; }
+  .flashcard {
+    position: relative;
+    min-height: 420px;
+    border-radius: 18px;
+    cursor: pointer;
+    transition: transform 0.5s cubic-bezier(.4,.2,.2,1);
+    transform-style: preserve-3d;
+  }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .face {
+    position: absolute; inset: 0;
+    -webkit-backface-visibility: hidden; backface-visibility: hidden;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    box-shadow: 0 4px 18px rgba(28,43,74,0.07);
+    padding: 26px 28px;
+    display: flex; flex-direction: column;
+  }
+  .face.back { transform: rotateY(180deg); overflow-y: auto; }
+  .cat-tag {
+    display: inline-flex; align-self: flex-start;
+    font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.72rem;
+    letter-spacing: 0.02em; text-transform: uppercase;
+    padding: 4px 11px; border-radius: 999px; margin-bottom: 14px;
+  }
+  .face.front { align-items: center; text-align: center; justify-content: center; }
+  .term { font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: var(--ink); font-size: 1.45rem; line-height: 1.25; margin: 0; }
+  .flip-hint { margin-top: 18px; font-size: 0.8rem; color: var(--gray); }
+  .def { font-size: 0.98rem; font-weight: 600; color: var(--ink); line-height: 1.42; margin: 0 0 10px; }
+  .extra { font-size: 0.86rem; color: var(--text-soft); line-height: 1.45; margin: 0 0 14px; }
+  .diagram-wrap { margin-top: auto; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 6px; }
+  .diagram-wrap svg { display: block; width: 100%; height: auto; }
+
+  /* ---------- Controls ---------- */
+  .controls { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  .btn {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.88rem;
+    border: 1px solid var(--border); background: var(--card-bg); color: var(--ink);
+    border-radius: 10px; padding: 10px 16px; cursor: pointer; transition: all 0.15s ease;
+  }
+  .btn:hover { border-color: var(--ink); }
+  .btn:disabled { opacity: 0.4; cursor: default; }
+  .btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .btn.primary:hover { opacity: 0.9; }
+  .rate-row { display: flex; gap: 10px; justify-content: center; margin-bottom: 6px; }
+  .btn.rate-bad { border-color: var(--coral); color: var(--coral); }
+  .btn.rate-bad:hover { background: var(--coral-soft); }
+  .btn.rate-good { border-color: var(--teal); color: var(--teal); }
+  .btn.rate-good:hover { background: var(--teal-soft); }
+
+  .tally { text-align: center; font-size: 0.82rem; color: var(--text-soft); margin-top: 4px; }
+  .tally b.good { color: var(--teal); }
+  .tally b.bad { color: var(--coral); }
+
+  @media (max-width: 480px) {
+    .flashcard { min-height: 460px; }
+    .term { font-size: 1.2rem; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="biology.html">&larr; Back to Biology</a>
+  <div class="hero">
+    <h1>Unit 2 Flashcards</h1>
+    <p>Cell theory &amp; scientists, prokaryotes vs. eukaryotes, and all the organelles &mdash; tap a card to flip it.</p>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="statline">
+    <span>Card <b id="cardNum">1</b> of <b id="cardTotal">14</b></span>
+    <span id="filterLabel">All cards</span>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+  <div class="stage">
+    <div class="flashcard" id="flashcard">
+      <div class="face front">
+        <span class="cat-tag" id="catTagFront"></span>
+        <p class="term" id="termText"></p>
+        <p class="flip-hint">Tap the card to see the definition</p>
+      </div>
+      <div class="face back">
+        <span class="cat-tag" id="catTagBack"></span>
+        <p class="def" id="defText"></p>
+        <p class="extra" id="extraText"></p>
+        <div class="diagram-wrap" id="diagramWrap" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rate-row" id="rateRow" style="visibility:hidden;">
+    <button class="btn rate-bad" id="btnBad">Still learning</button>
+    <button class="btn rate-good" id="btnGood">Got it</button>
+  </div>
+
+  <div class="controls">
+    <button class="btn" id="btnPrev">&larr; Prev</button>
+    <button class="btn primary" id="btnShuffle">Shuffle</button>
+    <button class="btn" id="btnNext">Next &rarr;</button>
+  </div>
+
+  <p class="tally" id="tally"></p>
+</div>
+
+<script>
+/* ============ Diagram helpers ============ */
+function svg(inner, vb, h) {
+  return '<svg viewBox="'+vb+'" width="100%" height="'+(h||180)+'" xmlns="http://www.w3.org/2000/svg">'+inner+'</svg>';
+}
+function lineEl(x1,y1,x2,y2,color,w,dash){ return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round"'+(dash?' stroke-dasharray="5 4"':'')+'/>'; }
+function dot(x,y,color,r){ return '<circle cx="'+x+'" cy="'+y+'" r="'+(r||3.2)+'" fill="'+(color||'var(--ink)')+'"/>'; }
+function txt(x,y,s,color,size,weight,anchor){ return '<text x="'+x+'" y="'+y+'" fill="'+(color||'var(--ink)')+'" font-family="Space Grotesk, sans-serif" font-size="'+(size||13)+'" font-weight="'+(weight||700)+'" text-anchor="'+(anchor||'middle')+'">'+s+'</text>'; }
+function poly(pts,color,w,fill){ return '<polygon points="'+pts+'" fill="'+(fill||'none')+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linejoin="round"/>'; }
+function ellipseEl(cx,cy,rx,ry,fill,stroke,w){ return '<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rx+'" ry="'+ry+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(w||2.5)+'"/>'; }
+function circleEl(cx,cy,r,fill,stroke,w){ return '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(w||2.5)+'"/>'; }
+function rectEl(x,y,w,h,rx,fill,stroke,sw){ return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+(rx||0)+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(sw||2.5)+'"/>'; }
+function pathEl(d,stroke,w,fill,dash){ return '<path d="'+d+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round"'+(dash?' stroke-dasharray="4 3"':'')+'/>'; }
+/* gentle sine-wave line between two points — used for ER membranes, mRNA strands, flagella */
+function wavy(x1,y1,x2,y2,amp,cycles,color,w){
+  var n=28, pts=[];
+  var dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy)||1;
+  var ux=dx/len, uy=dy/len, px=-uy, py=ux;
+  for(var i=0;i<=n;i++){
+    var t=i/n;
+    var bx=x1+dx*t, by=y1+dy*t;
+    var off=Math.sin(t*Math.PI*2*cycles)*amp;
+    pts.push((bx+px*off).toFixed(1)+','+(by+py*off).toFixed(1));
+  }
+  return '<polyline points="'+pts.join(' ')+'" fill="none" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.2)+'" stroke-linecap="round"/>';
+}
+
+/* ============ Biology diagrams ============ */
+
+/* --- Generic eukaryotic cell cross-section --- */
+function diagEukaryoticCell(){
+  var inner =
+      ellipseEl(190,130,175,108,'none','var(--ink)',3)
+    + ellipseEl(112,86,50,40,'var(--blue-soft)','var(--blue)',2.5)
+    + dot(112,86,'var(--blue)',7)
+    + txt(112,66,'nucleolus','var(--ink)',7.5,600)
+    + txt(112,140,'Nucleus','var(--blue)',11,700)
+    + wavy(166,52,262,48,7,3,'var(--coral)',2)
+    + dot(184,48,'var(--coral)',2.2) + dot(204,56,'var(--coral)',2.2) + dot(224,46,'var(--coral)',2.2) + dot(244,54,'var(--coral)',2.2)
+    + txt(214,36,'Rough ER','var(--coral)',10,700)
+    + wavy(190,180,282,170,6,2.5,'var(--amber)',2)
+    + txt(236,200,'Smooth ER','var(--amber)',10,700)
+    + pathEl('M60,190 Q95,178 130,190','var(--teal)',3)
+    + pathEl('M56,202 Q95,190 134,202','var(--teal)',3)
+    + pathEl('M52,214 Q95,202 138,214','var(--teal)',3)
+    + txt(95,232,'Golgi Apparatus','var(--teal)',10,700)
+    + ellipseEl(305,115,26,16,'var(--coral-soft)','var(--coral)',2.5)
+    + lineEl(293,115,301,108,'var(--coral)',1.6)
+    + lineEl(297,121,309,112,'var(--coral)',1.6)
+    + txt(305,143,'Mitochondrion','var(--coral)',9.5,700)
+    + dot(58,148,'var(--ink)',3) + dot(330,178,'var(--ink)',3) + dot(78,220,'var(--ink)',3)
+    + txt(58,163,'ribosomes','var(--text-soft)',8,600)
+    + circleEl(328,140,19,'none','var(--violet)',2.2)
+    + txt(328,168,'vacuole','var(--violet)',8.5,600)
+    + circleEl(238,222,10,'var(--amber-soft)','var(--amber)',2)
+    + txt(238,238,'lysosome','var(--amber)',8,600)
+    + txt(50,72,'cytoplasm','var(--text-soft)',9,500)
+    + txt(190,250,'cell membrane','var(--text-soft)',9,600);
+  return svg(inner,'0 0 380 262',225);
+}
+
+/* --- Simple prokaryotic cell (rod shape) + shape gallery --- */
+function diagProkaryoticCell(){
+  var inner =
+      rectEl(30,25,220,95,45,'none','var(--ink)',3)
+    + rectEl(42,37,196,71,32,'none','var(--blue)',1.8)
+    + pathEl('M105,72 C105,58 122,54 132,63 C142,72 160,68 160,82 C160,96 142,100 132,91 C122,82 105,86 105,72 Z','var(--teal)',2.2)
+    + txt(140,18,'Cell Wall','var(--ink)',10,700)
+    + txt(140,131,'Cell Membrane','var(--blue)',9,600)
+    + txt(133,113,'nucleoid (single DNA loop)','var(--teal)',7.8,600)
+    + dot(55,45,'var(--ink)',2.2) + dot(70,92,'var(--ink)',2.2) + dot(188,50,'var(--ink)',2.2) + dot(198,96,'var(--ink)',2.2) + dot(60,66,'var(--ink)',2.2) + dot(208,76,'var(--ink)',2.2)
+    + txt(58,32,'ribosomes','var(--text-soft)',7.5,600)
+    + rectEl(28,166,58,26,13,'none','var(--ink)',2.2)
+    + txt(57,206,'rod / bacilli','var(--text-soft)',8,600)
+    + circleEl(152,179,17,'none','var(--ink)',2.2)
+    + txt(152,206,'circular / cocci','var(--text-soft)',8,600)
+    + wavy(222,179,290,179,10,2,'var(--ink)',2.2)
+    + txt(256,206,'spiral / spirilla','var(--text-soft)',8,600);
+  return svg(inner,'0 0 320 220',195);
+}
+
+/* --- Endosymbiosis: two engulfment events --- */
+function diagEndosymbiosis(){
+  var inner =
+      ellipseEl(95,112,72,60,'var(--blue-soft)','var(--ink)',2.5)
+    + circleEl(146,84,15,'var(--coral-soft)','var(--coral)',2)
+    + pathEl('M130,71 A20,20 0 0 1 161,97','var(--coral)',1.6,undefined,true)
+    + txt(95,188,'Step 1: host cell engulfs an','var(--text-soft)',9,600)
+    + txt(95,200,'α-proteobacterium','var(--text-soft)',9,600)
+    + txt(95,214,'→ becomes the mitochondrion','var(--coral)',9,700)
+    + lineEl(182,112,218,112,'var(--ink)',2.5)
+    + poly('218,105 232,112 218,119','var(--ink)',2,'var(--ink)')
+    + ellipseEl(303,112,80,66,'var(--blue-soft)','var(--ink)',2.5)
+    + ellipseEl(282,96,16,10,'var(--coral-soft)','var(--coral)',2)
+    + circleEl(338,86,17,'var(--teal-soft)','var(--teal)',2)
+    + pathEl('M321,72 A22,22 0 0 1 355,100','var(--teal)',1.6,undefined,true)
+    + txt(303,188,'Step 2: that cell engulfs a','var(--text-soft)',9,600)
+    + txt(303,200,'cyanobacterium','var(--text-soft)',9,600)
+    + txt(303,214,'→ becomes the chloroplast','var(--teal)',9,700);
+  return svg(inner,'0 0 400 226',195);
+}
+
+/* --- Phospholipid bilayer cross-section --- */
+function diagPhospholipidBilayer(){
+  var xs=[30,72,114,156,198,240,282];
+  var inner='';
+  for(var i=0;i<xs.length;i++){
+    var x=xs[i];
+    inner += circleEl(x,26,11,'var(--blue-soft)','var(--blue)',2);
+    inner += lineEl(x,37,x,72,'var(--ink)',2.2);
+    inner += lineEl(x,108,x,143,'var(--ink)',2.2);
+    inner += circleEl(x,154,11,'var(--blue-soft)','var(--blue)',2);
+  }
+  inner += txt(156,12,'hydrophilic heads','var(--blue)',9.5,700);
+  inner += txt(156,92,'hydrophobic tails','var(--text-soft)',9,600);
+  inner += txt(156,177,'hydrophilic heads','var(--blue)',9.5,700);
+  return svg(inner,'0 0 312 186',160);
+}
+
+/* --- Golgi apparatus: stacked plates, cis/trans faces --- */
+function diagGolgi(){
+  var inner =
+      pathEl('M50,178 Q130,163 210,178','var(--teal)',3)
+    + pathEl('M45,155 Q130,141 215,155','var(--teal)',3)
+    + pathEl('M42,132 Q130,119 218,132','var(--teal)',3)
+    + pathEl('M45,109 Q130,97 215,109','var(--teal)',3)
+    + pathEl('M52,87 Q130,76 208,87','var(--teal)',3)
+    + dot(50,178,'var(--teal)',3) + dot(210,178,'var(--teal)',3)
+    + dot(52,87,'var(--teal)',3) + dot(208,87,'var(--teal)',3)
+    + txt(130,199,'cis face (receiving from ER)','var(--text-soft)',9,600)
+    + txt(130,60,'trans face (shipping out)','var(--text-soft)',9,600);
+  return svg(inner,'0 0 260 212',180);
+}
+
+/* --- Ribosome: large + small subunit with mRNA threading through --- */
+function diagRibosome(){
+  var inner =
+      ellipseEl(130,104,72,36,'var(--blue-soft)','var(--blue)',2.5)
+    + ellipseEl(130,64,46,24,'var(--teal-soft)','var(--teal)',2.5)
+    + wavy(6,86,254,86,6,4,'var(--coral)',2.4)
+    + txt(130,152,'Large subunit','var(--blue)',10,700)
+    + txt(130,38,'Small subunit','var(--teal)',10,700)
+    + txt(226,102,'mRNA','var(--coral)',9.5,700);
+  return svg(inner,'0 0 260 168',150);
+}
+
+/* --- Plant vs. animal cell, highlighting plant-only parts --- */
+function diagPlantVsAnimal(){
+  var inner =
+      circleEl(85,102,72,'none','var(--ink)',2.5)
+    + circleEl(65,84,19,'var(--blue-soft)','var(--blue)',2)
+    + ellipseEl(108,128,15,9,'var(--coral-soft)','var(--coral)',2)
+    + txt(85,192,'Animal Cell','var(--ink)',11,700)
+    + txt(65,108,'nucleus','var(--text-soft)',7,600)
+    + rectEl(188,28,150,148,22,'none','var(--teal)',4)
+    + rectEl(200,40,126,124,16,'none','var(--ink)',2)
+    + circleEl(224,64,16,'var(--blue-soft)','var(--blue)',2)
+    + circleEl(263,102,50,'var(--violet-soft)','var(--violet)',2.2)
+    + ellipseEl(305,58,13,8,'var(--teal-soft)','var(--teal)',2)
+    + ellipseEl(300,146,13,8,'var(--teal-soft)','var(--teal)',2)
+    + txt(263,194,'Plant Cell','var(--ink)',11,700)
+    + txt(224,88,'nucleus','var(--text-soft)',7,600)
+    + txt(263,102,'central','var(--violet)',7.6,700)
+    + txt(263,113,'vacuole','var(--violet)',7.6,700)
+    + txt(305,46,'chloroplast','var(--teal)',7.4,700)
+    + txt(300,134,'chloroplast','var(--teal)',7.4,700)
+    + txt(263,18,'cell wall (plant only)','var(--teal)',9,700);
+  return svg(inner,'0 0 350 202',175);
+}
+
+/* ============ Card data ============ */
+var CATS = [
+  {key:'theory', label:'Cell Theory', color:'var(--blue)'},
+  {key:'organelles', label:'Organelles', color:'var(--teal)'},
+  {key:'casestudy', label:'Cell Clinic', color:'var(--coral)'}
+];
+function catInfo(key){ for(var i=0;i<CATS.length;i++) if(CATS[i].key===key) return CATS[i]; return CATS[0]; }
+
+var CARDS = [
+  {cat:'theory', term:'Cell Theory', def:'1. All living things are made of cells. 2. Cells are the basic units of structure and function of living things. 3. New cells are produced from existing cells.', extra:'This is the Lecture Notes\' own wording. The assigned video phrases tenet 2 slightly differently ("structure and organization") — good to recognize both, but the Lecture Notes version is the one to know cold.', diagram:null},
+  {cat:'theory', term:'Robert Hooke (1665)', def:'Used an early microscope to look at cork, and named the tiny chambers he saw "cells" because they reminded him of small rooms.', extra:'First person to observe and name cells.', diagram:null},
+  {cat:'theory', term:'Anton van Leeuwenhoek', def:'Observed pond water and dental scrapings and was the first to view microscopic living organisms, which he called "animalcules."', extra:null, diagram:null},
+  {cat:'theory', term:'Matthias Schleiden', def:'Concluded that all plants are made of cells.', extra:'Easy to mix up with Schwann — Schleiden = plants.', diagram:null},
+  {cat:'theory', term:'Theodor Schwann', def:'Concluded that all animals are made of cells.', extra:'Easy to mix up with Schleiden — Schwann = animals.', diagram:null},
+  {cat:'theory', term:'Rudolf Virchow', def:'Concluded that all cells come from preexisting cells.', extra:'This became Cell Theory tenet #3.', diagram:null},
+  {cat:'theory', term:'Prokaryotic Cell', def:'Small, simple cell with no nucleus and no membrane-bound organelles.', extra:'Still has ribosomes, a cell membrane, cytoplasm, and DNA (a condensed circular loop — the nucleoid). Comes in 3 shapes: rod (bacilli), circular (cocci), spiral (spirilla). Smaller than eukaryotic cells (about 1–5 μm); reproduces by binary fission. These were the first cells on Earth — cyanobacteria (a prokaryote) changed Earth\'s atmosphere.', diagram:diagProkaryoticCell},
+  {cat:'theory', term:'Eukaryotic Cell', def:'Large, complex cell that has a nucleus and membrane-bound organelles.', extra:'Still has ribosomes, a cell membrane, cytoplasm, and DNA (linear, held in the nucleus). Can be unicellular or multicellular, and can have specialized functions like support, communication, or movement. Larger than prokaryotic cells (about 10–100 μm); undergoes mitosis/meiosis. Fungi and Protists are other examples of eukaryotes, besides plants and animals.', diagram:diagEukaryoticCell},
+  {cat:'theory', term:'Endosymbiosis Theory', def:'The theory that eukaryotic cells formed from a symbiotic relationship among prokaryotic cells.', extra:'Two-event version: a host cell engulfs an α-proteobacterium, which becomes the mitochondrion; that cell then engulfs a cyanobacterium, which becomes the chloroplast. (Longer version: two independent bacteria → one engulfs the other → one lives inside the other → both benefit → passed on to future generations.)', diagram:diagEndosymbiosis},
+
+  {cat:'organelles', term:'Nucleus & Nucleolus', def:'Nucleus: surrounded by a double nuclear membrane that houses and protects DNA from denaturation, and is also responsible for synthesis of ribosomal RNA (rRNA). Nucleolus: site of ribosome synthesis in the cell.', extra:'Both are Membrane Bound Organelles.', diagram:null},
+  {cat:'organelles', term:'Rough ER vs. Smooth ER', def:'Rough ER: highly folded organelle contiguous with the nucleus, with ribosomes attached; responsible for transporting proteins and sending them to the Golgi Apparatus. Smooth ER: responsible for lipid/hormone synthesis and detoxification of cell wastes.', extra:'Both Membrane Bound Organelles. "Rough" = ribosomes attached; "smooth" = no ribosomes.', diagram:null},
+  {cat:'organelles', term:'Golgi Apparatus', def:'Packages and ships materials — like proteins arriving from the ER — onward.', extra:'The teacher\'s materials use exactly one analogy anywhere: Golgi Apparatus = Amazon Warehouse (packaging and shipping). Membrane Bound Organelle.', diagram:diagGolgi},
+  {cat:'organelles', term:'Lysosome & Peroxisome', def:'Lysosome: a lipid bubble full of hydrolytic enzymes that break down cell waste and denatured proteins into their monomers; also involved in apoptosis (programmed cell death) — the fatty acid monomers from broken-down lipids are sent to the mitochondrion to help generate ATP. Peroxisome: responsible for lipid hydrolysis, and uses catalase (an enzyme) to break down hydrogen peroxide (toxic to the cell).', extra:'Both Membrane Bound Organelles.', diagram:null},
+  {cat:'organelles', term:'Mitochondrion', def:'Responsible for some of the processes that synthesize ATP.', extra:'The Citric Acid Cycle happens in the matrix; oxidative phosphorylation happens on the inner membrane. Membrane Bound Organelle.', diagram:null},
+  {cat:'organelles', term:'Chloroplast', def:'Internal anatomy arranged in stacks of thylakoid membranes called grana.', extra:'Multiple thylakoids increase surface area so more chemical reactions can occur. Membrane Bound Organelle — and one of the plant-only organelles.', diagram:null},
+  {cat:'organelles', term:'Cell Membrane', def:'Provides structure to cells, acting as a permeability barrier for some substances to the internal environment; a phospholipid bilayer that surrounds the entire cell.', extra:'Per the teacher\'s notes, Cell Membrane is grouped under Non-Membrane Bound Organelles (along with cell wall, ribosomes, cytoplasm, cytoskeleton, centriole/spindle fibers, and flagella/cilia) — unusual, but that\'s how the slides present it.', diagram:diagPhospholipidBilayer},
+  {cat:'organelles', term:'Ribosomes', def:'Non-Membrane Bound Organelle where proteins are made.', extra:'Free ribosomes float in the cytoplasm; others are attached to the Rough ER.', diagram:diagRibosome},
+  {cat:'organelles', term:'Cell Wall & Central Vacuole', def:'Cell Wall: a rigid structure made of complex carbohydrates found in plants, fungi, and bacteria; regulates what comes into and out of the cell and protects the interior from the extracellular space. Vacuole: a Membrane Bound Organelle — plant cells have one large central vacuole.', extra:'Cell Wall is a Non-Membrane Bound Organelle per the teacher\'s grouping. Along with the chloroplast, the cell wall and a big central vacuole are the classic plant-only features vs. an animal cell.', diagram:diagPlantVsAnimal},
+  {cat:'organelles', term:'Other Non-Membrane Bound Structures', def:'Cytoplasm: the fluid-filled interior of the cell. Cytoskeleton: Actin, Microtubules, Actin filaments (exactly as listed in the teacher\'s notes). Centriole & Spindle Fibers, and Flagella/Cilia round out this group.', extra:'Yes, "actin" appears twice in the teacher\'s own cytoskeleton list — looks like a slide typo, but it\'s kept exactly as written rather than swapped for outside vocabulary.', diagram:null},
+
+  {cat:'casestudy', term:'Cell Clinic — Room 1 (Fatigue)', def:'Organelle involved: Mitochondrion.', extra:'A patient with constant fatigue points to a problem with the organelle responsible for the processes that synthesize ATP.', diagram:null},
+  {cat:'casestudy', term:'Cell Clinic — Room 3 (Genetic Disorder)', def:'Organelle involved: Nucleus.', extra:'An inherited disorder traces back to the organelle that houses and protects the DNA.', diagram:null},
+  {cat:'casestudy', term:'Cell Clinic — Room 4 (Antibodies)', def:'Correct order: Ribosome → Rough ER → Golgi Apparatus → vesicle.', extra:'Antibodies are proteins, so they follow the normal protein pathway: made at the ribosome, processed through the rough ER, packaged/shipped by the Golgi, then sent out in a vesicle.', diagram:null},
+  {cat:'casestudy', term:'Cell Clinic — Room 5 (Water Intoxication)', def:'Organelle/structure involved: Cell Membrane.', extra:'Water intoxication is about too much water moving into or out of the cell — that\'s the cell membrane\'s job as a permeability barrier.', diagram:null},
+  {cat:'casestudy', term:'Cell Clinic — Rooms 6 & 7 (Enzymes)', def:'Room 6 (bacterial infection, enzymes released): Lysosome. Room 7 (can\'t package enzymes/bile): Golgi Apparatus.', extra:'Lysosome = breaks things down with hydrolytic enzymes. Golgi = packages and ships enzymes/proteins onward.', diagram:null}
+];
+
+/* ============ Deck state & rendering ============ */
+var activeCat = 'all';
+var order = CARDS.map(function(_,i){return i;});
+var pos = 0;
+var flipped = false;
+var goodCount = 0, badCount = 0;
+var seenRated = {};
+
+function currentIndices(){
+  if(activeCat==='all') return order;
+  return order.filter(function(i){ return CARDS[i].cat===activeCat; });
+}
+
+function buildTabs(){
+  var tabsEl = document.getElementById('tabs');
+  var allBtn = document.createElement('button');
+  allBtn.className='tab-btn active'; allBtn.textContent='All'; allBtn.dataset.key='all';
+  tabsEl.appendChild(allBtn);
+  CATS.forEach(function(c){
+    var b=document.createElement('button');
+    b.className='tab-btn'; b.textContent=c.label; b.dataset.key=c.key;
+    tabsEl.appendChild(b);
+  });
+  tabsEl.addEventListener('click', function(e){
+    if(e.target.tagName!=='BUTTON') return;
+    activeCat = e.target.dataset.key;
+    Array.prototype.forEach.call(tabsEl.children, function(b){ b.classList.toggle('active', b.dataset.key===activeCat); });
+    document.getElementById('filterLabel').textContent = activeCat==='all' ? 'All cards' : catInfo(activeCat).label;
+    pos = 0; flipped=false;
+    renderCard();
+  });
+}
+
+function renderCard(){
+  var idxs = currentIndices();
+  if(idxs.length===0) return;
+  if(pos>=idxs.length) pos=0;
+  var card = CARDS[idxs[pos]];
+  var info = catInfo(card.cat);
+
+  document.getElementById('flashcard').classList.remove('flipped');
+  flipped=false;
+
+  document.getElementById('catTagFront').textContent = info.label;
+  document.getElementById('catTagFront').style.background = info.color;
+  document.getElementById('catTagFront').style.color = '#fff';
+  document.getElementById('catTagBack').textContent = info.label;
+  document.getElementById('catTagBack').style.background = info.color;
+  document.getElementById('catTagBack').style.color = '#fff';
+
+  document.getElementById('termText').textContent = card.term;
+  document.getElementById('defText').textContent = card.def;
+  document.getElementById('extraText').textContent = card.extra || '';
+
+  var dWrap = document.getElementById('diagramWrap');
+  if(card.diagram){
+    dWrap.style.display='block';
+    dWrap.innerHTML = card.diagram();
+  } else {
+    dWrap.style.display='none';
+    dWrap.innerHTML='';
+  }
+
+  document.getElementById('cardNum').textContent = pos+1;
+  document.getElementById('cardTotal').textContent = idxs.length;
+  document.getElementById('progressFill').style.width = Math.round(((pos+1)/idxs.length)*100)+'%';
+
+  document.getElementById('rateRow').style.visibility='hidden';
+  updateTally();
+}
+
+function updateTally(){
+  var t = document.getElementById('tally');
+  if(goodCount+badCount===0){ t.textContent=''; return; }
+  t.innerHTML = '<b class="good">'+goodCount+'</b> got it &middot; <b class="bad">'+badCount+'</b> still learning';
+}
+
+function nextCard(){ var idxs=currentIndices(); pos=(pos+1)%idxs.length; renderCard(); }
+function prevCard(){ var idxs=currentIndices(); pos=(pos-1+idxs.length)%idxs.length; renderCard(); }
+function shuffleDeck(){
+  for(var i=order.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=order[i]; order[i]=order[j]; order[j]=t; }
+  pos=0; goodCount=0; badCount=0; seenRated={}; renderCard();
+}
+
+document.getElementById('flashcard').addEventListener('click', function(){
+  flipped=!flipped;
+  this.classList.toggle('flipped', flipped);
+  document.getElementById('rateRow').style.visibility = flipped ? 'visible' : 'hidden';
+});
+document.getElementById('btnNext').addEventListener('click', function(e){ e.stopPropagation(); nextCard(); });
+document.getElementById('btnPrev').addEventListener('click', function(e){ e.stopPropagation(); prevCard(); });
+document.getElementById('btnShuffle').addEventListener('click', function(e){ e.stopPropagation(); shuffleDeck(); });
+document.getElementById('btnGood').addEventListener('click', function(e){
+  e.stopPropagation();
+  var idxs=currentIndices(); var key=idxs[pos];
+  if(seenRated[key]==='bad') badCount--; if(seenRated[key]!=='good'){ goodCount++; seenRated[key]='good'; }
+  updateTally(); nextCard();
+});
+document.getElementById('btnBad').addEventListener('click', function(e){
+  e.stopPropagation();
+  var idxs=currentIndices(); var key=idxs[pos];
+  if(seenRated[key]==='good') goodCount--; if(seenRated[key]!=='bad'){ badCount++; seenRated[key]='bad'; }
+  updateTally(); nextCard();
+});
+
+buildTabs();
+renderCard();
+</script>
+</body>
+</html>

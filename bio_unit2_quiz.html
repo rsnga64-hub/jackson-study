@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 2 Quiz: Cells &amp; Organelles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FBFAF7;
+    --grid-line: rgba(28,43,74,0.055);
+    --ink: #1C2B4A;
+    --text: #2B3648;
+    --text-soft: #64707F;
+    --blue: #2E86AB;
+    --blue-soft: #E9F3F8;
+    --amber: #D98A2B;
+    --amber-soft: #FCF1DE;
+    --coral: #D65A5A;
+    --coral-soft: #FBEBEB;
+    --teal: #2C9C82;
+    --teal-soft: #E6F5F0;
+    --violet: #7C5CBF;
+    --violet-soft: #EFE9F8;
+    --card-bg: #FFFFFF;
+    --border: #E4E0D4;
+    --gray: #94A0AD;
+    --gray-line: #CBD3DC;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; color: var(--ink); }
+  .wrap { max-width: 680px; margin: 0 auto; padding: 32px 20px 80px; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--text-soft); text-decoration: none; font-size: 0.88rem; font-weight: 600; margin-bottom: 18px; }
+  .back-link:hover { color: var(--blue); }
+
+  .hero { background: var(--ink); border-radius: 18px; padding: 26px 28px; color: #fff; margin-bottom: 22px; }
+  .hero h1 { color: #fff; font-size: 1.7rem; margin: 0 0 6px; }
+  .hero p { margin: 0; color: #C8D3E0; font-size: 0.96rem; max-width: 52ch; }
+
+  .statline { display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text-soft); margin-bottom: 8px; }
+  .statline b { color: var(--ink); }
+  .progress-track { height: 6px; background: var(--border); border-radius: 999px; overflow: hidden; margin-bottom: 20px; }
+  .progress-fill { height: 100%; background: var(--blue); border-radius: 999px; transition: width 0.25s ease; }
+
+  .qcard {
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px;
+    padding: 26px 28px; box-shadow: 0 4px 18px rgba(28,43,74,0.06);
+  }
+  .qkicker { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.72rem; letter-spacing: 0.03em; text-transform: uppercase; color: var(--blue); margin: 0 0 8px; }
+  .qtext { font-size: 1.1rem; font-weight: 700; color: var(--ink); line-height: 1.35; margin: 0 0 16px; }
+  .diagram-wrap { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 6px; margin-bottom: 18px; }
+  .diagram-wrap svg { display: block; width: 100%; height: auto; }
+
+  .opt {
+    display: flex; align-items: center; gap: 10px;
+    width: 100%; text-align: left; font-family: 'Inter', sans-serif; font-size: 0.96rem; font-weight: 600;
+    color: var(--ink); background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 12px;
+    padding: 12px 16px; margin-bottom: 10px; cursor: pointer; transition: all 0.15s ease;
+  }
+  .opt:hover:not(.locked) { border-color: var(--blue); background: var(--blue-soft); }
+  .opt .letter {
+    flex-shrink: 0; width: 24px; height: 24px; border-radius: 999px; border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 700; color: var(--text-soft);
+  }
+  .opt.correct { border-color: var(--teal); background: var(--teal-soft); }
+  .opt.correct .letter { background: var(--teal); border-color: var(--teal); color: #fff; }
+  .opt.incorrect { border-color: var(--coral); background: var(--coral-soft); }
+  .opt.incorrect .letter { background: var(--coral); border-color: var(--coral); color: #fff; }
+  .opt.locked { cursor: default; }
+  .opt.dim { opacity: 0.55; }
+
+  .explain {
+    display: none; margin-top: 14px; padding: 12px 14px; border-radius: 10px;
+    background: var(--blue-soft); color: var(--ink); font-size: 0.9rem; line-height: 1.45;
+  }
+  .explain.show { display: block; }
+  .explain b { color: var(--blue); }
+
+  .qcontrols { display: flex; justify-content: flex-end; margin-top: 18px; }
+  .btn {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.92rem;
+    border: 1px solid var(--ink); background: var(--ink); color: #fff;
+    border-radius: 10px; padding: 11px 20px; cursor: pointer; transition: opacity 0.15s ease;
+  }
+  .btn:hover { opacity: 0.88; }
+  .btn:disabled { opacity: 0.35; cursor: default; }
+  .btn.ghost { background: var(--card-bg); color: var(--ink); }
+
+  /* results screen */
+  .results { text-align: center; }
+  .score-big { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 3rem; color: var(--ink); margin: 6px 0; }
+  .score-msg { font-size: 1rem; color: var(--text-soft); margin-bottom: 22px; }
+  .missed-list { text-align: left; margin: 20px 0; padding: 0; list-style: none; }
+  .missed-list li { padding: 10px 0; border-top: 1px solid var(--border); font-size: 0.88rem; color: var(--text-soft); }
+  .missed-list li b { color: var(--ink); display: block; margin-bottom: 2px; }
+
+  @media (max-width: 480px) {
+    .qtext { font-size: 1.02rem; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="biology.html">&larr; Back to Biology</a>
+  <div class="hero">
+    <h1>Unit 2 Quiz</h1>
+    <p id="heroSub">Cell theory &amp; scientists, prokaryotes vs. eukaryotes, organelles, and Cell Clinic scenarios.</p>
+  </div>
+
+  <div id="quizArea">
+    <div class="statline">
+      <span>Question <b id="qNum">1</b> of <b id="qTotal">20</b></span>
+      <span id="scoreLive">Score: 0</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+    <div class="qcard">
+      <p class="qkicker" id="qKicker"></p>
+      <p class="qtext" id="qText"></p>
+      <div class="diagram-wrap" id="diagramWrap" style="display:none;"></div>
+      <div id="optsWrap"></div>
+      <div class="explain" id="explain"></div>
+      <div class="qcontrols">
+        <button class="btn" id="btnNext" disabled>Next Question &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="resultsArea" style="display:none;">
+    <div class="qcard results">
+      <p class="qkicker">Quiz complete</p>
+      <div class="score-big" id="finalScore">0 / 20</div>
+      <p class="score-msg" id="finalMsg"></p>
+      <ul class="missed-list" id="missedList"></ul>
+      <button class="btn" id="btnRetake">Retake Quiz</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---- shared diagram helpers (same small library as the flashcards page) ---- */
+function svg(inner, vb, h) { return '<svg viewBox="'+vb+'" width="100%" height="'+(h||180)+'" xmlns="http://www.w3.org/2000/svg">'+inner+'</svg>'; }
+function lineEl(x1,y1,x2,y2,color,w,dash){ return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round"'+(dash?' stroke-dasharray="5 4"':'')+'/>'; }
+function dot(x,y,color,r){ return '<circle cx="'+x+'" cy="'+y+'" r="'+(r||3.2)+'" fill="'+(color||'var(--ink)')+'"/>'; }
+function txt(x,y,s,color,size,weight,anchor){ return '<text x="'+x+'" y="'+y+'" fill="'+(color||'var(--ink)')+'" font-family="Space Grotesk, sans-serif" font-size="'+(size||13)+'" font-weight="'+(weight||700)+'" text-anchor="'+(anchor||'middle')+'">'+s+'</text>'; }
+function poly(pts,color,w,fill){ return '<polygon points="'+pts+'" fill="'+(fill||'none')+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linejoin="round"/>'; }
+function ellipseEl(cx,cy,rx,ry,fill,stroke,w){ return '<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rx+'" ry="'+ry+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(w||2.5)+'"/>'; }
+function circleEl(cx,cy,r,fill,stroke,w){ return '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(w||2.5)+'"/>'; }
+function rectEl(x,y,w,h,rx,fill,stroke,sw){ return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+(rx||0)+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(sw||2.5)+'"/>'; }
+function pathEl(d,stroke,w,fill,dash){ return '<path d="'+d+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round"'+(dash?' stroke-dasharray="4 3"':'')+'/>'; }
+function wavy(x1,y1,x2,y2,amp,cycles,color,w){
+  var n=28, pts=[];
+  var dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy)||1;
+  var ux=dx/len, uy=dy/len, px=-uy, py=ux;
+  for(var i=0;i<=n;i++){
+    var t=i/n;
+    var bx=x1+dx*t, by=y1+dy*t;
+    var off=Math.sin(t*Math.PI*2*cycles)*amp;
+    pts.push((bx+px*off).toFixed(1)+','+(by+py*off).toFixed(1));
+  }
+  return '<polyline points="'+pts.join(' ')+'" fill="none" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.2)+'" stroke-linecap="round"/>';
+}
+
+function diagProkaryoticCell(){
+  var inner =
+      rectEl(30,25,220,95,45,'none','var(--ink)',3)
+    + rectEl(42,37,196,71,32,'none','var(--blue)',1.8)
+    + pathEl('M105,72 C105,58 122,54 132,63 C142,72 160,68 160,82 C160,96 142,100 132,91 C122,82 105,86 105,72 Z','var(--teal)',2.2)
+    + txt(140,18,'Cell Wall','var(--ink)',10,700)
+    + txt(140,131,'Cell Membrane','var(--blue)',9,600)
+    + txt(133,113,'nucleoid (single DNA loop)','var(--teal)',7.8,600)
+    + dot(55,45,'var(--ink)',2.2) + dot(70,92,'var(--ink)',2.2) + dot(188,50,'var(--ink)',2.2) + dot(198,96,'var(--ink)',2.2) + dot(60,66,'var(--ink)',2.2) + dot(208,76,'var(--ink)',2.2)
+    + txt(58,32,'ribosomes','var(--text-soft)',7.5,600);
+  return svg(inner,'0 0 320 145',150);
+}
+
+function diagEndosymbiosis(){
+  var inner =
+      ellipseEl(95,112,72,60,'var(--blue-soft)','var(--ink)',2.5)
+    + circleEl(146,84,15,'var(--coral-soft)','var(--coral)',2)
+    + pathEl('M130,71 A20,20 0 0 1 161,97','var(--coral)',1.6,undefined,true)
+    + txt(95,188,'Step 1: engulfs an','var(--text-soft)',9,600)
+    + txt(95,200,'α-proteobacterium','var(--text-soft)',9,600)
+    + lineEl(182,112,218,112,'var(--ink)',2.5)
+    + poly('218,105 232,112 218,119','var(--ink)',2,'var(--ink)')
+    + ellipseEl(303,112,80,66,'var(--blue-soft)','var(--ink)',2.5)
+    + ellipseEl(282,96,16,10,'var(--coral-soft)','var(--coral)',2)
+    + circleEl(338,86,17,'var(--teal-soft)','var(--teal)',2)
+    + pathEl('M321,72 A22,22 0 0 1 355,100','var(--teal)',1.6,undefined,true)
+    + txt(303,188,'Step 2: engulfs a','var(--text-soft)',9,600)
+    + txt(303,200,'cyanobacterium','var(--text-soft)',9,600);
+  return svg(inner,'0 0 400 210',185);
+}
+
+function diagGolgi(){
+  var inner =
+      pathEl('M50,178 Q130,163 210,178','var(--teal)',3)
+    + pathEl('M45,155 Q130,141 215,155','var(--teal)',3)
+    + pathEl('M42,132 Q130,119 218,132','var(--teal)',3)
+    + pathEl('M45,109 Q130,97 215,109','var(--teal)',3)
+    + pathEl('M52,87 Q130,76 208,87','var(--teal)',3)
+    + dot(50,178,'var(--teal)',3) + dot(210,178,'var(--teal)',3)
+    + dot(52,87,'var(--teal)',3) + dot(208,87,'var(--teal)',3)
+    + txt(130,199,'cis face (receiving)','var(--text-soft)',9,600)
+    + txt(130,60,'trans face (shipping)','var(--text-soft)',9,600);
+  return svg(inner,'0 0 260 212',180);
+}
+
+function diagRibosome(){
+  var inner =
+      ellipseEl(130,104,72,36,'var(--blue-soft)','var(--blue)',2.5)
+    + ellipseEl(130,64,46,24,'var(--teal-soft)','var(--teal)',2.5)
+    + wavy(6,86,254,86,6,4,'var(--coral)',2.4)
+    + txt(130,152,'Large subunit','var(--blue)',10,700)
+    + txt(130,38,'Small subunit','var(--teal)',10,700)
+    + txt(226,102,'mRNA','var(--coral)',9.5,700);
+  return svg(inner,'0 0 260 168',150);
+}
+
+function diagPlantVsAnimal(){
+  var inner =
+      circleEl(85,102,72,'none','var(--ink)',2.5)
+    + circleEl(65,84,19,'var(--blue-soft)','var(--blue)',2)
+    + ellipseEl(108,128,15,9,'var(--coral-soft)','var(--coral)',2)
+    + txt(85,192,'Animal Cell','var(--ink)',11,700)
+    + rectEl(188,28,150,148,22,'none','var(--teal)',4)
+    + rectEl(200,40,126,124,16,'none','var(--ink)',2)
+    + circleEl(224,64,16,'var(--blue-soft)','var(--blue)',2)
+    + circleEl(263,102,50,'var(--violet-soft)','var(--violet)',2.2)
+    + ellipseEl(305,58,13,8,'var(--teal-soft)','var(--teal)',2)
+    + ellipseEl(300,146,13,8,'var(--teal-soft)','var(--teal)',2)
+    + txt(263,194,'Plant Cell','var(--ink)',11,700)
+    + txt(263,105,'central','var(--violet)',7.6,700)
+    + txt(305,46,'chloroplast','var(--teal)',7.4,700)
+    + txt(263,18,'cell wall (plant only)','var(--teal)',9,700);
+  return svg(inner,'0 0 350 202',175);
+}
+
+function diagramFor(key){
+  if(key==='prokaryotic') return diagProkaryoticCell();
+  if(key==='endosymbiosis') return diagEndosymbiosis();
+  if(key==='golgi') return diagGolgi();
+  if(key==='ribosome') return diagRibosome();
+  if(key==='plantAnimal') return diagPlantVsAnimal();
+  return '';
+}
+
+/* ---- question bank ---- */
+var Q = [
+  {kicker:'2.1 Cell Theory', text:'According to your Lecture Notes, which best completes Cell Theory tenet #2?', opts:[
+    'Cells are the basic units of structure and function of living things.','Cells are the basic units of structure and organization of living things.','Cells are made only of DNA and protein.','Cells only exist in multicellular organisms.'
+  ], correct:0, explain:'Your Lecture Notes say "structure and function." (The assigned video phrases it slightly differently, as "structure and organization" — good to recognize both, but the Lecture Notes version is primary.)'},
+
+  {kicker:'2.1 Cell Theory', text:'Which of these is Cell Theory tenet #3?', opts:[
+    'New cells are produced from existing cells.','All cells are identical in shape and size.','Cells can form from non-living matter.','Only animals are made of cells.'
+  ], correct:0, explain:'"New cells are produced from existing cells" is the tenet credited to Rudolf Virchow.'},
+
+  {kicker:'2.1 Scientists', text:'Which scientist used an early microscope to examine cork and named the tiny chambers he saw "cells"?', opts:[
+    'Anton van Leeuwenhoek','Robert Hooke','Matthias Schleiden','Rudolf Virchow'
+  ], correct:1, explain:'Robert Hooke, 1665 — the cork\'s tiny chambers reminded him of small rooms, so he called them "cells."'},
+
+  {kicker:'2.1 Scientists', text:'Anton van Leeuwenhoek is known for:', opts:[
+    'Naming cells after looking at cork','Concluding all animals are made of cells','Being the first to observe microscopic living organisms ("animalcules") in pond water','Concluding all cells come from preexisting cells'
+  ], correct:2, explain:'He observed pond water and dental scrapings and called the tiny living things he saw "animalcules."'},
+
+  {kicker:'2.1 Scientists', text:'Which scientist concluded "all plants are made of cells"?', opts:[
+    'Theodor Schwann','Matthias Schleiden','Robert Hooke','Rudolf Virchow'
+  ], correct:1, explain:'Schleiden — plants. (Schwann is the "all animals" one — easy to mix up since they\'re often mentioned together.)'},
+
+  {kicker:'2.1 Scientists', text:'Which scientist concluded that all cells come from preexisting cells?', opts:[
+    'Rudolf Virchow','Theodor Schwann','Anton van Leeuwenhoek','Matthias Schleiden'
+  ], correct:0, explain:'Rudolf Virchow — this idea became Cell Theory tenet #3.'},
+
+  {kicker:'2.1 Prokaryote vs. Eukaryote', text:'Which of these is true of a prokaryotic cell?', opts:[
+    'No nucleus and no membrane-bound organelles','Has a nucleus but no ribosomes','Has membrane-bound organelles but no cell membrane','Is always multicellular'
+  ], correct:0, explain:'Prokaryotic cells have no nucleus and no membrane-bound organelles — but they DO have ribosomes, a cell membrane, cytoplasm, and DNA.'},
+
+  {kicker:'2.1 Prokaryote vs. Eukaryote — Diagram', text:'This cell has no nucleus, a single loop of DNA, and scattered ribosomes. What kind of cell is it?', diagram:'prokaryotic', opts:[
+    'Eukaryotic','Prokaryotic','A plant cell only','A cell with membrane-bound organelles'
+  ], correct:1, explain:'No nucleus plus a single loop of DNA (the nucleoid) is the signature of a prokaryotic cell.'},
+
+  {kicker:'2.1 Prokaryote vs. Eukaryote', text:'Which of these were the first cells on Earth, and changed Earth\'s atmosphere?', opts:[
+    'Eukaryotic cells','Cyanobacteria (a prokaryote)','Fungi','Protists'
+  ], correct:1, explain:'Cyanobacteria — a type of prokaryote — were among the first cells on Earth and changed the atmosphere.'},
+
+  {kicker:'2.1 Endosymbiosis', text:'In the two-event version of Endosymbiosis Theory, what does the host cell engulf to eventually form the mitochondrion?', opts:[
+    'A cyanobacterium','An α-proteobacterium','Another eukaryotic cell','A virus'
+  ], correct:1, explain:'Host cell engulfs an α-proteobacterium → becomes the mitochondrion. (A separate, later engulfment of a cyanobacterium becomes the chloroplast.)'},
+
+  {kicker:'2.1 Endosymbiosis — Diagram', text:'This diagram shows a cell engulfing smaller cells in two steps. What does Endosymbiosis Theory say happens to those engulfed cells?', diagram:'endosymbiosis', opts:[
+    'They are digested immediately for energy and destroyed','They become permanent, beneficial residents of the host cell — the mitochondrion and chloroplast','They escape the host cell right away','They turn into ribosomes'
+  ], correct:1, explain:'Endosymbiosis Theory: the engulfed prokaryotes end up living inside the host, both benefit, and this is passed on to future generations — becoming mitochondria and chloroplasts.'},
+
+  {kicker:'2.2 Organelles', text:'Which organelle is surrounded by a double nuclear membrane and is also responsible for synthesizing ribosomal RNA (rRNA)?', opts:[
+    'Nucleus','Nucleolus','Golgi Apparatus','Rough ER'
+  ], correct:0, explain:'The Nucleus — double nuclear membrane, houses/protects DNA, and synthesizes rRNA.'},
+
+  {kicker:'2.2 Organelles', text:'What is the Nucleolus responsible for?', opts:[
+    'Site of ribosome synthesis in the cell','Detoxifying cell wastes','Packaging and shipping proteins','Breaking down hydrogen peroxide'
+  ], correct:0, explain:'The Nucleolus is the site of ribosome synthesis in the cell.'},
+
+  {kicker:'2.2 Organelles', text:'Which organelle is contiguous with the nucleus, has ribosomes attached, and sends proteins on to the Golgi Apparatus?', opts:[
+    'Smooth ER','Rough ER','Lysosome','Peroxisome'
+  ], correct:1, explain:'Rough ER — "rough" because of the attached ribosomes; it transports proteins onward to the Golgi.'},
+
+  {kicker:'2.2 Organelles — Diagram', text:'This organelle is a stack of curved plates with a receiving (cis) side and a shipping (trans) side. What is it?', diagram:'golgi', opts:[
+    'Golgi Apparatus','Rough ER','Mitochondrion','Nucleolus'
+  ], correct:0, explain:'The Golgi Apparatus — cis face receives from the ER, trans face ships materials out. (Think: Amazon warehouse.)'},
+
+  {kicker:'2.2 Organelles', text:'Which organelle breaks down cell waste and denatured proteins with hydrolytic enzymes, and is also involved in apoptosis (programmed cell death)?', opts:[
+    'Lysosome','Peroxisome','Ribosome','Vacuole'
+  ], correct:0, explain:'Lysosome — hydrolytic enzymes break waste into monomers; it\'s also involved in apoptosis.'},
+
+  {kicker:'2.2 Organelles', text:'Which organelle uses catalase to break down hydrogen peroxide?', opts:[
+    'Peroxisome','Lysosome','Mitochondrion','Golgi Apparatus'
+  ], correct:0, explain:'Peroxisome — catalase breaks down toxic hydrogen peroxide, alongside lipid hydrolysis.'},
+
+  {kicker:'2.2 Organelles', text:'What is the Mitochondrion responsible for?', opts:[
+    'Some of the processes that synthesize ATP','Breaking down hydrogen peroxide','Storing water for the cell','Making ribosomal RNA'
+  ], correct:0, explain:'The Mitochondrion is responsible for some of the processes that synthesize ATP — the Citric Acid Cycle in the matrix, and oxidative phosphorylation on the inner membrane.'},
+
+  {kicker:'2.2 Organelles', text:'The chloroplast\'s internal anatomy is arranged in stacks of thylakoid membranes. What are those stacks called, and why do they matter?', opts:[
+    'Grana — they increase surface area so more chemical reactions can occur','Cristae — they store DNA','Vesicles — they transport waste out of the cell','Nucleoids — they hold genetic material'
+  ], correct:0, explain:'Grana — stacks of thylakoid membranes; more thylakoids means more surface area for chemical reactions to occur.'},
+
+  {kicker:'2.2 Organelles', text:'Per your teacher\'s notes, which category is the Cell Membrane grouped under?', opts:[
+    'Membrane Bound Organelles','Non-Membrane Bound Organelles','It isn\'t classified as an organelle','Cytoskeleton'
+  ], correct:1, explain:'Unusual but true, per the slides: Cell Membrane is grouped under Non-Membrane Bound Organelles, alongside cell wall, ribosomes, cytoplasm, cytoskeleton, centriole/spindle fibers, and flagella/cilia.'},
+
+  {kicker:'2.2 Organelles', text:'Per your teacher\'s notes, what makes up the Cytoskeleton?', opts:[
+    'Actin, Microtubules, Intermediate filaments','Actin, Microtubules, Actin filaments','Microtubules, Ribosomes, Centrioles','Actin, Cilia, Flagella'
+  ], correct:1, explain:'Your teacher\'s own notes list "Actin, Microtubules, Actin filaments" (actin appears twice — likely a slide typo, but that\'s what\'s written, not the standard textbook "intermediate filaments").'},
+
+  {kicker:'2.2 Ribosomes — Diagram', text:'This structure has a large and small subunit with a strand threading through the middle. What is it, and what is it doing?', diagram:'ribosome', opts:[
+    'Ribosome, making a protein','Golgi Apparatus, shipping a protein','Nucleus, storing DNA','Mitochondrion, making ATP'
+  ], correct:0, explain:'A ribosome — made of a large and small subunit — with mRNA threading through as it builds a protein.'},
+
+  {kicker:'2.2 Plant vs. Animal — Diagram', text:'This diagram highlights parts found ONLY in the plant cell. Which set is correct?', diagram:'plantAnimal', opts:[
+    'Nucleus, Ribosomes, Mitochondrion','Cell Wall, Chloroplast, Large Central Vacuole','Cell Membrane, Cytoplasm, Golgi Apparatus','Lysosome, Peroxisome, Centriole'
+  ], correct:1, explain:'Cell wall, chloroplast, and a large central vacuole are the classic plant-only features versus an animal cell.'},
+
+  {kicker:'2.2 Cell Clinic — Room 1', text:'Room 1: A patient reports constant fatigue with no other symptoms. Which organelle is most likely involved?', opts:[
+    'Mitochondrion','Golgi Apparatus','Nucleus','Ribosome'
+  ], correct:0, explain:'Fatigue points to the Mitochondrion — it\'s responsible for some of the processes that synthesize ATP.'},
+
+  {kicker:'2.2 Cell Clinic — Room 3', text:'Room 3: A disorder is passed down from parent to child. Which organelle is most likely involved?', opts:[
+    'Nucleus','Lysosome','Cell Membrane','Golgi Apparatus'
+  ], correct:0, explain:'Inherited disorders trace back to the Nucleus, which houses and protects the DNA.'},
+
+  {kicker:'2.2 Cell Clinic — Room 4', text:'Room 4: A cell needs to build and ship out an antibody (a protein). What is the correct order it travels through the cell?', opts:[
+    'Ribosome → Rough ER → Golgi Apparatus → vesicle','Nucleus → Mitochondrion → Golgi Apparatus','Golgi Apparatus → Ribosome → Rough ER','Rough ER → Ribosome → Lysosome'
+  ], correct:0, explain:'Proteins like antibodies follow: made at the Ribosome → processed by the Rough ER → packaged/shipped by the Golgi Apparatus → sent out in a vesicle.'},
+
+  {kicker:'2.2 Cell Clinic — Room 5', text:'Room 5: A cell is experiencing water intoxication — too much water is moving in or out. Which organelle/structure is involved?', opts:[
+    'Cell Membrane','Nucleolus','Peroxisome','Vacuole'
+  ], correct:0, explain:'The Cell Membrane is the permeability barrier that controls what moves into and out of the cell.'},
+
+  {kicker:'2.2 Cell Clinic — Rooms 6 & 7', text:'Room 6 involves a bacterial infection where enzymes are released to destroy it; Room 7 involves a cell that can\'t package its enzymes and bile. In order (Room 6, then Room 7), which organelles are involved?', opts:[
+    'Lysosome, then Golgi Apparatus','Golgi Apparatus, then Lysosome','Mitochondrion, then Nucleus','Ribosome, then Peroxisome'
+  ], correct:0, explain:'Room 6 = Lysosome (hydrolytic enzymes break things down). Room 7 = Golgi Apparatus (packages and ships enzymes/bile onward).'}
+];
+
+var idx = 0, score = 0, answered = false, missed = [];
+
+function render(){
+  var q = Q[idx];
+  document.getElementById('qNum').textContent = idx+1;
+  document.getElementById('qTotal').textContent = Q.length;
+  document.getElementById('scoreLive').textContent = 'Score: '+score;
+  document.getElementById('progressFill').style.width = Math.round((idx/Q.length)*100)+'%';
+  document.getElementById('qKicker').textContent = q.kicker;
+  document.getElementById('qText').textContent = q.text;
+
+  var dWrap = document.getElementById('diagramWrap');
+  if(q.diagram){ dWrap.style.display='block'; dWrap.innerHTML = diagramFor(q.diagram); }
+  else { dWrap.style.display='none'; dWrap.innerHTML=''; }
+
+  var optsWrap = document.getElementById('optsWrap');
+  optsWrap.innerHTML='';
+  var letters=['A','B','C','D'];
+  q.opts.forEach(function(optText, i){
+    var b = document.createElement('button');
+    b.className='opt';
+    b.innerHTML = '<span class="letter">'+letters[i]+'</span><span>'+optText+'</span>';
+    b.addEventListener('click', function(){ selectAnswer(i); });
+    optsWrap.appendChild(b);
+  });
+
+  document.getElementById('explain').classList.remove('show');
+  document.getElementById('explain').textContent='';
+  document.getElementById('btnNext').disabled = true;
+  answered = false;
+}
+
+function selectAnswer(i){
+  if(answered) return;
+  answered = true;
+  var q = Q[idx];
+  var opts = document.querySelectorAll('.opt');
+  opts.forEach(function(el,i2){
+    el.classList.add('locked');
+    if(i2===q.correct) el.classList.add('correct');
+    else if(i2===i) el.classList.add('incorrect');
+    else el.classList.add('dim');
+  });
+  if(i===q.correct){ score++; }
+  else { missed.push(q); }
+  document.getElementById('scoreLive').textContent = 'Score: '+score;
+  var ex = document.getElementById('explain');
+  ex.innerHTML = '<b>'+(i===q.correct?'Correct. ':'Not quite. ')+'</b>'+q.explain;
+  ex.classList.add('show');
+  document.getElementById('btnNext').disabled = false;
+}
+
+function nextQuestion(){
+  if(idx < Q.length-1){ idx++; render(); }
+  else { showResults(); }
+}
+
+function showResults(){
+  document.getElementById('quizArea').style.display='none';
+  document.getElementById('resultsArea').style.display='block';
+  document.getElementById('finalScore').textContent = score+' / '+Q.length;
+  var pct = Math.round((score/Q.length)*100);
+  var msg;
+  if(pct===100) msg = 'Perfect score — Unit 2 is locked in.';
+  else if(pct>=80) msg = 'Strong work. Review the missed ones below and you\'ve got this unit.';
+  else if(pct>=60) msg = 'Good start — a few gaps to close. Check the missed questions below.';
+  else msg = 'Worth another pass through the flashcards before the next round.';
+  document.getElementById('finalMsg').textContent = msg+' ('+pct+'%)';
+
+  var list = document.getElementById('missedList');
+  list.innerHTML='';
+  if(missed.length===0){
+    var li=document.createElement('li'); li.textContent='No missed questions — nice.'; list.appendChild(li);
+  } else {
+    missed.forEach(function(q){
+      var li=document.createElement('li');
+      li.innerHTML = '<b>'+q.text+'</b>Correct answer: '+q.opts[q.correct];
+      list.appendChild(li);
+    });
+  }
+}
+
+document.getElementById('btnNext').addEventListener('click', nextQuestion);
+document.getElementById('btnRetake').addEventListener('click', function(){
+  idx=0; score=0; missed=[]; answered=false;
+  document.getElementById('resultsArea').style.display='none';
+  document.getElementById('quizArea').style.display='block';
+  render();
+});
+
+document.getElementById('heroSub').textContent = Q.length+' questions covering cell theory & scientists, prokaryotes vs. eukaryotes, organelles, and Cell Clinic scenarios.';
+render();
+</script>
+</body>
+</html>
