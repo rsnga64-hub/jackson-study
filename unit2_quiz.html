@@ -3,387 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Unit 2 Quiz: Geometry Proofs</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Geometry - Removed per Teacher Request</title>
 <style>
   :root {
     --bg: #FBFAF7;
-    --grid-line: rgba(28,43,74,0.055);
     --ink: #1C2B4A;
     --text: #2B3648;
     --text-soft: #64707F;
     --blue: #2E86AB;
     --blue-soft: #E9F3F8;
-    --amber: #D98A2B;
-    --amber-soft: #FCF1DE;
-    --coral: #D65A5A;
-    --coral-soft: #FBEBEB;
-    --teal: #2C9C82;
-    --teal-soft: #E6F5F0;
-    --card-bg: #FFFFFF;
     --border: #E4E0D4;
-    --gray: #94A0AD;
-    --gray-line: #CBD3DC;
+    --card-bg: #FFFFFF;
   }
   * { box-sizing: border-box; }
   html, body {
     margin: 0; padding: 0;
     background: var(--bg);
     color: var(--text);
-    font-family: 'Inter', sans-serif;
-    background-image:
-      linear-gradient(var(--grid-line) 1px, transparent 1px),
-      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-    background-size: 28px 28px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif;
   }
-  h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; color: var(--ink); }
-  .wrap { max-width: 680px; margin: 0 auto; padding: 32px 20px 80px; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 48px 20px 80px; }
+  a { color: inherit; }
   .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--text-soft); text-decoration: none; font-size: 0.88rem; font-weight: 600; margin-bottom: 18px; }
   .back-link:hover { color: var(--blue); }
-
-  .hero { background: var(--ink); border-radius: 18px; padding: 26px 28px; color: #fff; margin-bottom: 22px; }
-  .hero h1 { color: #fff; font-size: 1.7rem; margin: 0 0 6px; }
-  .hero p { margin: 0; color: #C8D3E0; font-size: 0.96rem; max-width: 52ch; }
-
-  .statline { display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text-soft); margin-bottom: 8px; }
-  .statline b { color: var(--ink); }
-  .progress-track { height: 6px; background: var(--border); border-radius: 999px; overflow: hidden; margin-bottom: 20px; }
-  .progress-fill { height: 100%; background: var(--blue); border-radius: 999px; transition: width 0.25s ease; }
-
-  .qcard {
-    background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px;
-    padding: 26px 28px; box-shadow: 0 4px 18px rgba(28,43,74,0.06);
+  h1 { color: var(--ink); font-size: 1.6rem; margin: 0 0 8px; }
+  .notice {
+    background: var(--card-bg);
+    border: 1px dashed var(--border);
+    border-radius: 14px;
+    padding: 32px 26px;
+    text-align: center;
   }
-  .qkicker { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.72rem; letter-spacing: 0.03em; text-transform: uppercase; color: var(--blue); margin: 0 0 8px; }
-  .qtext { font-size: 1.15rem; font-weight: 700; color: var(--ink); line-height: 1.35; margin: 0 0 16px; }
-  .diagram-wrap { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 6px; margin-bottom: 18px; }
-  .diagram-wrap svg { display: block; width: 100%; height: auto; }
-
-  .opt {
-    display: flex; align-items: center; gap: 10px;
-    width: 100%; text-align: left; font-family: 'Inter', sans-serif; font-size: 0.98rem; font-weight: 600;
-    color: var(--ink); background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 12px;
-    padding: 12px 16px; margin-bottom: 10px; cursor: pointer; transition: all 0.15s ease;
-  }
-  .opt:hover:not(.locked) { border-color: var(--blue); background: var(--blue-soft); }
-  .opt .letter {
-    flex-shrink: 0; width: 24px; height: 24px; border-radius: 999px; border: 1.5px solid var(--border);
-    display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 700; color: var(--text-soft);
-  }
-  .opt.correct { border-color: var(--teal); background: var(--teal-soft); }
-  .opt.correct .letter { background: var(--teal); border-color: var(--teal); color: #fff; }
-  .opt.incorrect { border-color: var(--coral); background: var(--coral-soft); }
-  .opt.incorrect .letter { background: var(--coral); border-color: var(--coral); color: #fff; }
-  .opt.locked { cursor: default; }
-  .opt.dim { opacity: 0.55; }
-
-  .explain {
-    display: none; margin-top: 14px; padding: 12px 14px; border-radius: 10px;
-    background: var(--blue-soft); color: var(--ink); font-size: 0.9rem; line-height: 1.45;
-  }
-  .explain.show { display: block; }
-  .explain b { color: var(--blue); }
-
-  .qcontrols { display: flex; justify-content: flex-end; margin-top: 18px; }
-  .btn {
-    font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.92rem;
-    border: 1px solid var(--ink); background: var(--ink); color: #fff;
-    border-radius: 10px; padding: 11px 20px; cursor: pointer; transition: opacity 0.15s ease;
-  }
-  .btn:hover { opacity: 0.88; }
-  .btn:disabled { opacity: 0.35; cursor: default; }
-  .btn.ghost { background: var(--card-bg); color: var(--ink); }
-
-  /* results screen */
-  .results { text-align: center; }
-  .score-big { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 3rem; color: var(--ink); margin: 6px 0; }
-  .score-msg { font-size: 1rem; color: var(--text-soft); margin-bottom: 22px; }
-  .missed-list { text-align: left; margin: 20px 0; padding: 0; list-style: none; }
-  .missed-list li { padding: 10px 0; border-top: 1px solid var(--border); font-size: 0.88rem; color: var(--text-soft); }
-  .missed-list li b { color: var(--ink); display: block; margin-bottom: 2px; }
-
-  @media (max-width: 480px) {
-    .qtext { font-size: 1.03rem; }
-  }
+  .notice .icon { font-size: 1.8rem; margin-bottom: 10px; }
+  .notice p { margin: 0; color: var(--text-soft); font-size: 0.95rem; max-width: 46ch; margin: 0 auto; }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <a class="back-link" href="index.html">&larr; Back to study site</a>
-  <div class="hero">
-    <h1>Unit 2 Quiz</h1>
-    <p>25 questions covering segment proofs, angle pairs, transversals, exterior angles, and parallel-line converses.</p>
-  </div>
-
-  <div id="quizArea">
-    <div class="statline">
-      <span>Question <b id="qNum">1</b> of <b id="qTotal">15</b></span>
-      <span id="scoreLive">Score: 0</span>
-    </div>
-    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-
-    <div class="qcard">
-      <p class="qkicker" id="qKicker"></p>
-      <p class="qtext" id="qText"></p>
-      <div class="diagram-wrap" id="diagramWrap" style="display:none;"></div>
-      <div id="optsWrap"></div>
-      <div class="explain" id="explain"></div>
-      <div class="qcontrols">
-        <button class="btn" id="btnNext" disabled>Next Question &rarr;</button>
-      </div>
+  <div class="wrap">
+    <a class="back-link" href="index.html">&larr; All subjects</a>
+    <h1>Geometry - Removed per Teacher Request</h1>
+    <div class="notice">
+      <div class="icon">🚫</div>
+      <p>This Geometry quiz has been taken down at the teacher's request and is no longer available on this site.</p>
     </div>
   </div>
-
-  <div id="resultsArea" style="display:none;">
-    <div class="qcard results">
-      <p class="qkicker">Quiz complete</p>
-      <div class="score-big" id="finalScore">0 / 15</div>
-      <p class="score-msg" id="finalMsg"></p>
-      <ul class="missed-list" id="missedList"></ul>
-      <button class="btn" id="btnRetake">Retake Quiz</button>
-    </div>
-  </div>
-</div>
-
-<script>
-/* ---- shared diagram helpers (parallel lines + transversal) ---- */
-function svg(inner, vb, h) { return '<svg viewBox="'+vb+'" width="100%" height="'+(h||180)+'" xmlns="http://www.w3.org/2000/svg">'+inner+'</svg>'; }
-function lineEl(x1,y1,x2,y2,color,w){ return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round"/>'; }
-function txt(x,y,s,color,size,weight,anchor){ return '<text x="'+x+'" y="'+y+'" fill="'+(color||'var(--ink)')+'" font-family="Space Grotesk, sans-serif" font-size="'+(size||13)+'" font-weight="'+(weight||700)+'" text-anchor="'+(anchor||'middle')+'">'+s+'</text>'; }
-function wedgeEl(path,color,active){
-  if(active) return '<path d="'+path+'" fill="'+color+'" fill-opacity="0.28" stroke="'+color+'" stroke-width="2"/>';
-  return '<path d="'+path+'" fill="none" stroke="var(--gray-line)" stroke-width="1.5"/>';
-}
-var PAR_ANGLES = {
-  1:{w:'M 150.0 60.0 L 130.0 60.0 A 20 20 0 0 1 138.5 43.6 Z', lx:121.6, ly:49.2},
-  2:{w:'M 150.0 60.0 L 138.5 43.6 A 20 20 0 0 1 170.0 60.0 Z', lx:164.8, ly:35.6},
-  3:{w:'M 150.0 60.0 L 161.5 76.4 A 20 20 0 0 1 130.0 60.0 Z', lx:135.2, ly:92.4},
-  4:{w:'M 150.0 60.0 L 170.0 60.0 A 20 20 0 0 1 161.5 76.4 Z', lx:178.4, ly:78.8},
-  5:{w:'M 220.0 160.0 L 200.0 160.0 A 20 20 0 0 1 208.5 143.6 Z', lx:191.6, ly:149.2},
-  6:{w:'M 220.0 160.0 L 208.5 143.6 A 20 20 0 0 1 240.0 160.0 Z', lx:234.8, ly:135.6},
-  7:{w:'M 220.0 160.0 L 231.5 176.4 A 20 20 0 0 1 200.0 160.0 Z', lx:205.2, ly:192.4},
-  8:{w:'M 220.0 160.0 L 240.0 160.0 A 20 20 0 0 1 231.5 176.4 Z', lx:248.4, ly:178.8}
-};
-function diagParallel(highlight){
-  var color = 'var(--blue)';
-  var inner = lineEl(20,60,280,60,'var(--ink)') + lineEl(20,160,280,160,'var(--ink)')
-    + lineEl(127.1,27.2,243.0,192.8,'var(--ink)');
-  for(var n=1;n<=8;n++){
-    var a = PAR_ANGLES[n];
-    var active = highlight.indexOf(n) !== -1;
-    inner += wedgeEl(a.w, active?color:'#cbd3dc', active);
-    inner += txt(a.lx, a.ly, n, active?color:'var(--gray)', active?13:11.5);
-  }
-  return svg(inner,'0 0 300 210',185);
-}
-
-/* ---- question bank ---- */
-var Q = [
-  {kicker:'Segments', text:'What is the Segment Addition Postulate?', opts:[
-    'If B is between A and C, then AB + BC = AC.',
-    'If M is the midpoint of XY, then XM = MY.',
-    'Two angles whose measures sum to 180°.',
-    'An exterior angle equals the sum of its remote interior angles.'
-  ], correct:0, explain:'Segment Addition Postulate lets you break one long segment into two measurable pieces (or combine two pieces into the whole).'},
-
-  {kicker:'Transversals · Diagram', text:'What type of angle pair is highlighted below?', diagram:[3,6], opts:[
-    'Corresponding Angles','Alternate Interior Angles','Alternate Exterior Angles','Consecutive Interior Angles'
-  ], correct:1, explain:'∠3 and ∠6 are both interior (between the two lines) and on opposite sides of the transversal — that\'s Alternate Interior.'},
-
-  {kicker:'Transversals · Diagram', text:'What type of angle pair is highlighted below?', diagram:[1,8], opts:[
-    'Corresponding Angles','Alternate Interior Angles','Alternate Exterior Angles','Consecutive Interior Angles'
-  ], correct:2, explain:'∠1 and ∠8 are both exterior (outside the two lines) and on opposite sides of the transversal — that\'s Alternate Exterior.'},
-
-  {kicker:'Angle Pairs', text:'A linear pair is best described as:', opts:[
-    'Two angles whose measures sum to 90°',
-    'Two angles across from each other where two lines cross',
-    'Adjacent, supplementary angles that form a straight line',
-    'Two angles that don\'t share a vertex'
-  ], correct:2, explain:'Linear pair = adjacent (shares a ray) + supplementary (sums to 180°) + forms a straight line.'},
-
-  {kicker:'Proof Toolkit', text:'In a proof you write "m∠2 = m∠2." What\'s the reason?', opts:[
-    'Reflexive Property','Transitive Property','Substitution Property','Definition of Congruent Angles'
-  ], correct:0, explain:'Reflexive Property: any quantity equals itself. It shows up whenever the same angle appears on both sides of an argument.'},
-
-  {kicker:'Angle Pairs', text:'The Vertical Angles Theorem tells you that vertical angles are always:', opts:[
-    'Supplementary','Complementary','Congruent','Adjacent'
-  ], correct:2, explain:'Vertical Angles Theorem: if two angles are vertical angles, then they are congruent.'},
-
-  {kicker:'Transversals · Diagram', text:'What type of angle pair is highlighted below?', diagram:[3,5], opts:[
-    'Corresponding Angles','Alternate Interior Angles','Alternate Exterior Angles','Consecutive Interior Angles'
-  ], correct:3, explain:'∠3 and ∠5 are both interior and on the same side of the transversal — that\'s Consecutive (Same-Side) Interior.'},
-
-  {kicker:'Exterior Angle · Applied', text:'A triangle\'s exterior angle measures 130°. One remote interior angle is 48°. What is the other remote interior angle?', opts:[
-    '82°','48°','130°','178°'
-  ], correct:0, explain:'Exterior Angle Theorem: exterior = remote₁ + remote₂, so 130 − 48 = 82°.'},
-
-  {kicker:'Angle Pairs', text:'Which of these angle pairs is never adjacent?', opts:[
-    'Linear pair','A complementary pair that shares a ray','Vertical angles','Adjacent angles'
-  ], correct:2, explain:'Vertical angles only share the vertex, not a side — so they\'re never adjacent, even though they\'re formed by the same two lines.'},
-
-  {kicker:'Converse Theorems', text:'You\'re given that two consecutive interior angles are supplementary. Which theorem lets you conclude the lines are parallel?', opts:[
-    'Corresponding Angles Converse Postulate',
-    'Alternate Interior Angles Converse Theorem',
-    'Consecutive Interior Angles Converse Theorem',
-    'Alternate Exterior Angles Converse Theorem'
-  ], correct:2, explain:'Consecutive Interior Angles Converse Theorem is the one built on a supplementary (not congruent) relationship.'},
-
-  {kicker:'Proof Toolkit', text:'If a = b and b = c, which property lets you conclude a = c?', opts:[
-    'Reflexive Property','Transitive Property','Symmetric Property','Substitution Property'
-  ], correct:1, explain:'Transitive Property chains two separate equalities (or congruences) into one.'},
-
-  {kicker:'Angle Pairs', text:'The Triangle Sum Theorem says the interior angles of a triangle always sum to:', opts:[
-    '90°','180°','270°','360°'
-  ], correct:1, explain:'m∠A + m∠B + m∠C = 180° for every triangle.'},
-
-  {kicker:'Transversals · Diagram', text:'What type of angle pair is highlighted below?', diagram:[1,5], opts:[
-    'Corresponding Angles','Alternate Interior Angles','Alternate Exterior Angles','Consecutive Interior Angles'
-  ], correct:0, explain:'∠1 and ∠5 sit in the same relative position at each intersection — that\'s Corresponding.'},
-
-  {kicker:'Proof-writing trap', text:'You\'re asked to prove the Alternate Interior Angles Converse Theorem. Which reason can you NOT use anywhere in that proof?', opts:[
-    'Vertical Angles Theorem','Linear Pair Postulate','Alternate Interior Angles Converse Theorem','Corresponding Angles Converse Postulate'
-  ], correct:2, explain:'Citing the exact theorem you\'re trying to prove, inside its own proof, is circular reasoning — build it from a different tool instead (usually Vertical Angles + another converse).'},
-
-  {kicker:'Angle Pairs', text:'Two angles whose measures add up to 90° are called:', opts:[
-    'Supplementary','Complementary','Congruent','Vertical'
-  ], correct:1, explain:'Complementary angles sum to 90°; supplementary angles sum to 180°.'},
-
-  {kicker:'Segments · Solve', text:'On a line, AB = (2x+3), BC = (x+9), and AC = 42. What is x?', opts:[
-    '10','8','13','11'
-  ], correct:0, explain:'Segment Addition Postulate: AB + BC = AC, so (2x+3)+(x+9) = 42 → 3x+12 = 42 → x = 10.'},
-
-  {kicker:'Segments · Solve', text:'M is the midpoint of PQ. PM = (5x−2) and MQ = (3x+8). What is x?', opts:[
-    '5','4','6','10'
-  ], correct:0, explain:'Definition of Midpoint: PM = MQ, so 5x−2 = 3x+8 → 2x = 10 → x = 5.'},
-
-  {kicker:'Angle Pairs · Solve', text:'Two vertical angles measure (3x+8)° and 62°. What is x?', opts:[
-    '18','54','20','16'
-  ], correct:0, explain:'Vertical angles are congruent: 3x+8 = 62 → 3x = 54 → x = 18.'},
-
-  {kicker:'Angle Pairs · Solve', text:'A linear pair measures (4x+10)° and (2x+20)°. What is x?', opts:[
-    '25','15','30','20'
-  ], correct:0, explain:'Linear Pair Postulate: the two measures sum to 180°. (4x+10)+(2x+20) = 180 → 6x+30 = 180 → x = 25.'},
-
-  {kicker:'Angle Pairs · Solve', text:'Two complementary angles measure (5n−3)° and 38°. What is n?', opts:[
-    '11','9','13','17'
-  ], correct:0, explain:'Complementary angles sum to 90°: (5n−3)+38 = 90 → 5n = 55 → n = 11.'},
-
-  {kicker:'Transversals · Solve', text:'l ∥ m ∥ n, all cut by one transversal. A pair of corresponding angles measure (6x−4)° and (4x+10)°. What is x?', opts:[
-    '7','14','2','9'
-  ], correct:0, explain:'Corresponding Angles Postulate: the two measures are equal. 6x−4 = 4x+10 → 2x = 14 → x = 7.'},
-
-  {kicker:'Triangle Sum · Solve', text:'A triangle\'s three interior angles measure (2x+5)°, (3x−1)°, and 66°. What is x?', opts:[
-    '22','18','24','20'
-  ], correct:0, explain:'Triangle Sum Theorem: the three measures add to 180°. (2x+5)+(3x−1)+66 = 180 → 5x+70 = 180 → x = 22.'},
-
-  {kicker:'Exterior Angle · Solve', text:'A triangle\'s exterior angle measures (7x+4)°. Its two remote interior angles measure (3x+10)° and 38°. What is x?', opts:[
-    '11','9','13','7'
-  ], correct:0, explain:'Exterior Angle Theorem: exterior = remote₁ + remote₂. 7x+4 = (3x+10)+38 → 4x = 44 → x = 11.'},
-
-  {kicker:'Exterior Angle · Tricky', text:'Two lines cross right at each end of a triangle\'s side. The vertical angles opposite the triangle\'s own interior angles there measure (x+50)° and (x+70)°, and the triangle\'s third interior angle is 100°. What is x?', opts:[
-    '−20','20','40','−40'
-  ], correct:0, explain:'Vertical Angles Theorem makes the marked angles equal to the triangle\'s actual interior angles there, so Triangle Sum still applies: 100+(x+50)+(x+70) = 180 → 2x+220 = 180 → x = −20. Negative is fine here — plug it back in and the three angles (100°, 30°, 50°) really do sum to 180°.'},
-
-  {kicker:'Converse Theorems', text:'You\'re given that a pair of alternate exterior angles are congruent. Which theorem lets you conclude the two lines are parallel?', opts:[
-    'Alternate Exterior Angles Converse Theorem',
-    'Alternate Interior Angles Converse Theorem',
-    'Corresponding Angles Converse Postulate',
-    'Consecutive Interior Angles Converse Theorem'
-  ], correct:0, explain:'Match the angle pair in the Given to the converse theorem built on that exact pair — congruent alternate exterior angles call for the Alternate Exterior Angles Converse Theorem.'}
-];
-
-var idx = 0, score = 0, answered = false, missed = [];
-
-function render(){
-  var q = Q[idx];
-  document.getElementById('qNum').textContent = idx+1;
-  document.getElementById('qTotal').textContent = Q.length;
-  document.getElementById('scoreLive').textContent = 'Score: '+score;
-  document.getElementById('progressFill').style.width = Math.round((idx/Q.length)*100)+'%';
-  document.getElementById('qKicker').textContent = q.kicker;
-  document.getElementById('qText').textContent = q.text;
-
-  var dWrap = document.getElementById('diagramWrap');
-  if(q.diagram){ dWrap.style.display='block'; dWrap.innerHTML = diagParallel(q.diagram); }
-  else { dWrap.style.display='none'; dWrap.innerHTML=''; }
-
-  var optsWrap = document.getElementById('optsWrap');
-  optsWrap.innerHTML='';
-  var letters=['A','B','C','D'];
-  q.opts.forEach(function(optText, i){
-    var b = document.createElement('button');
-    b.className='opt';
-    b.innerHTML = '<span class="letter">'+letters[i]+'</span><span>'+optText+'</span>';
-    b.addEventListener('click', function(){ selectAnswer(i); });
-    optsWrap.appendChild(b);
-  });
-
-  document.getElementById('explain').classList.remove('show');
-  document.getElementById('explain').textContent='';
-  document.getElementById('btnNext').disabled = true;
-  answered = false;
-}
-
-function selectAnswer(i){
-  if(answered) return;
-  answered = true;
-  var q = Q[idx];
-  var opts = document.querySelectorAll('.opt');
-  opts.forEach(function(el,i2){
-    el.classList.add('locked');
-    if(i2===q.correct) el.classList.add('correct');
-    else if(i2===i) el.classList.add('incorrect');
-    else el.classList.add('dim');
-  });
-  if(i===q.correct){ score++; }
-  else { missed.push(q); }
-  document.getElementById('scoreLive').textContent = 'Score: '+score;
-  var ex = document.getElementById('explain');
-  ex.innerHTML = '<b>'+(i===q.correct?'Correct. ':'Not quite. ')+'</b>'+q.explain;
-  ex.classList.add('show');
-  document.getElementById('btnNext').disabled = false;
-}
-
-function nextQuestion(){
-  if(idx < Q.length-1){ idx++; render(); }
-  else { showResults(); }
-}
-
-function showResults(){
-  document.getElementById('quizArea').style.display='none';
-  document.getElementById('resultsArea').style.display='block';
-  document.getElementById('finalScore').textContent = score+' / '+Q.length;
-  var pct = Math.round((score/Q.length)*100);
-  var msg;
-  if(pct===100) msg = 'Perfect score — Unit 2 is locked in.';
-  else if(pct>=80) msg = 'Strong work. Review the missed ones below and you\'ve got this unit.';
-  else if(pct>=60) msg = 'Good start — a few gaps to close. Check the missed questions below.';
-  else msg = 'Worth another pass through the flashcards before the next round.';
-  document.getElementById('finalMsg').textContent = msg+' ('+pct+'%)';
-
-  var list = document.getElementById('missedList');
-  list.innerHTML='';
-  if(missed.length===0){
-    var li=document.createElement('li'); li.textContent='No missed questions — nice.'; list.appendChild(li);
-  } else {
-    missed.forEach(function(q){
-      var li=document.createElement('li');
-      li.innerHTML = '<b>'+q.text+'</b>Correct answer: '+q.opts[q.correct];
-      list.appendChild(li);
-    });
-  }
-}
-
-document.getElementById('btnNext').addEventListener('click', nextQuestion);
-document.getElementById('btnRetake').addEventListener('click', function(){
-  idx=0; score=0; missed=[]; answered=false;
-  document.getElementById('resultsArea').style.display='none';
-  document.getElementById('quizArea').style.display='block';
-  render();
-});
-
-render();
-</script>
 </body>
 </html>

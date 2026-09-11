@@ -52,6 +52,13 @@
     margin-bottom: 10px;
   }
   .tag.teal { background: var(--teal-soft); color: var(--teal); }
+  .tag.gray { background: #ECECEA; color: var(--text-soft); }
+  .card.disabled {
+    cursor: default;
+    opacity: 0.72;
+    border-style: dashed;
+  }
+  .card.disabled:hover { box-shadow: none; transform: none; }
 </style>
 </head>
 <body>
@@ -59,16 +66,16 @@
     <h1>Jackson's Study Site</h1>
     <p class="sub">Pick a subject to see its study guides, flashcards, and quizzes.</p>
 
-    <a class="card" href="geometry.html">
-      <span class="tag">Geometry</span>
-      <h2>Geometry</h2>
-      <p>Units 2–3 so far: proofs, then quadrilaterals. Each unit has a study guide, flashcards, and a quiz.</p>
-    </a>
+    <div class="card disabled">
+      <span class="tag gray">Geometry</span>
+      <h2>Geometry - Removed per Teacher Request</h2>
+      <p>This subject's materials have been taken down at the teacher's request and are no longer available here.</p>
+    </div>
 
     <a class="card" href="biology.html">
       <span class="tag teal">Biology</span>
       <h2>Biology</h2>
-      <p>Set up and ready for the first unit's materials.</p>
+      <p>Units 1–2: bonding &amp; water, macromolecules, enzymes, cells, and organelles. Each unit has a study guide, flashcards, and a quiz.</p>
     </a>
   </div>
 </body>
