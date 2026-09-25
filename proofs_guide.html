@@ -574,6 +574,30 @@ const sections = [
         <p>This is the same "two facts chained by Transitive" pattern from the 2.5 tab, just run in reverse: instead of ending on Transitive, it ends on a converse theorem. The one Given pair of parallel lines (P &parallel; R here) always supplies your first non-converse angle theorem &mdash; the pair you're trying to prove parallel is always the last line, always justified by a converse.</p>
       </div>
     `
+  },
+  {
+    id: "s213",
+    label: "2.13 Coordinate Formulas",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="21" x2="3" y2="3"/><line x1="3" y1="21" x2="21" y2="21"/><circle cx="8" cy="15" r="1.6" fill="currentColor"/><circle cx="17" cy="7" r="1.6" fill="currentColor"/><line x1="8" y1="15" x2="17" y2="7"/></svg>',
+    title: "Midpoint, slope & distance formulas",
+    sub: "Three formulas for working with two points on the coordinate plane. You'll lean on them all through Unit 3.",
+    body: `
+      <div class="box postulate"><h4>Midpoint formula</h4><p>(x<sub>m</sub>, y<sub>m</sub>) = ( (x₁ + x₂)/2 , (y₁ + y₂)/2 ). Average the x's, average the y's.</p></div>
+      <div class="numex"><div class="setup">Midpoint of (2, −5) and (8, 3) (original numbers)</div><div class="steps">( (2 + 8)/2 , (−5 + 3)/2 ) = <b>(5, −1)</b></div></div>
+      <div class="numex"><div class="setup">Missing endpoint: one endpoint is (−2, 7) and the midpoint is (1, 4)</div><div class="steps">1 = (−2 + x)/2 &rarr; 2 = −2 + x &rarr; x = 4 &nbsp;·&nbsp; 4 = (7 + y)/2 &rarr; 8 = 7 + y &rarr; y = 1 &nbsp;&rarr;&nbsp; <b>(4, 1)</b></div></div>
+      <div class="box postulate"><h4>Slope formula</h4><p>m = rise/run = (y₂ − y₁)/(x₂ − x₁)</p></div>
+      <div class="numex"><div class="setup">Slope through (−3, 2) and (5, 6)</div><div class="steps">(6 − 2)/(5 − (−3)) = 4/8 = <b>1/2</b></div></div>
+      <div class="def-grid">
+        <div class="def-card"><span class="term">Parallel ( ∥ )</span><span class="desc">Same slope. Parallel to the line above: slope 1/2.</span></div>
+        <div class="def-card"><span class="term">Perpendicular ( ⊥ )</span><span class="desc">Negative reciprocal: flip it and change the sign. Perpendicular to 1/2: slope <b>−2</b>.</span></div>
+      </div>
+      <div class="box postulate"><h4>Distance formula</h4><p>d = √( (x₂ − x₁)² + (y₂ − y₁)² )</p></div>
+      <div class="numex"><div class="setup">Distance from (1, −2) to (7, 6)</div><div class="steps">√(6² + 8²) = √(36 + 64) = √100 = <b>10</b></div></div>
+      <div class="numex"><div class="setup">Distance from (−4, 3) to (2, −1)</div><div class="steps">√(6² + (−4)²) = √52 = √4·√13 = <b>2√13</b> (simplify the radical)</div></div>
+      <div class="numex"><div class="setup">Working backward: the distance between (3, 1) and (8, y) is 13. Find y.</div><div class="steps">13² = 5² + (y − 1)² &rarr; 169 = 25 + (y − 1)² &rarr; (y − 1)² = 144 &rarr; y − 1 = ±12 &rarr; <b>y = 13 or y = −11</b></div></div>
+      <div class="box watch"><h4>Subtract carefully</h4><p>Subtracting a negative is adding: 5 − (−3) = 8. Keep the same point first in the top and the bottom of the slope formula.</p></div>
+      <div class="box tip"><h4>Where this goes next</h4><p>In Unit 3 these formulas prove what kind of quadrilateral a shape is. <b>Midpoint:</b> do the diagonals bisect each other? <b>Distance:</b> are the sides or diagonals congruent? <b>Slope:</b> are sides parallel or perpendicular?</p></div>
+    `
   }
 ];
 

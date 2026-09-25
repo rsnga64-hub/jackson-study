@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 1: Polynomials &amp; Geometry Basics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FBFAF7;
+    --grid-line: rgba(28,43,74,0.055);
+    --ink: #1C2B4A;
+    --text: #2B3648;
+    --text-soft: #64707F;
+    --blue: #2E86AB;
+    --blue-soft: #E9F3F8;
+    --amber: #D98A2B;
+    --amber-soft: #FCF1DE;
+    --coral: #D65A5A;
+    --coral-soft: #FBEBEB;
+    --teal: #2C9C82;
+    --teal-soft: #E6F5F0;
+    --violet: #7C5CBF;
+    --violet-soft: #EFE9F8;
+    --gray: #94A0AD;
+    --gray-line: #CBD3DC;
+    --card-bg: #FFFFFF;
+    --border: #E4E0D4;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  h1, h2, h3, .display {
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--ink);
+  }
+
+  a { color: inherit; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--text-soft); text-decoration: none; font-size: 0.88rem; font-weight: 600; margin-bottom: 18px; }
+  .back-link:hover { color: var(--blue); }
+
+  .wrap {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: var(--ink);
+    border-radius: 18px;
+    padding: 28px 30px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-text h1 {
+    color: #fff;
+    font-size: 1.9rem;
+    margin: 0 0 6px;
+    line-height: 1.15;
+  }
+  .hero-text p {
+    margin: 0;
+    color: #C8D3E0;
+    font-size: 0.98rem;
+    max-width: 48ch;
+  }
+  .hero svg { flex-shrink: 0; }
+
+  /* ---------- Tabs ---------- */
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 26px 0 20px;
+  }
+  .tab-btn {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.86rem;
+    border: 1.5px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text-soft);
+    padding: 9px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    transition: transform 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+  }
+  .tab-btn:hover { transform: translateY(-1px); }
+  .tab-btn.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: #fff;
+  }
+  .tab-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  /* ---------- Panels ---------- */
+  .panel { display: none; animation: fade .18s ease; }
+  .panel.active { display: block; }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+  .section-title {
+    font-size: 1.3rem;
+    margin: 0 0 4px;
+  }
+  .section-sub {
+    color: var(--text-soft);
+    font-size: 0.92rem;
+    margin: 0 0 18px;
+  }
+
+  /* ---------- Callout boxes ---------- */
+  .box {
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin: 14px 0;
+    border-left: 4px solid transparent;
+  }
+  .box h4 {
+    margin: 0 0 6px;
+    font-size: 0.98rem;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .box p, .box ul { margin: 0; font-size: 0.93rem; line-height: 1.55; }
+  .box ul { padding-left: 20px; }
+
+  .box.theorem { background: var(--blue-soft); border-color: var(--blue); }
+  .box.theorem h4 { color: var(--blue); }
+  .box.postulate { background: var(--teal-soft); border-color: var(--teal); }
+  .box.postulate h4 { color: var(--teal); }
+  .box.watch { background: var(--coral-soft); border-color: var(--coral); }
+  .box.watch h4 { color: var(--coral); }
+  .box.tip { background: var(--amber-soft); border-color: var(--amber); }
+  .box.tip h4 { color: var(--amber); }
+
+  /* ---------- Definition grid ---------- */
+  .def-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 10px;
+    margin: 14px 0;
+  }
+  .def-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .def-card .term {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--ink);
+    display: block;
+    margin-bottom: 3px;
+  }
+  .def-card .desc { font-size: 0.85rem; color: var(--text-soft); }
+
+  /* ---------- Proof/step tables ---------- */
+  .proof-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--ink);
+    margin: 18px 0 8px;
+  }
+  table.proof {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 6px;
+    font-size: 0.88rem;
+    background: var(--card-bg);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  table.proof th {
+    text-align: left;
+    background: var(--ink);
+    color: #fff;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
+    padding: 8px 12px;
+  }
+  table.proof td {
+    padding: 8px 12px;
+    border-top: 1px solid var(--border);
+  }
+  table.proof td:first-child { width: 55%; }
+  table.proof tr:nth-child(even) td { background: #FAF9F5; }
+
+  /* ---------- Numeric example ---------- */
+  .numex {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 10px 0;
+    font-size: 0.9rem;
+  }
+  .numex .setup { color: var(--text-soft); margin-bottom: 6px; }
+  .numex .steps { font-family: 'Space Grotesk', sans-serif; color: var(--ink); line-height: 1.7; }
+
+  /* ---------- Family tree ---------- */
+  .tree-box {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 10px 0;
+    font-size: 0.88rem;
+    line-height: 1.9;
+  }
+  .tree-box .lvl0 { font-weight: 700; color: var(--ink); font-family: 'Space Grotesk', sans-serif; }
+  .tree-box .lvl1 { padding-left: 22px; color: var(--ink); }
+  .tree-box .lvl2 { padding-left: 44px; color: var(--text-soft); }
+  .tree-box .note { color: var(--text-soft); font-size: 0.82rem; }
+
+  /* ---------- Footer: reasons bank + checklist ---------- */
+  .foot-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 16px;
+    margin-top: 34px;
+  }
+  @media (max-width: 700px) { .foot-grid { grid-template-columns: 1fr; } }
+
+  .foot-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+  }
+  .foot-card h3 { font-size: 1rem; margin: 0 0 10px; }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    font-size: 0.78rem;
+    background: var(--blue-soft);
+    color: var(--blue);
+    border-radius: 999px;
+    padding: 5px 11px;
+    font-weight: 600;
+  }
+  .checklist { list-style: none; margin: 0; padding: 0; font-size: 0.87rem; }
+  .checklist li {
+    display: flex;
+    gap: 9px;
+    align-items: flex-start;
+    padding: 6px 0;
+    border-bottom: 1px dashed var(--border);
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checkmark {
+    flex-shrink: 0;
+    width: 18px; height: 18px;
+    border-radius: 5px;
+    background: var(--teal-soft);
+    color: var(--teal);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem;
+    margin-top: 1px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="geometry.html">&larr; Back to Geometry</a>
+
+  <div class="hero">
+    <div class="hero-text">
+      <h1>Unit 1 &mdash; Polynomials &amp; Geometry Basics</h1>
+      <p>Lessons 1.1&ndash;1.7: polynomials, algebraic proof and literal equations, solving quadratics, geometry notation, the segment and angle addition postulates, and your first geometric proofs.</p>
+    </div>
+    <svg width="100" height="100" viewBox="0 0 100 100" fill="none"><line x1="10" y1="70" x2="90" y2="70" stroke="#4A6FA5" stroke-width="3"/><circle cx="25" cy="70" r="4" fill="#E9A23B"/><circle cx="55" cy="70" r="4" fill="#E9A23B"/><circle cx="85" cy="70" r="4" fill="#E9A23B"/><text x="22" y="45" fill="#2C9C82" font-size="26" font-family="sans-serif" font-weight="700">x²</text></svg>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+  <div id="panels"></div>
+
+  <div class="foot-grid">
+    <div class="foot-card">
+      <h3>Reasons bank</h3>
+      <div class="chip-row">
+        <span class="chip">Given</span><span class="chip">Distributive property</span><span class="chip">CLT</span><span class="chip">Addition POE</span><span class="chip">Subtraction POE</span><span class="chip">Multiplication POE</span><span class="chip">Division POE</span><span class="chip">Reflexive</span><span class="chip">Symmetric</span><span class="chip">Transitive</span><span class="chip">Substitution</span><span class="chip">Definition of ≅</span><span class="chip">Definition of midpoint</span><span class="chip">Definition of bisector</span><span class="chip">Segment Addition Postulate</span><span class="chip">Angle Addition Postulate</span><span class="chip">Definition of right angle</span>
+      </div>
+    </div>
+    <div class="foot-card">
+      <h3>Before you answer</h3>
+      <ul class="checklist">
+        <li><span class="checkmark">✓</span><span><b>Standard form first,</b> then read off the degree and leading coefficient.</span></li>
+        <li><span class="checkmark">✓</span><span><b>"A subtracted from B"</b> = B − A. Distribute the negative to every term.</span></li>
+        <li><span class="checkmark">✓</span><span><b>Quadratics:</b> set = 0, check for a GCF, and remember ± when you take a square root.</span></li>
+        <li><span class="checkmark">✓</span><span><b>Notation:</b> a length has no bar; a ray is named endpoint first; the vertex goes in the middle of an angle name.</span></li>
+        <li><span class="checkmark">✓</span><span><b>Found x?</b> Plug it back in for the length or angle they actually asked for.</span></li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ============ Coordinate-plane plot helper ============
+   pts: [[x,y],...] in order; labels: ['A','B',...]
+   opts: {min,max, diags:bool, color, diagColor, h} */
+function coordPlot(pts, labels, opts){
+  opts = opts || {};
+  var min = (opts.min!==undefined)?opts.min:-7, max=(opts.max!==undefined)?opts.max:7;
+  var u = 16, pad = 14, n = max-min, size = n*u + pad*2;
+  function X(x){ return pad + (x-min)*u; }
+  function Y(y){ return pad + (max-y)*u; }
+  var s = '';
+  for(var i=min;i<=max;i++){
+    s += '<line x1="'+X(i)+'" y1="'+Y(min)+'" x2="'+X(i)+'" y2="'+Y(max)+'" stroke="var(--gray-line)" stroke-width="0.7"/>';
+    s += '<line x1="'+X(min)+'" y1="'+Y(i)+'" x2="'+X(max)+'" y2="'+Y(i)+'" stroke="var(--gray-line)" stroke-width="0.7"/>';
+  }
+  if(min<0 && max>0){
+    s += '<line x1="'+X(0)+'" y1="'+Y(min)+'" x2="'+X(0)+'" y2="'+Y(max)+'" stroke="var(--gray)" stroke-width="1.6"/>';
+    s += '<line x1="'+X(min)+'" y1="'+Y(0)+'" x2="'+X(max)+'" y2="'+Y(0)+'" stroke="var(--gray)" stroke-width="1.6"/>';
+  }
+  var col = opts.color || 'var(--blue)';
+  if(opts.diags && pts.length===4){
+    var dc = opts.diagColor || 'var(--coral)';
+    s += '<line x1="'+X(pts[0][0])+'" y1="'+Y(pts[0][1])+'" x2="'+X(pts[2][0])+'" y2="'+Y(pts[2][1])+'" stroke="'+dc+'" stroke-width="1.8" stroke-dasharray="5 4"/>';
+    s += '<line x1="'+X(pts[1][0])+'" y1="'+Y(pts[1][1])+'" x2="'+X(pts[3][0])+'" y2="'+Y(pts[3][1])+'" stroke="'+dc+'" stroke-width="1.8" stroke-dasharray="5 4"/>';
+  }
+  var ptsStr = pts.map(function(p){ return X(p[0])+','+Y(p[1]); }).join(' ');
+  s += (pts.length>2 ? '<polygon points="'+ptsStr+'" fill="none" stroke="'+col+'" stroke-width="2.6" stroke-linejoin="round"/>'
+                     : '<polyline points="'+ptsStr+'" fill="none" stroke="'+col+'" stroke-width="2.6"/>');
+  var cx=0, cy=0; pts.forEach(function(p){cx+=p[0];cy+=p[1];}); cx/=pts.length; cy/=pts.length;
+  pts.forEach(function(p,i){
+    s += '<circle cx="'+X(p[0])+'" cy="'+Y(p[1])+'" r="3.6" fill="var(--ink)"/>';
+    if(labels && labels[i]){
+      var dx=p[0]-cx, dy=p[1]-cy, L=Math.sqrt(dx*dx+dy*dy)||1;
+      var lx=X(p[0])+dx/L*13, ly=Y(p[1])-dy/L*13+5;
+      s += '<text x="'+lx+'" y="'+ly+'" fill="var(--ink)" font-family="Space Grotesk, sans-serif" font-size="13" font-weight="700" text-anchor="middle">'+labels[i]+'</text>';
+    }
+  });
+  return '<svg viewBox="0 0 '+size+' '+size+'" width="100%" height="'+(opts.h||220)+'" xmlns="http://www.w3.org/2000/svg">'+s+'</svg>';
+}
+
+/* ---- Unit 1 diagram helpers (self-contained) ---- */
+function g1svg(inner, vb, h){ return '<svg viewBox="'+vb+'" width="100%" height="'+(h||170)+'" xmlns="http://www.w3.org/2000/svg">'+inner+'</svg>'; }
+function g1line(x1,y1,x2,y2,c,w,dash){ return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+(c||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round"'+(dash?' stroke-dasharray="5 4"':'')+'/>'; }
+function g1dot(x,y,c){ return '<circle cx="'+x+'" cy="'+y+'" r="3.6" fill="'+(c||'var(--ink)')+'"/>'; }
+function g1txt(x,y,s,c,size,weight,anchor){ return '<text x="'+x+'" y="'+y+'" fill="'+(c||'var(--ink)')+'" font-family="Space Grotesk, sans-serif" font-size="'+(size||13)+'" font-weight="'+(weight||700)+'" text-anchor="'+(anchor||'middle')+'">'+s+'</text>'; }
+function g1head(x,y,dx,dy,c){ var L=Math.sqrt(dx*dx+dy*dy),ux=dx/L,uy=dy/L,px=-uy,py=ux;
+  return '<polygon points="'+(x)+','+(y)+' '+(x-ux*11+px*5)+','+(y-uy*11+py*5)+' '+(x-ux*11-px*5)+','+(y-uy*11-py*5)+'" fill="'+(c||'var(--ink)')+'"/>'; }
+function g1tick(x,y,c){ return g1line(x-4,y+8,x+4,y-8,c||'var(--coral)',2.2); }
+
+function diagBox(){
+  var c='var(--blue)', inner=''
+    + '<rect x="90" y="40" width="200" height="110" fill="none" stroke="var(--ink)" stroke-width="2"/>'
+    + g1line(190,40,190,150,'var(--ink)',2) + g1line(90,95,290,95,'var(--ink)',2)
+    + g1txt(140,30,'3x',c,14) + g1txt(240,30,'−2',c,14)
+    + g1txt(70,72,'x','var(--teal)',14) + g1txt(70,127,'+4','var(--teal)',14)
+    + g1txt(140,72,'3x²','var(--ink)',14) + g1txt(240,72,'−2x','var(--ink)',14)
+    + g1txt(140,127,'+12x','var(--ink)',14) + g1txt(240,127,'−8','var(--ink)',14)
+    + g1txt(190,175,'(x + 4)(3x − 2) = 3x² + 10x − 8','var(--coral)',13);
+  return g1svg(inner,'40 10 300 175',175);
+}
+function diagRays(){
+  var inner=''
+    + g1line(40,40,260,40) + g1head(262,40,1,0) + g1dot(70,40) + g1dot(170,40)
+    + g1txt(70,62,'A') + g1txt(170,62,'B') + g1txt(300,45,'ray AB','var(--blue)',12,700,'start')
+    + g1line(270,100,50,100) + g1head(48,100,-1,0) + g1dot(130,100) + g1dot(230,100)
+    + g1txt(130,122,'A') + g1txt(230,122,'B') + g1txt(300,105,'ray BA','var(--teal)',12,700,'start')
+    + g1line(60,160,260,160) + g1head(58,160,-1,0) + g1head(262,160,1,0) + g1dot(100,160) + g1dot(160,160) + g1dot(220,160)
+    + g1txt(100,182,'P') + g1txt(160,182,'Q') + g1txt(220,182,'R') + g1txt(300,158,'QP and QR:','var(--coral)',12,700,'start') + g1txt(300,173,'opposite rays','var(--coral)',12,700,'start');
+  return g1svg(inner,'20 15 390 180',180);
+}
+function diagSAP(){
+  var y=90, a=40, bx=160, c=300, inner=''
+    + g1line(a,y,c,y) + g1dot(a,y) + g1dot(bx,y) + g1dot(c,y)
+    + g1txt(a,y-14,'A') + g1txt(bx,y-14,'B') + g1txt(c,y-14,'C')
+    + g1line(a,y+22,bx,y+22,'var(--blue)',2.5) + g1txt((a+bx)/2,y+40,'AB','var(--blue)',12)
+    + g1line(bx,y+22,c,y+22,'var(--teal)',2.5) + g1txt((bx+c)/2,y+40,'BC','var(--teal)',12)
+    + g1line(a,y-40,c,y-40,'var(--coral)',2.5) + g1txt((a+c)/2,y-50,'AC = AB + BC','var(--coral)',13);
+  return g1svg(inner,'20 25 300 130',150);
+}
+function diagMid(){
+  var y=70, a=40, mm=170, bb=300, inner=''
+    + g1line(a,y,bb,y) + g1dot(a,y) + g1dot(mm,y) + g1dot(bb,y)
+    + g1txt(a,y+26,'A') + g1txt(mm,y+26,'M') + g1txt(bb,y+26,'B')
+    + g1tick((a+mm)/2,y) + g1tick((mm+bb)/2,y)
+    + g1txt(mm,y-22,'AM = MB, so AB = 2·AM','var(--coral)',13);
+  return g1svg(inner,'20 30 300 80',130);
+}
+function diagAAP(){
+  var S=[60,160], inner=''
+    + g1line(S[0],S[1],300,160) + g1head(302,160,1,0)
+    + g1line(S[0],S[1],270,40) + g1head(272,39,0.87,-0.5)
+    + g1line(S[0],S[1],290,100,'var(--teal)') + g1head(292,99,0.97,-0.26,'var(--teal)')
+    + g1dot(S[0],S[1]) + g1txt(S[0]-12,S[1]+6,'S')
+    + g1txt(262,32,'R') + g1txt(304,98,'P','var(--teal)') + g1txt(300,178,'T')
+    + '<path d="M 110 160 A 50 50 0 0 0 107 146" fill="none" stroke="var(--blue)" stroke-width="2"/>'
+    + '<path d="M 130 140 A 72 72 0 0 0 122 124" fill="none" stroke="var(--coral)" stroke-width="2"/>'
+    + g1txt(175,195,'m∠RSP + m∠PST = m∠RST','var(--coral)',13);
+  return g1svg(inner,'20 20 320 185',185);
+}
+function diagBisector(){
+  var V=[60,150], inner=''
+    + g1line(V[0],V[1],290,150) + g1head(292,150,1,0)
+    + g1line(V[0],V[1],250,40) + g1head(252,39,0.87,-0.5)
+    + g1line(V[0],V[1],280,93,'var(--blue)') + g1head(282,92,0.97,-0.26,'var(--blue)')
+    + g1dot(V[0],V[1]) + g1txt(V[0]-12,V[1]+6,'B') + g1txt(244,30,'A') + g1txt(296,88,'D','var(--blue)') + g1txt(290,170,'C')
+    + g1txt(128,139,'2','var(--ink)',12) + g1txt(120,118,'1','var(--ink)',12)
+    + g1txt(175,190,'BD bisects ∠ABC → m∠1 = m∠2','var(--coral)',13);
+  return g1svg(inner,'20 20 310 180',180);
+}
+
+const sections = [
+  {
+    id: "s11",
+    label: "1.1 Polynomial Basics",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><text x="3" y="17" font-size="13" fill="currentColor" stroke="none" font-family="sans-serif">x²</text></svg>',
+    title: "Polynomial basics: standard form, degree & classifying",
+    sub: "Before you can name a polynomial, you have to write it in standard form.",
+    body: `
+      <div class="box postulate">
+        <h4>Standard form: 3 rules</h4>
+        <ul>
+          <li><b>Combine like terms</b> first. Like terms have the same variable <i>and</i> the same exponent. (Terms are separated by + or −.)</li>
+          <li>Variables go in <b>ABC order</b>.</li>
+          <li>Exponents on the first (ABC order) variable go in <b>descending order</b>: highest first.</li>
+        </ul>
+      </div>
+      <div class="def-grid">
+        <div class="def-card"><span class="term">Degree</span><span class="desc">The highest <b>sum of exponents</b> in any one term. In 3x²y⁴, that's 2 + 4 = 6.</span></div>
+        <div class="def-card"><span class="term">Leading coefficient</span><span class="desc">The number in front of the first term <i>after</i> the polynomial is in standard form.</span></div>
+        <div class="def-card"><span class="term">Constant</span><span class="desc">The term with no variable. If there isn't one, the constant is 0.</span></div>
+      </div>
+      <div class="proof-label">Naming a polynomial</div>
+      <table class="proof"><tr><th>Degree</th><th>Name by degree</th><th># of terms</th><th>Name by terms</th></tr>
+        <tr><td>0</td><td>constant</td><td>1</td><td>monomial</td></tr>
+        <tr><td>1</td><td>linear</td><td>2</td><td>binomial</td></tr>
+        <tr><td>2</td><td>quadratic</td><td>3</td><td>trinomial</td></tr>
+        <tr><td>3</td><td>cubic</td><td>4+</td><td>polynomial of n terms</td></tr>
+        <tr><td>4</td><td>quartic</td><td></td><td></td></tr>
+        <tr><td>5</td><td>quintic</td><td></td><td></td></tr></table>
+      <div class="numex">
+        <div class="setup">Example (original numbers): 7y − 2y³ + 4y² − 3 + 5y³</div>
+        <div class="steps">Combine −2y³ + 5y³ = 3y³ &rarr; standard form: <b>3y³ + 4y² + 7y − 3</b><br>
+        4 terms · degree 3 &rarr; <b>cubic polynomial of 4 terms</b> · leading coefficient 3 · constant −3</div>
+      </div>
+      <div class="numex">
+        <div class="setup">Adding polynomials: combine like terms, then write in standard form</div>
+        <div class="steps">(2x² − 5x + 1) + (x² + 3x − 4) = <b>3x² − 2x − 3</b></div>
+      </div>
+      <div class="box watch">
+        <h4>Common slip</h4>
+        <p>Find the leading coefficient <b>after</b> putting it in standard form. In 6 − 2y + 8y³ − y⁵, the leading coefficient is <b>−1</b> (from −y⁵), not 6.</p>
+      </div>
+    `
+  },
+  {
+    id: "s12",
+    label: "1.2 Subtract & Multiply",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/></svg>',
+    title: "Subtracting & multiplying polynomials",
+    sub: "Subtraction is distributing a negative. Multiplication is distributing everything, and the box method keeps it organized.",
+    body: `
+      <div class="box postulate">
+        <h4>Distributing</h4>
+        <p>Multiply the outside term by <b>every</b> term inside. When you multiply variables, <b>add the exponents</b>: x² · x³ = x⁵.</p>
+      </div>
+      <div class="numex"><div class="setup">Example</div><div class="steps">−3x²(2x³ − x + 4) = <b>−6x⁵ + 3x³ − 12x²</b></div></div>
+      <div class="box theorem">
+        <h4>Subtracting = distributing a −1</h4>
+        <p>Change the sign of <b>every</b> term in the second polynomial, then combine like terms.</p>
+      </div>
+      <div class="numex"><div class="setup">(5x² + 2x − 3) − (2x² − 4x + 1)</div><div class="steps">= 5x² + 2x − 3 − 2x² + 4x − 1 = <b>3x² + 6x − 4</b></div></div>
+      <div class="box watch">
+        <h4>Watch the wording</h4>
+        <p>"If <b>A</b> is subtracted from <b>B</b>" means <b>B − A</b>. The thing after "from" goes first.</p>
+      </div>
+      <div class="proof-label">Multiplying with the box method</div>
+      <p>Put one polynomial across the top and the other down the side, multiply to fill each box, then combine like terms (they line up on the diagonals). FOIL, rainbows, and repeated distribution all give the same answer.</p>
+      <div class="diagram-wrap">${diagBox()}</div>
+      <div class="numex"><div class="setup">Bigger boxes work the same way</div><div class="steps">(2x² + x)(x² − 3x + 2) = 2x⁴ − 6x³ + 4x² + x³ − 3x² + 2x = <b>2x⁴ − 5x³ + x² + 2x</b></div></div>
+      <div class="proof-label">Applying it to rectangles</div>
+      <div class="def-grid">
+        <div class="def-card"><span class="term">Perimeter</span><span class="desc">P = 2(length + width). Sides x + 6 and 2x − 1: P = 2(3x + 5) = <b>6x + 10</b>.</span></div>
+        <div class="def-card"><span class="term">Area</span><span class="desc">A = length × width. Same rectangle: (x + 6)(2x − 1) = <b>2x² + 11x − 6</b>.</span></div>
+      </div>
+    `
+  },
+  {
+    id: "s13",
+    label: "1.3 Algebraic Proof & Literal Eq.",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16"/><line x1="12" y1="4" x2="12" y2="20"/><line x1="3" y1="9" x2="21" y2="9"/></svg>',
+    title: "Algebraic proof & literal equations",
+    sub: "Solving an equation, but writing the reason for every step.",
+    body: `
+      <div class="proof-label">Vocabulary</div>
+      <div class="def-grid">
+        <div class="def-card"><span class="term">Proof</span><span class="desc">A logical argument that uses definitions, properties, and previously proven statements to show a conclusion is true.</span></div>
+        <div class="def-card"><span class="term">Postulate</span><span class="desc">A statement accepted as true <b>without proof</b>.</span></div>
+        <div class="def-card"><span class="term">Theorem</span><span class="desc">A statement that <b>can be proven</b> true.</span></div>
+      </div>
+      <p><b>Acceptable reasons</b> in a proof: given, definitions, properties, postulates, and theorems.</p>
+      <div class="proof-label">Properties (POE = Property of Equality)</div>
+      <table class="proof"><tr><th>Property</th><th>What it says</th></tr>
+        <tr><td>Addition POE</td><td>If a = b, then a + c = b + c</td></tr>
+        <tr><td>Subtraction POE</td><td>If a = b, then a − c = b − c</td></tr>
+        <tr><td>Multiplication POE</td><td>If a = b, then ac = bc</td></tr>
+        <tr><td>Division POE</td><td>If a = b, then a/c = b/c</td></tr>
+        <tr><td>Reflexive</td><td>a = a</td></tr>
+        <tr><td>Symmetric</td><td>If a = b, then b = a</td></tr>
+        <tr><td>Transitive</td><td>If a = b and b = c, then a = c (replaces a whole side)</td></tr>
+        <tr><td>Substitution</td><td>Replace a single item with something equal to it</td></tr>
+        <tr><td>Distributive</td><td>a(b + c) = ab + ac</td></tr>
+        <tr><td>CLT</td><td>Combine like terms (on one side only)</td></tr></table>
+      <div class="proof-label">Algebraic proof example (original)</div>
+      <p>Given 3(x + 5) = x + 21. Prove x = 3.</p>
+      <table class="proof"><tr><th>Statement</th><th>Reason</th></tr>
+        <tr><td>3(x + 5) = x + 21</td><td>Given</td></tr>
+        <tr><td>3x + 15 = x + 21</td><td>Distributive property</td></tr>
+        <tr><td>2x + 15 = 21</td><td>Subtraction POE</td></tr>
+        <tr><td>2x = 6</td><td>Subtraction POE</td></tr>
+        <tr><td>x = 3</td><td>Division POE</td></tr></table>
+      <div class="box tip"><h4>Fractions</h4><p>If an answer is a fraction, leave it as an <b>improper fraction</b> (like 25/2). No mixed numbers.</p></div>
+      <div class="proof-label">Literal equations</div>
+      <p>An equation with several variables, like a formula. You solve it for the letter you're asked about, using the same moves as always.</p>
+      <div class="numex"><div class="steps">V = lwh, solve for h: &nbsp;<b>h = V / (lw)</b><br>P = 2L + 2W, solve for W: &nbsp;<b>W = (P − 2L) / 2</b><br>A = ½bh, solve for b: multiply by 2 first &rarr; <b>b = 2A / h</b></div></div>
+      <div class="numex"><div class="setup">Missing side (original): a rectangle's perimeter is 8x + 20 and its length is x + 3. Find the width.</div>
+      <div class="steps">8x + 20 = 2(x + 3) + 2W &rarr; 8x + 20 = 2x + 6 + 2W &rarr; 6x + 14 = 2W &rarr; <b>W = 3x + 7</b></div></div>
+    `
+  },
+  {
+    id: "s14",
+    label: "1.4 Solving Quadratics",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4c3 16 15 16 18 0"/></svg>',
+    title: "Solving quadratics: four methods",
+    sub: "ax² + bx + c = 0 (a ≠ 0) can have two, one, or zero real solutions.",
+    body: `
+      <div class="proof-label">1. Factoring</div>
+      <ol><li>Set the equation equal to 0.</li><li><b>Always check for a GCF</b> first.</li><li>Factor.</li><li>Set each factor = 0.</li><li>Solve each one.</li></ol>
+      <div class="numex"><div class="setup">x² + 6x = 7</div><div class="steps">x² + 6x − 7 = 0 &rarr; (x + 7)(x − 1) = 0 &rarr; <b>x = −7 or x = 1</b></div></div>
+      <div class="numex"><div class="setup">GCF first: 4x² − 8x − 12 = 0</div><div class="steps">4(x² − 2x − 3) = 0 &rarr; 4(x − 3)(x + 1) = 0 &rarr; <b>x = 3 or x = −1</b></div></div>
+      <div class="proof-label">2. Square root method (only a squared term and a constant, no x term)</div>
+      <ol><li>Get the square alone on one side.</li><li>Take the square root of both sides: <b>±</b>, two answers.</li><li>Solve for x.</li></ol>
+      <div class="numex"><div class="setup">3(x − 1)² − 48 = 0</div><div class="steps">3(x − 1)² = 48 &rarr; (x − 1)² = 16 &rarr; x − 1 = ±4 &rarr; <b>x = 5 or x = −3</b></div></div>
+      <div class="box watch"><h4>Square root of a negative</h4><p>x² = −9 has <b>no real solution</b>. No real number squared is negative.</p></div>
+      <div class="proof-label">3. Completing the square</div>
+      <ol><li>If a ≠ 1, divide everything by a.</li><li>Move the constant to the right; leave a blank on both sides.</li><li>Take half of b, square it, and add (b/2)² to <b>both</b> sides.</li><li>Factor the left side as a perfect square.</li><li>Square root both sides (±) and solve.</li></ol>
+      <div class="numex"><div class="setup">x² + 8x − 5 = 0</div><div class="steps">x² + 8x + ___ = 5 + ___ &rarr; (8/2)² = 16 &rarr; x² + 8x + 16 = 21 &rarr; (x + 4)² = 21 &rarr; <b>x = −4 ± √21</b></div></div>
+      <div class="proof-label">4. Quadratic formula (works on every quadratic)</div>
+      <div class="numex"><div class="steps">x = (−b ± √(b² − 4ac)) / 2a</div></div>
+      <div class="numex"><div class="setup">x² − 4x − 6 = 0 &nbsp;(a = 1, b = −4, c = −6)</div><div class="steps">x = (4 ± √(16 + 24)) / 2 = (4 ± √40) / 2 = (4 ± 2√10) / 2 = <b>2 ± √10</b></div></div>
+      <div class="box tip"><h4>Simplify the radical</h4><p>Pull perfect squares out: √40 = √4·√10 = 2√10. Leave the exact answer unless you're asked for a decimal.</p></div>
+      <div class="proof-label">Applications</div>
+      <div class="numex"><div class="setup">A rectangle's length is 3 more than its width, and its area is 40. Find the dimensions. (original)</div>
+      <div class="steps">w(w + 3) = 40 &rarr; w² + 3w − 40 = 0 &rarr; (w + 8)(w − 5) = 0 &rarr; w = 5 (w = −8 makes no sense for a length) &rarr; <b>5 by 8</b></div></div>
+      <div class="box watch"><h4>Throw out answers that don't make sense</h4><p>A negative length or width isn't possible. Solve, then drop it.</p></div>
+    `
+  },
+  {
+    id: "s15",
+    label: "1.5 Notation & Definitions",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="12" x2="22" y2="12"/><circle cx="8" cy="12" r="1.5" fill="currentColor"/><circle cx="16" cy="12" r="1.5" fill="currentColor"/></svg>',
+    title: "Geometry notation & definitions",
+    sub: "The vocabulary and symbols everything else in geometry is built on.",
+    body: `
+      <div class="box postulate"><h4>3 undefined terms</h4><p><b>Point, line, and plane</b> have no formal definition, only an agreement about what they mean.</p></div>
+      <table class="proof"><tr><th>Term</th><th>Meaning</th><th>How to name it</th></tr>
+        <tr><td>Point</td><td>No dimension; a dot</td><td>A capital letter: point C</td></tr>
+        <tr><td>Line</td><td>One dimension; goes on forever both ways</td><td>line m (lowercase), or two points with a double arrow over them</td></tr>
+        <tr><td>Plane</td><td>Two dimensions; flat, goes on forever</td><td>plane P, or plane + 3 points <b>not</b> in a line</td></tr>
+        <tr><td>Segment</td><td>Two endpoints and all the points between</td><td>endpoints with a bar over them (no dots on the bar)</td></tr>
+        <tr><td>Ray</td><td>An endpoint and all points in one direction</td><td><b>endpoint first</b>, arrow over both letters pointing right</td></tr></table>
+      <div class="diagram-wrap">${diagRays()}</div>
+      <div class="box watch"><h4>Ray AB ≠ ray BA</h4><p>Ray AB starts at A and heads through B. Ray BA starts at B and heads through A. <b>Opposite rays</b> share an endpoint and go in opposite directions along one line (the points are <b>collinear</b>).</p></div>
+      <div class="def-grid">
+        <div class="def-card"><span class="term">Length of a segment</span><span class="desc">Written with <b>no bar</b>: AB. (You can only measure segments, not lines or rays.)</span></div>
+        <div class="def-card"><span class="term">Congruent ( ≅ )</span><span class="desc">Same size and shape. <b>Lengths</b> are equal (AB = CD); <b>segments</b> are congruent (bar AB ≅ bar CD). Shown with matching tick marks.</span></div>
+        <div class="def-card"><span class="term">Midpoint</span><span class="desc">Splits a segment into two congruent segments.</span></div>
+        <div class="def-card"><span class="term">Segment bisector</span><span class="desc">A point, line, segment, ray, or plane that crosses a segment at its midpoint.</span></div>
+      </div>
+      <div class="proof-label">Angles</div>
+      <div class="def-grid">
+        <div class="def-card"><span class="term">Angle</span><span class="desc">Two rays with the same endpoint (the <b>vertex</b>). Name it ∠BAC, ∠CAB, ∠A, or ∠1. With 3 letters, the <b>vertex goes in the middle</b>.</span></div>
+        <div class="def-card"><span class="term">Measure</span><span class="desc">Put m in front: m∠A = 42°. Congruent angles have equal measures and matching arcs.</span></div>
+        <div class="def-card"><span class="term">Angle bisector</span><span class="desc">A ray or line through the vertex that makes two congruent angles.</span></div>
+        <div class="def-card"><span class="term">Angle types</span><span class="desc">Acute: less than 90°. Right: 90°. Obtuse: more than 90°. Straight: 180°.</span></div>
+      </div>
+    `
+  },
+  {
+    id: "s16",
+    label: "1.6 Segment & Angle Addition",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="14" x2="22" y2="14"/><line x1="2" y1="8" x2="12" y2="8"/><line x1="12" y1="8" x2="22" y2="8"/></svg>',
+    title: "Segment Addition & Angle Addition Postulates",
+    sub: "The parts add up to the whole. Write that equation, then solve.",
+    body: `
+      <div class="box postulate"><h4>Segment Addition Postulate (SAP)</h4><p>If B is between A and C, then <b>AB + BC = AC</b>.</p></div>
+      <div class="diagram-wrap">${diagSAP()}</div>
+      <div class="numex"><div class="setup">B is between A and C. AB = 4x + 1, BC = 2x + 5, AC = 54. (original)</div>
+      <div class="steps">4x + 1 + 2x + 5 = 54 &rarr; 6x + 6 = 54 &rarr; x = 8 &rarr; <b>AB = 33, BC = 21</b></div></div>
+      <div class="proof-label">Midpoint problems</div>
+      <div class="diagram-wrap">${diagMid()}</div>
+      <div class="numex"><div class="setup">M is the midpoint of AB. AM = 2x + 3, MB = x + 11.</div>
+      <div class="steps">Set the halves equal: 2x + 3 = x + 11 &rarr; x = 8 &rarr; AM = MB = 19 &rarr; <b>AB = 38</b></div></div>
+      <div class="box postulate"><h4>Angle Addition Postulate (AAP)</h4><p>If P is in the interior of ∠RST, then <b>m∠RSP + m∠PST = m∠RST</b>.</p></div>
+      <div class="diagram-wrap">${diagAAP()}</div>
+      <div class="numex"><div class="setup">m∠RST = 95°, m∠RSP = 3x + 10, m∠PST = 2x.</div>
+      <div class="steps">3x + 10 + 2x = 95 &rarr; 5x = 85 &rarr; x = 17 &rarr; <b>m∠RSP = 61°, m∠PST = 34°</b></div></div>
+      <div class="box tip"><h4>Straight angle</h4><p>If ∠ABC is a straight angle, its parts add to <b>180°</b>.</p></div>
+      <div class="proof-label">Angle bisector problems</div>
+      <div class="diagram-wrap">${diagBisector()}</div>
+      <div class="numex"><div class="setup">BD bisects ∠ABC. m∠1 = 6x − 4, m∠2 = 4x + 12.</div>
+      <div class="steps">6x − 4 = 4x + 12 &rarr; x = 8 &rarr; each half is 44° &rarr; <b>m∠ABC = 88°</b></div></div>
+      <div class="box watch"><h4>Answer the question that was asked</h4><p>Finding x is usually just step one. Plug x back in to get the length or angle they want, and double it when they ask for the whole.</p></div>
+    `
+  },
+  {
+    id: "s17",
+    label: "1.7 More Proofs",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12l5 5L20 6"/></svg>',
+    title: "Two-column geometric proofs",
+    sub: "The same idea as algebraic proof, but the statements are about segments and angles.",
+    body: `
+      <div class="box tip"><h4>Test note</h4><p>The Unit 1 review says geometric proofs are <b>not on the Unit 1 test</b>. They will be on the <b>Unit 2</b> test, so learn them now.</p></div>
+      <div class="proof-label">Reasons you'll use</div>
+      <div class="def-grid">
+        <div class="def-card"><span class="term">Definition of ≅</span><span class="desc">Switch between congruent segments/angles and equal lengths/measures, either direction.</span></div>
+        <div class="def-card"><span class="term">Reflexive property</span><span class="desc">Anything equals itself: XY = XY, ∠A ≅ ∠A.</span></div>
+        <div class="def-card"><span class="term">Substitution</span><span class="desc">Replace something with an equal value. Works with <b>=</b> only.</span></div>
+        <div class="def-card"><span class="term">SAP / AAP</span><span class="desc">Write a whole as the sum of its parts.</span></div>
+        <div class="def-card"><span class="term">Addition / Subtraction POE</span><span class="desc">Add or subtract the same thing on both sides.</span></div>
+        <div class="def-card"><span class="term">Definition of right angle</span><span class="desc">Once you've shown a measure is 90°, you can call the angle a right angle.</span></div>
+      </div>
+      <div class="box theorem"><h4>Strategy</h4>
+        <ul><li><b>Small → big:</b> you're given parts and must prove wholes? <b>Add</b> (Addition POE), then SAP/AAP, then substitution.</li>
+        <li><b>Big → small:</b> you're given wholes and must prove parts? Write each whole with SAP/AAP, substitute, then <b>subtract</b>.</li>
+        <li>Start with Given, finish by converting back with the definition of ≅ if the "prove" uses ≅.</li></ul></div>
+      <div class="proof-label">Example (original figure: points P, Q, R, S in order on a line)</div>
+      <p>Given PQ ≅ RS. Prove PR ≅ QS.</p>
+      <table class="proof"><tr><th>Statement</th><th>Reason</th></tr>
+        <tr><td>PQ ≅ RS</td><td>Given</td></tr>
+        <tr><td>PQ = RS</td><td>Definition of ≅</td></tr>
+        <tr><td>QR = QR</td><td>Reflexive property</td></tr>
+        <tr><td>PQ + QR = QR + RS</td><td>Addition POE</td></tr>
+        <tr><td>PQ + QR = PR</td><td>Segment Addition Postulate</td></tr>
+        <tr><td>QR + RS = QS</td><td>Segment Addition Postulate</td></tr>
+        <tr><td>PR = QS</td><td>Substitution</td></tr>
+        <tr><td>PR ≅ QS</td><td>Definition of ≅</td></tr></table>
+    `
+  }
+];
+
+const tabsEl = document.getElementById('tabs');
+const panelsEl = document.getElementById('panels');
+
+sections.forEach((s, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
+  btn.innerHTML = s.icon + '<span>' + s.label + '</span>';
+  btn.onclick = () => selectTab(s.id);
+  btn.dataset.id = s.id;
+  tabsEl.appendChild(btn);
+
+  const panel = document.createElement('div');
+  panel.className = 'panel' + (i === 0 ? ' active' : '');
+  panel.id = s.id;
+  panel.innerHTML =
+    '<h2 class="section-title">' + s.title + '</h2>' +
+    '<p class="section-sub">' + s.sub + '</p>' +
+    s.body;
+  panelsEl.appendChild(panel);
+});
+
+function selectTab(id) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.id === id));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === id));
+}
+</script>
+</body>
+</html>

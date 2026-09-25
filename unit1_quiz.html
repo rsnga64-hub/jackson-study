@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 1 Quiz: Polynomials &amp; Geometry Basics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FBFAF7;
+    --grid-line: rgba(28,43,74,0.055);
+    --ink: #1C2B4A;
+    --text: #2B3648;
+    --text-soft: #64707F;
+    --blue: #2E86AB;
+    --blue-soft: #E9F3F8;
+    --amber: #D98A2B;
+    --amber-soft: #FCF1DE;
+    --coral: #D65A5A;
+    --coral-soft: #FBEBEB;
+    --teal: #2C9C82;
+    --teal-soft: #E6F5F0;
+    --card-bg: #FFFFFF;
+    --border: #E4E0D4;
+    --gray: #94A0AD;
+    --gray-line: #CBD3DC;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; color: var(--ink); }
+  .wrap { max-width: 680px; margin: 0 auto; padding: 32px 20px 80px; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--text-soft); text-decoration: none; font-size: 0.88rem; font-weight: 600; margin-bottom: 18px; }
+  .back-link:hover { color: var(--blue); }
+
+  .hero { background: var(--ink); border-radius: 18px; padding: 26px 28px; color: #fff; margin-bottom: 22px; }
+  .hero h1 { color: #fff; font-size: 1.7rem; margin: 0 0 6px; }
+  .hero p { margin: 0; color: #C8D3E0; font-size: 0.96rem; max-width: 52ch; }
+
+  .statline { display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text-soft); margin-bottom: 8px; }
+  .statline b { color: var(--ink); }
+  .progress-track { height: 6px; background: var(--border); border-radius: 999px; overflow: hidden; margin-bottom: 20px; }
+  .progress-fill { height: 100%; background: var(--blue); border-radius: 999px; transition: width 0.25s ease; }
+
+  .qcard {
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px;
+    padding: 26px 28px; box-shadow: 0 4px 18px rgba(28,43,74,0.06);
+  }
+  .qkicker { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.72rem; letter-spacing: 0.03em; text-transform: uppercase; color: var(--blue); margin: 0 0 8px; }
+  .qtext { font-size: 1.15rem; font-weight: 700; color: var(--ink); line-height: 1.35; margin: 0 0 16px; }
+  .diagram-wrap { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 6px; margin-bottom: 18px; }
+  .diagram-wrap svg { display: block; width: 100%; height: auto; max-height: 270px; }
+
+  .opt {
+    display: flex; align-items: center; gap: 10px;
+    width: 100%; text-align: left; font-family: 'Inter', sans-serif; font-size: 0.98rem; font-weight: 600;
+    color: var(--ink); background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 12px;
+    padding: 12px 16px; margin-bottom: 10px; cursor: pointer; transition: all 0.15s ease;
+  }
+  .opt:hover:not(.locked) { border-color: var(--blue); background: var(--blue-soft); }
+  .opt .letter {
+    flex-shrink: 0; width: 24px; height: 24px; border-radius: 999px; border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 700; color: var(--text-soft);
+  }
+  .opt.correct { border-color: var(--teal); background: var(--teal-soft); }
+  .opt.correct .letter { background: var(--teal); border-color: var(--teal); color: #fff; }
+  .opt.incorrect { border-color: var(--coral); background: var(--coral-soft); }
+  .opt.incorrect .letter { background: var(--coral); border-color: var(--coral); color: #fff; }
+  .opt.locked { cursor: default; }
+  .opt.dim { opacity: 0.55; }
+
+  .explain {
+    display: none; margin-top: 14px; padding: 12px 14px; border-radius: 10px;
+    background: var(--blue-soft); color: var(--ink); font-size: 0.9rem; line-height: 1.45;
+  }
+  .explain.show { display: block; }
+  .explain b { color: var(--blue); }
+
+  .qcontrols { display: flex; justify-content: flex-end; margin-top: 18px; }
+  .btn {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.92rem;
+    border: 1px solid var(--ink); background: var(--ink); color: #fff;
+    border-radius: 10px; padding: 11px 20px; cursor: pointer; transition: opacity 0.15s ease;
+  }
+  .btn:hover { opacity: 0.88; }
+  .btn:disabled { opacity: 0.35; cursor: default; }
+  .btn.ghost { background: var(--card-bg); color: var(--ink); }
+
+  /* results screen */
+  .results { text-align: center; }
+  .score-big { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 3rem; color: var(--ink); margin: 6px 0; }
+  .score-msg { font-size: 1rem; color: var(--text-soft); margin-bottom: 22px; }
+  .missed-list { text-align: left; margin: 20px 0; padding: 0; list-style: none; }
+  .missed-list li { padding: 10px 0; border-top: 1px solid var(--border); font-size: 0.88rem; color: var(--text-soft); }
+  .missed-list li b { color: var(--ink); display: block; margin-bottom: 2px; }
+
+  @media (max-width: 480px) {
+    .qtext { font-size: 1.03rem; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="geometry.html">&larr; Back to Geometry</a>
+  <div class="hero">
+    <h1>Unit 1 Quiz</h1>
+    <p>39 questions covering all of Unit 1: polynomials, algebraic proof and literal equations, quadratics, notation, segment and angle addition, and proofs. Answer order shuffles every time.</p>
+  </div>
+
+  <div id="quizArea">
+    <div class="statline">
+      <span>Question <b id="qNum">1</b> of <b id="qTotal">18</b></span>
+      <span id="scoreLive">Score: 0</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+    <div class="qcard">
+      <p class="qkicker" id="qKicker"></p>
+      <p class="qtext" id="qText"></p>
+      <div class="diagram-wrap" id="diagramWrap" style="display:none;"></div>
+      <div id="optsWrap"></div>
+      <div class="explain" id="explain"></div>
+      <div class="qcontrols">
+        <button class="btn" id="btnNext" disabled>Next Question &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="resultsArea" style="display:none;">
+    <div class="qcard results">
+      <p class="qkicker">Quiz complete</p>
+      <div class="score-big" id="finalScore">0 / 18</div>
+      <p class="score-msg" id="finalMsg"></p>
+      <ul class="missed-list" id="missedList"></ul>
+      <button class="btn" id="btnRetake">Retake Quiz</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---- shared diagram helpers ---- */
+function svg(inner, vb, h) { return '<svg viewBox="'+vb+'" width="100%" height="'+(h||180)+'" xmlns="http://www.w3.org/2000/svg">'+inner+'</svg>'; }
+function lineEl(x1,y1,x2,y2,color,w,dash){ return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round"'+(dash?' stroke-dasharray="5 4"':'')+'/>'; }
+function txt(x,y,s,color,size,weight,anchor){ return '<text x="'+x+'" y="'+y+'" fill="'+(color||'var(--ink)')+'" font-family="Space Grotesk, sans-serif" font-size="'+(size||13)+'" font-weight="'+(weight||700)+'" text-anchor="'+(anchor||'middle')+'">'+s+'</text>'; }
+function poly(pts,color,w){ return '<polygon points="'+pts+'" fill="none" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linejoin="round"/>'; }
+function tick(mx,my,dx,dy,color,double_){
+  var len=Math.sqrt(dx*dx+dy*dy); var ux=dx/len, uy=dy/len; var px=-uy, py=ux;
+  function mark(cx,cy){
+    return '<line x1="'+(cx-px*7)+'" y1="'+(cy-py*7)+'" x2="'+(cx+px*7)+'" y2="'+(cy+py*7)+'" stroke="'+color+'" stroke-width="2.4" stroke-linecap="round"/>';
+  }
+  if(double_) return mark(mx-ux*4,my-uy*4) + mark(mx+ux*4,my+uy*4);
+  return mark(mx,my);
+}
+function rightAngle(x,y,dx1,dy1,dx2,dy2,color,size){
+  size = size||11;
+  var p1x=x+dx1*size, p1y=y+dy1*size;
+  var p2x=x+dx2*size, p2y=y+dy2*size;
+  var p3x=p1x+dx2*size, p3y=p1y+dy2*size;
+  return '<polyline points="'+p1x+','+p1y+' '+p3x+','+p3y+' '+p2x+','+p2y+'" fill="none" stroke="'+color+'" stroke-width="2"/>';
+}
+function diagRhombus(){
+  var color='var(--teal)';
+  var A=[150,30], B=[250,110], C=[150,190], D=[50,110];
+  var inner = poly(A+' '+B+' '+C+' '+D,'var(--ink)')
+    + tick(200,70,100,80,color,false) + tick(200,150,100,80,color,false)
+    + tick(100,150,100,-80,color,false) + tick(100,70,100,-80,color,false);
+  return svg(inner,'0 0 300 220',175);
+}
+function diagKite(){
+  var colorTop='var(--violet, #7C5CBF)', colorBot='var(--blue)';
+  var T=[150,30], R=[220,110], Bm=[150,190], L=[80,110];
+  var inner = poly(T+' '+R+' '+Bm+' '+L,'var(--ink)')
+    + tick(185,70,70,80,colorTop,false) + tick(115,70,-70,80,colorTop,false)
+    + tick(185,150,70,-80,colorBot,true) + tick(115,150,-70,-80,colorBot,true);
+  return svg(inner,'0 0 300 220',175);
+}
+function diagIsoTrapezoid(){
+  var color='var(--teal)'; var legColor='var(--coral)';
+  var A=[50,170], B=[250,170], C=[190,70], D=[110,70];
+  var inner = poly(A+' '+B+' '+C+' '+D,'var(--ink)')
+    + tick(80,120,60,-100,legColor,false) + tick(220,120,-60,-100,legColor,false);
+  return svg(inner,'0 0 300 200',170);
+}
+
+/* ============ Coordinate-plane plot helper ============
+   pts: [[x,y],...] in order; labels: ['A','B',...]
+   opts: {min,max, diags:bool, color, diagColor, h} */
+function coordPlot(pts, labels, opts){
+  opts = opts || {};
+  var min = (opts.min!==undefined)?opts.min:-7, max=(opts.max!==undefined)?opts.max:7;
+  var u = 16, pad = 14, n = max-min, size = n*u + pad*2;
+  function X(x){ return pad + (x-min)*u; }
+  function Y(y){ return pad + (max-y)*u; }
+  var s = '';
+  for(var i=min;i<=max;i++){
+    s += '<line x1="'+X(i)+'" y1="'+Y(min)+'" x2="'+X(i)+'" y2="'+Y(max)+'" stroke="var(--gray-line)" stroke-width="0.7"/>';
+    s += '<line x1="'+X(min)+'" y1="'+Y(i)+'" x2="'+X(max)+'" y2="'+Y(i)+'" stroke="var(--gray-line)" stroke-width="0.7"/>';
+  }
+  if(min<0 && max>0){
+    s += '<line x1="'+X(0)+'" y1="'+Y(min)+'" x2="'+X(0)+'" y2="'+Y(max)+'" stroke="var(--gray)" stroke-width="1.6"/>';
+    s += '<line x1="'+X(min)+'" y1="'+Y(0)+'" x2="'+X(max)+'" y2="'+Y(0)+'" stroke="var(--gray)" stroke-width="1.6"/>';
+  }
+  var col = opts.color || 'var(--blue)';
+  if(opts.diags && pts.length===4){
+    var dc = opts.diagColor || 'var(--coral)';
+    s += '<line x1="'+X(pts[0][0])+'" y1="'+Y(pts[0][1])+'" x2="'+X(pts[2][0])+'" y2="'+Y(pts[2][1])+'" stroke="'+dc+'" stroke-width="1.8" stroke-dasharray="5 4"/>';
+    s += '<line x1="'+X(pts[1][0])+'" y1="'+Y(pts[1][1])+'" x2="'+X(pts[3][0])+'" y2="'+Y(pts[3][1])+'" stroke="'+dc+'" stroke-width="1.8" stroke-dasharray="5 4"/>';
+  }
+  var ptsStr = pts.map(function(p){ return X(p[0])+','+Y(p[1]); }).join(' ');
+  s += (pts.length>2 ? '<polygon points="'+ptsStr+'" fill="none" stroke="'+col+'" stroke-width="2.6" stroke-linejoin="round"/>'
+                     : '<polyline points="'+ptsStr+'" fill="none" stroke="'+col+'" stroke-width="2.6"/>');
+  var cx=0, cy=0; pts.forEach(function(p){cx+=p[0];cy+=p[1];}); cx/=pts.length; cy/=pts.length;
+  pts.forEach(function(p,i){
+    s += '<circle cx="'+X(p[0])+'" cy="'+Y(p[1])+'" r="3.6" fill="var(--ink)"/>';
+    if(labels && labels[i]){
+      var dx=p[0]-cx, dy=p[1]-cy, L=Math.sqrt(dx*dx+dy*dy)||1;
+      var lx=X(p[0])+dx/L*13, ly=Y(p[1])-dy/L*13+5;
+      s += '<text x="'+lx+'" y="'+ly+'" fill="var(--ink)" font-family="Space Grotesk, sans-serif" font-size="13" font-weight="700" text-anchor="middle">'+labels[i]+'</text>';
+    }
+  });
+  return '<svg viewBox="0 0 '+size+' '+size+'" width="100%" height="'+(opts.h||220)+'" xmlns="http://www.w3.org/2000/svg">'+s+'</svg>';
+}
+
+/* ---- question bank (options are shuffled each time; "correct" is the index in opts as written) ---- */
+/* ---- Unit 1 diagram helpers (self-contained) ---- */
+function g1svg(inner, vb, h){ return '<svg viewBox="'+vb+'" width="100%" height="'+(h||170)+'" xmlns="http://www.w3.org/2000/svg">'+inner+'</svg>'; }
+function g1line(x1,y1,x2,y2,c,w,dash){ return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+(c||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round"'+(dash?' stroke-dasharray="5 4"':'')+'/>'; }
+function g1dot(x,y,c){ return '<circle cx="'+x+'" cy="'+y+'" r="3.6" fill="'+(c||'var(--ink)')+'"/>'; }
+function g1txt(x,y,s,c,size,weight,anchor){ return '<text x="'+x+'" y="'+y+'" fill="'+(c||'var(--ink)')+'" font-family="Space Grotesk, sans-serif" font-size="'+(size||13)+'" font-weight="'+(weight||700)+'" text-anchor="'+(anchor||'middle')+'">'+s+'</text>'; }
+function g1head(x,y,dx,dy,c){ var L=Math.sqrt(dx*dx+dy*dy),ux=dx/L,uy=dy/L,px=-uy,py=ux;
+  return '<polygon points="'+(x)+','+(y)+' '+(x-ux*11+px*5)+','+(y-uy*11+py*5)+' '+(x-ux*11-px*5)+','+(y-uy*11-py*5)+'" fill="'+(c||'var(--ink)')+'"/>'; }
+function g1tick(x,y,c){ return g1line(x-4,y+8,x+4,y-8,c||'var(--coral)',2.2); }
+
+function diagBox(){
+  var c='var(--blue)', inner=''
+    + '<rect x="90" y="40" width="200" height="110" fill="none" stroke="var(--ink)" stroke-width="2"/>'
+    + g1line(190,40,190,150,'var(--ink)',2) + g1line(90,95,290,95,'var(--ink)',2)
+    + g1txt(140,30,'3x',c,14) + g1txt(240,30,'−2',c,14)
+    + g1txt(70,72,'x','var(--teal)',14) + g1txt(70,127,'+4','var(--teal)',14)
+    + g1txt(140,72,'3x²','var(--ink)',14) + g1txt(240,72,'−2x','var(--ink)',14)
+    + g1txt(140,127,'+12x','var(--ink)',14) + g1txt(240,127,'−8','var(--ink)',14)
+    + g1txt(190,175,'(x + 4)(3x − 2) = 3x² + 10x − 8','var(--coral)',13);
+  return g1svg(inner,'40 10 300 175',175);
+}
+function diagRays(){
+  var inner=''
+    + g1line(40,40,260,40) + g1head(262,40,1,0) + g1dot(70,40) + g1dot(170,40)
+    + g1txt(70,62,'A') + g1txt(170,62,'B') + g1txt(300,45,'ray AB','var(--blue)',12,700,'start')
+    + g1line(270,100,50,100) + g1head(48,100,-1,0) + g1dot(130,100) + g1dot(230,100)
+    + g1txt(130,122,'A') + g1txt(230,122,'B') + g1txt(300,105,'ray BA','var(--teal)',12,700,'start')
+    + g1line(60,160,260,160) + g1head(58,160,-1,0) + g1head(262,160,1,0) + g1dot(100,160) + g1dot(160,160) + g1dot(220,160)
+    + g1txt(100,182,'P') + g1txt(160,182,'Q') + g1txt(220,182,'R') + g1txt(300,158,'QP and QR:','var(--coral)',12,700,'start') + g1txt(300,173,'opposite rays','var(--coral)',12,700,'start');
+  return g1svg(inner,'20 15 390 180',180);
+}
+function diagSAP(){
+  var y=90, a=40, bx=160, c=300, inner=''
+    + g1line(a,y,c,y) + g1dot(a,y) + g1dot(bx,y) + g1dot(c,y)
+    + g1txt(a,y-14,'A') + g1txt(bx,y-14,'B') + g1txt(c,y-14,'C')
+    + g1line(a,y+22,bx,y+22,'var(--blue)',2.5) + g1txt((a+bx)/2,y+40,'AB','var(--blue)',12)
+    + g1line(bx,y+22,c,y+22,'var(--teal)',2.5) + g1txt((bx+c)/2,y+40,'BC','var(--teal)',12)
+    + g1line(a,y-40,c,y-40,'var(--coral)',2.5) + g1txt((a+c)/2,y-50,'AC = AB + BC','var(--coral)',13);
+  return g1svg(inner,'20 25 300 130',150);
+}
+function diagMid(){
+  var y=70, a=40, mm=170, bb=300, inner=''
+    + g1line(a,y,bb,y) + g1dot(a,y) + g1dot(mm,y) + g1dot(bb,y)
+    + g1txt(a,y+26,'A') + g1txt(mm,y+26,'M') + g1txt(bb,y+26,'B')
+    + g1tick((a+mm)/2,y) + g1tick((mm+bb)/2,y)
+    + g1txt(mm,y-22,'AM = MB, so AB = 2·AM','var(--coral)',13);
+  return g1svg(inner,'20 30 300 80',130);
+}
+function diagAAP(){
+  var S=[60,160], inner=''
+    + g1line(S[0],S[1],300,160) + g1head(302,160,1,0)
+    + g1line(S[0],S[1],270,40) + g1head(272,39,0.87,-0.5)
+    + g1line(S[0],S[1],290,100,'var(--teal)') + g1head(292,99,0.97,-0.26,'var(--teal)')
+    + g1dot(S[0],S[1]) + g1txt(S[0]-12,S[1]+6,'S')
+    + g1txt(262,32,'R') + g1txt(304,98,'P','var(--teal)') + g1txt(300,178,'T')
+    + '<path d="M 110 160 A 50 50 0 0 0 107 146" fill="none" stroke="var(--blue)" stroke-width="2"/>'
+    + '<path d="M 130 140 A 72 72 0 0 0 122 124" fill="none" stroke="var(--coral)" stroke-width="2"/>'
+    + g1txt(175,195,'m∠RSP + m∠PST = m∠RST','var(--coral)',13);
+  return g1svg(inner,'20 20 320 185',185);
+}
+function diagBisector(){
+  var V=[60,150], inner=''
+    + g1line(V[0],V[1],290,150) + g1head(292,150,1,0)
+    + g1line(V[0],V[1],250,40) + g1head(252,39,0.87,-0.5)
+    + g1line(V[0],V[1],280,93,'var(--blue)') + g1head(282,92,0.97,-0.26,'var(--blue)')
+    + g1dot(V[0],V[1]) + g1txt(V[0]-12,V[1]+6,'B') + g1txt(244,30,'A') + g1txt(296,88,'D','var(--blue)') + g1txt(290,170,'C')
+    + g1txt(128,139,'2','var(--ink)',12) + g1txt(120,118,'1','var(--ink)',12)
+    + g1txt(175,190,'BD bisects ∠ABC → m∠1 = m∠2','var(--coral)',13);
+  return g1svg(inner,'20 20 310 180',180);
+}
+
+function diagramFor(key){
+  var X={box:diagBox,rays:diagRays,sap:diagSAP,mid:diagMid,aap:diagAAP,bisector:diagBisector};
+  return X[key] ? X[key]() : '';
+}
+var Q = [
+  {kicker:'1.1 Standard Form', text:'Write 3x + 5x⁴ − 7 + 2x² in standard form.', opts:['5x⁴ + 2x² + 3x − 7','−7 + 3x + 2x² + 5x⁴','5x⁴ + 3x + 2x² − 7','2x² + 3x + 5x⁴ − 7'], correct:0, explain:'Highest exponent first, descending: 5x⁴ + 2x² + 3x − 7.'},
+  {kicker:'1.1 Degree', text:'What is the degree of 4a²b³ − 2ab + 9, and what is it called?', opts:['5, quintic','3, cubic','2, quadratic','6, not named'], correct:0, explain:'Add the exponents within a term: a²b³ has 2 + 3 = 5. Degree 5 = quintic.'},
+  {kicker:'1.1 Leading Coefficient', text:'What is the leading coefficient of 6 − 2y + 8y³ − y⁵?', opts:['−1','6','8','5'], correct:0, explain:'Standard form is −y⁵ + 8y³ − 2y + 6, so the leading coefficient is −1.'},
+  {kicker:'1.1 Classifying', text:'Classify 7m³ − 4m by number of terms and by degree.', opts:['Binomial, cubic','Trinomial, cubic','Binomial, quadratic','Monomial, cubic'], correct:0, explain:'Two terms = binomial. Highest exponent 3 = cubic.'},
+  {kicker:'1.1 Adding', text:'(4x² − 3x + 6) + (−x² + 8x − 10) =', opts:['3x² + 5x − 4','5x² + 5x − 4','3x² − 11x + 16','3x² + 5x + 16'], correct:0, explain:'4x² − x² = 3x²; −3x + 8x = 5x; 6 − 10 = −4.'},
+  {kicker:'1.2 Subtracting', text:'If 3x² − 2x + 5 is subtracted from 7x² + 4x − 1, what is the result?', opts:['4x² + 6x − 6','−4x² − 6x + 6','4x² + 2x + 4','10x² + 2x + 4'], correct:0, explain:'"Subtracted from" puts 7x² + 4x − 1 first: (7x² + 4x − 1) − (3x² − 2x + 5) = 4x² + 6x − 6.'},
+  {kicker:'1.2 Distributing', text:'−3x²(2x³ − x + 4) =', opts:['−6x⁵ + 3x³ − 12x²','−6x⁶ + 3x² − 12x²','−6x⁵ − 3x³ + 12x²','6x⁵ + 3x³ − 12x²'], correct:0, explain:'Multiply coefficients and add exponents: −3·2 = −6, x²·x³ = x⁵; −3x²·(−x) = +3x³; −3x²·4 = −12x².'},
+  {kicker:'1.2 Box Method', text:'(2x + 5)(x − 3) =', opts:['2x² − x − 15','2x² + x − 15','2x² − 11x − 15','2x² − 15'], correct:0, explain:'2x² − 6x + 5x − 15 = 2x² − x − 15.'},
+  {kicker:'1.2 Box Method — Diagram', text:'Use the box method: (3x − 2)(x² + 4x − 1) =', diagram:'box', opts:['3x³ + 10x² − 11x + 2','3x³ + 12x² − 3x + 2','3x³ + 10x² − 5x − 2','3x³ + 14x² − 11x + 2'], correct:0, explain:'3x³ + 12x² − 3x − 2x² − 8x + 2 → 3x³ + 10x² − 11x + 2.'},
+  {kicker:'1.2 Area', text:'A rectangle has sides x + 6 and 2x − 1. What is its area?', opts:['2x² + 11x − 6','6x + 10','2x² − 6','2x² + 13x − 6'], correct:0, explain:'(x + 6)(2x − 1) = 2x² − x + 12x − 6 = 2x² + 11x − 6. (6x + 10 is the perimeter.)'},
+  {kicker:'1.3 Algebraic Proof', text:'In a proof, the step after "5(x − 2) = 3x + 4" is "5x − 10 = 3x + 4". What is the reason?', opts:['Distributive property','Substitution','Addition POE','Reflexive property'], correct:0, explain:'Multiplying 5 through the parentheses is the distributive property.'},
+  {kicker:'1.3 Algebraic Proof', text:'Going from 5x − 10 = 3x + 4 to 2x − 10 = 4 uses which reason?', opts:['Subtraction POE','Addition POE','Division POE','Transitive property'], correct:0, explain:'3x was subtracted from both sides.'},
+  {kicker:'1.3 Properties', text:'"If a = b and b = c, then a = c" is the:', opts:['Transitive property','Symmetric property','Reflexive property','Substitution property'], correct:0, explain:'Transitive links two equalities through a shared middle.'},
+  {kicker:'1.3 Properties', text:'"If a = b, then b = a" is the:', opts:['Symmetric property','Reflexive property','Transitive property','Division POE'], correct:0, explain:'Symmetric flips the two sides.'},
+  {kicker:'1.3 Vocabulary', text:'A statement that is accepted as true without proof is a:', opts:['Postulate','Theorem','Proof','Definition'], correct:0, explain:'Postulates are accepted; theorems are proven.'},
+  {kicker:'1.3 Literal Equations', text:'Solve V = lwh for h.', opts:['h = V / (lw)','h = V − lw','h = lw / V','h = Vlw'], correct:0, explain:'Divide both sides by lw.'},
+  {kicker:'1.3 Literal Equations', text:'Solve P = 2L + 2W for W.', opts:['W = (P − 2L) / 2','W = P − 2L','W = P / 2 − 2L','W = (P + 2L) / 2'], correct:0, explain:'Subtract 2L, then divide by 2.'},
+  {kicker:'1.3 Missing Side', text:'A triangle\'s perimeter is 9x + 2. Two sides are 2x + 5 and 4x − 1. What is the third side?', opts:['3x − 2','3x + 6','15x + 6','3x − 4'], correct:0, explain:'9x + 2 − (2x + 5) − (4x − 1) = 3x − 2.'},
+  {kicker:'1.4 Factoring', text:'Solve x² − 2x − 15 = 0.', opts:['x = 5 or x = −3','x = −5 or x = 3','x = 15 or x = −1','x = 5 only'], correct:0, explain:'(x − 5)(x + 3) = 0.'},
+  {kicker:'1.4 Factoring', text:'What should you do FIRST to solve 4x² − 8x − 12 = 0 by factoring?', opts:['Factor out the GCF, 4','Use the quadratic formula','Take the square root of both sides','Add 12 to both sides'], correct:0, explain:'Always check for a GCF: 4(x² − 2x − 3) = 0, giving x = 3 or x = −1.'},
+  {kicker:'1.4 Square Root Method', text:'Solve (x − 2)² = 25.', opts:['x = 7 or x = −3','x = 7 only','x = 27 or x = −23','x = 3 or x = −7'], correct:0, explain:'x − 2 = ±5, so x = 7 or x = −3.'},
+  {kicker:'1.4 Square Root Method', text:'Solve x² = −9.', opts:['No real solution','x = 3 or x = −3','x = −3','x = 81'], correct:0, explain:'No real number squared is negative.'},
+  {kicker:'1.4 Completing the Square', text:'To solve x² + 10x = 11 by completing the square, what number do you add to both sides?', opts:['25','10','100','5'], correct:0, explain:'(b/2)² = (10/2)² = 25. Then (x + 5)² = 36, so x = 1 or x = −11.'},
+  {kicker:'1.4 Quadratic Formula', text:'Solve 2x² + 3x − 1 = 0 with the quadratic formula.', opts:['x = (−3 ± √17) / 4','x = (3 ± √17) / 4','x = (−3 ± √1) / 4','x = (−3 ± √17) / 2'], correct:0, explain:'b² − 4ac = 9 − 4(2)(−1) = 17, and 2a = 4.'},
+  {kicker:'1.4 Applications', text:'A rectangle\'s length is 5 more than its width, and its area is 84. What are its dimensions?', opts:['7 by 12','12 by 17','−12 by −7','6 by 14'], correct:0, explain:'w(w + 5) = 84 → (w + 12)(w − 7) = 0 → w = 7 (−12 makes no sense) → 7 by 12.'},
+  {kicker:'1.5 Undefined Terms', text:'Which are the three undefined terms of geometry?', opts:['Point, line, plane','Point, segment, ray','Line, angle, plane','Segment, ray, angle'], correct:0, explain:'Point, line, and plane have no formal definition.'},
+  {kicker:'1.5 Rays — Diagram', text:'How are ray AB and ray BA related?', diagram:'rays', opts:['They are different rays: AB starts at A, BA starts at B.','They are the same ray.','They are opposite rays.','They are both segments.'], correct:0, explain:'A ray is named endpoint first, so switching the letters changes the ray.'},
+  {kicker:'1.5 Notation', text:'How do you write the LENGTH of segment AB?', opts:['AB with no bar','AB with a bar over it','AB with an arrow over it','AB with a double arrow over it'], correct:0, explain:'A bar means the segment itself; the length has no bar.'},
+  {kicker:'1.5 Naming Angles', text:'In ∠DEF, which point is the vertex?', opts:['E','D','F','There is no vertex'], correct:0, explain:'With three letters, the vertex is always the middle letter.'},
+  {kicker:'1.5 Angle Types', text:'An angle measuring 135° is:', opts:['Obtuse','Acute','Right','Straight'], correct:0, explain:'Obtuse is more than 90° (and less than 180°).'},
+  {kicker:'1.6 Segment Addition — Diagram', text:'B is between A and C. AB = 3x + 1, BC = 2x + 4, and AC = 30. Find AB.', diagram:'sap', opts:['16','5','14','30'], correct:0, explain:'5x + 5 = 30 → x = 5 → AB = 3(5) + 1 = 16.'},
+  {kicker:'1.6 Midpoint — Diagram', text:'M is the midpoint of AB. AM = 5x − 3 and MB = 2x + 9. Find AB.', diagram:'mid', opts:['34','17','4','12'], correct:0, explain:'5x − 3 = 2x + 9 → x = 4 → AM = 17 → AB = 34.'},
+  {kicker:'1.6 Angle Addition', text:'∠ABC is a straight angle. m∠ABD = 3x + 20 and m∠DBC = 5x. Find m∠ABD.', opts:['80°','20°','100°','60°'], correct:0, explain:'The parts of a straight angle add to 180: 8x + 20 = 180 → x = 20 → 3(20) + 20 = 80°.'},
+  {kicker:'1.6 Angle Bisector — Diagram', text:'BD bisects ∠ABC. m∠ABD = 4x + 6 and m∠DBC = 6x − 10. Find m∠ABC.', diagram:'bisector', opts:['76°','38°','8°','152°'], correct:0, explain:'4x + 6 = 6x − 10 → x = 8 → each half is 38° → whole is 76°.'},
+  {kicker:'1.6 Angle Addition — Diagram', text:'m∠PQR = 110°, m∠PQS = 2x + 10, m∠SQR = 3x, and S is in the interior of ∠PQR. Find m∠PQS.', diagram:'aap', opts:['50°','20°','60°','55°'], correct:0, explain:'5x + 10 = 110 → x = 20 → 2(20) + 10 = 50°.'},
+  {kicker:'1.7 Proofs', text:'Which reason lets you go from "WX ≅ YZ" to "WX = YZ"?', opts:['Definition of congruence','Reflexive property','Substitution','Segment Addition Postulate'], correct:0, explain:'The definition of ≅ switches between congruent segments and equal lengths.'},
+  {kicker:'1.7 Proofs', text:'Which reason justifies "XY = XY" in a proof?', opts:['Reflexive property','Symmetric property','Transitive property','Given'], correct:0, explain:'Anything equals itself.'},
+  {kicker:'1.7 Proofs', text:'Which reason justifies "WX + XY = WY" when X is between W and Y?', opts:['Segment Addition Postulate','Angle Addition Postulate','Addition POE','Definition of midpoint'], correct:0, explain:'The parts of a segment add up to the whole.'},
+  {kicker:'1.7 Proof Strategy', text:'You\'re given that two smaller segments are congruent and must prove two bigger (overlapping) segments are congruent. What\'s the usual move?', opts:['Add the shared piece to both sides (Addition POE)','Subtract the shared piece from both sides','Use the quadratic formula','Use the symmetric property only'], correct:0, explain:'Small → big means add; big → small means subtract.'}
+];
+
+var idx = 0, score = 0, answered = false, missed = [], shown = [];
+
+
+function render(){
+  var q = Q[idx];
+  document.getElementById('qNum').textContent = idx+1;
+  document.getElementById('qTotal').textContent = Q.length;
+  document.getElementById('scoreLive').textContent = 'Score: '+score;
+  document.getElementById('progressFill').style.width = Math.round((idx/Q.length)*100)+'%';
+  document.getElementById('qKicker').textContent = q.kicker;
+  document.getElementById('qText').textContent = q.text;
+
+  var dWrap = document.getElementById('diagramWrap');
+  if(q.plot){ dWrap.style.display='block'; dWrap.innerHTML = coordPlot(q.plot, q.labels, {min:-7,max:7,h:240}); }
+  else if(q.diagram){ dWrap.style.display='block'; dWrap.innerHTML = diagramFor(q.diagram); }
+  else { dWrap.style.display='none'; dWrap.innerHTML=''; }
+
+  var optsWrap = document.getElementById('optsWrap');
+  optsWrap.innerHTML='';
+  var letters=['A','B','C','D'];
+  shown = q.opts.map(function(_,k){return k;});
+  for(var k=shown.length-1;k>0;k--){ var j=Math.floor(Math.random()*(k+1)); var t=shown[k]; shown[k]=shown[j]; shown[j]=t; }
+  shown.forEach(function(orig, i){
+    var optText = q.opts[orig];
+    var b = document.createElement('button');
+    b.className='opt';
+    b.innerHTML = '<span class="letter">'+letters[i]+'</span><span>'+optText+'</span>';
+    b.addEventListener('click', function(){ selectAnswer(orig); });
+    optsWrap.appendChild(b);
+  });
+
+  document.getElementById('explain').classList.remove('show');
+  document.getElementById('explain').textContent='';
+  document.getElementById('btnNext').disabled = true;
+  answered = false;
+}
+
+function selectAnswer(i){
+  if(answered) return;
+  answered = true;
+  var q = Q[idx];
+  var opts = document.querySelectorAll('.opt');
+  opts.forEach(function(el,pos){
+    var i2 = shown[pos];
+    el.classList.add('locked');
+    if(i2===q.correct) el.classList.add('correct');
+    else if(i2===i) el.classList.add('incorrect');
+    else el.classList.add('dim');
+  });
+  if(i===q.correct){ score++; }
+  else { missed.push(q); }
+  document.getElementById('scoreLive').textContent = 'Score: '+score;
+  var ex = document.getElementById('explain');
+  ex.innerHTML = '<b>'+(i===q.correct?'Correct. ':'Not quite. ')+'</b>'+q.explain;
+  ex.classList.add('show');
+  document.getElementById('btnNext').disabled = false;
+}
+
+function nextQuestion(){
+  if(idx < Q.length-1){ idx++; render(); }
+  else { showResults(); }
+}
+
+function showResults(){
+  document.getElementById('quizArea').style.display='none';
+  document.getElementById('resultsArea').style.display='block';
+  document.getElementById('finalScore').textContent = score+' / '+Q.length;
+  var pct = Math.round((score/Q.length)*100);
+  var msg;
+  if(pct===100) msg = 'Perfect score. Unit 1 is locked in.';
+  else if(pct>=80) msg = 'Strong work. Review the missed ones below and you\'ve got this unit.';
+  else if(pct>=60) msg = 'Good start — a few gaps to close. Check the missed questions below.';
+  else msg = 'Worth another pass through the flashcards before the next round.';
+  document.getElementById('finalMsg').textContent = msg+' ('+pct+'%)';
+
+  var list = document.getElementById('missedList');
+  list.innerHTML='';
+  if(missed.length===0){
+    var li=document.createElement('li'); li.textContent='No missed questions — nice.'; list.appendChild(li);
+  } else {
+    missed.forEach(function(q){
+      var li=document.createElement('li');
+      li.innerHTML = '<b>'+q.text+'</b>Correct answer: '+q.opts[q.correct];
+      list.appendChild(li);
+    });
+  }
+}
+
+document.getElementById('btnNext').addEventListener('click', nextQuestion);
+document.getElementById('btnRetake').addEventListener('click', function(){
+  idx=0; score=0; missed=[]; answered=false;
+  document.getElementById('resultsArea').style.display='none';
+  document.getElementById('quizArea').style.display='block';
+  render();
+});
+
+render();
+</script>
+</body>
+</html>

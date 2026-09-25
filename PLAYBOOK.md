@@ -12,15 +12,17 @@ A static study site: study guide + flashcards + self-graded quiz per unit, organ
 
 ## Site structure
 
-- `index.html` — top-level subject picker (cards: Geometry, Biology). The Geometry card is currently disabled (not a link); see **Geometry status** below.
+- `index.html` — top-level subject picker (cards: Geometry, Biology)
 - `geometry.html` — Geometry unit list (unit cards grouped under section labels)
 - `biology.html` — Biology unit list
-- `proofs_guide.html`, `unit2_flashcards.html`, `unit2_quiz.html` — Geometry Unit 2, Proofs
+- `unit1_guide.html`, `unit1_flashcards.html`, `unit1_quiz.html` — Geometry Unit 1, Polynomials & Geometry Basics
+- `proofs_guide.html`, `unit2_flashcards.html`, `unit2_quiz.html` — Geometry Unit 2, Proofs (plus 2.13 coordinate formulas)
 - `unit3_guide.html`, `unit3_flashcards.html`, `unit3_quiz.html` — Geometry Unit 3, Quadrilaterals (lessons 3.1–3.10)
 - `bio_unit1_*`, `bio_unit2_*` — Biology units
-- `bio_unit2_membrane_*` — Biology lesson 2.3, The Cell Membrane (a lesson-level set listed under Unit 2)
 
-**Pattern for every future unit:** three files named `unitN_guide.html` / `unitN_flashcards.html` / `unitN_quiz.html`, linked from the relevant subject page under a new "Unit N — <title>" section-label block, and given a card on that subject page. Biology files use the `bio_` prefix (`bio_unitN_*`). When a single lesson gets its own set within a unit, name it `bio_unitN_<topic>_guide/flashcards/quiz.html` and give it its own section-label block on the subject page (e.g. "Unit 2 — Lesson 2.3: The Cell Membrane").
+**Pattern for every future unit:** three files named `unitN_guide.html` / `unitN_flashcards.html` / `unitN_quiz.html`, linked from the relevant subject page under a new "Unit N — <title>" section-label block, and given a card on that subject page. Biology files use the `bio_` prefix (`bio_unitN_*`).
+
+**Group by unit, never by lesson (site owner's rule).** Every lesson numbered N.x belongs in Unit N's guide/flashcards/quiz, as a tab in the guide and a category or section in the flashcards and quiz. Never give a single lesson its own section or files. Group by the lesson number even when the source file is filed in a different unit's folder (e.g. Geometry 2.13 was filed under Unit 3 but lives in Unit 2). Long unit quizzes should offer a per-lesson picker (see `bio_unit2_quiz.html`).
 
 ## Design system — copy verbatim, do not reinvent
 
@@ -56,18 +58,21 @@ The Claude GitHub app is installed on this repo, so a Claude session can push di
 
 ## Known issues
 
-- Geometry Unit 2 quiz does not shuffle answer order; its correct answer is always A.
-- Biology Unit 1 and Unit 2 quizzes don't shuffle either and are heavily weighted to A (Unit 1: 17 of 21; Unit 2: 17 of 28). Fix by shuffling answer order when those units are next touched. The 2.3 Cell Membrane quiz is already balanced.
+- Biology Unit 1 quiz doesn't shuffle and is heavily weighted to A (17 of 21). Fix by shuffling answer order when that unit is next touched. (Geometry Unit 2 and Biology Unit 2 were fixed; Geometry Units 1 and 3 shuffle at runtime.)
 
 ## Current content
 
-### Geometry status: removed at the teacher's request
+### Geometry (live)
 
-All Geometry pages (`geometry.html`, `proofs_guide.html`, `unit2_*`, `unit3_*`) currently show "Removed per Teacher Request" notices, and the Geometry card on `index.html` is disabled. **Do not rebuild, restore, or re-link Geometry content unless the site owner explicitly says the issue is resolved.** A restore patch existing somewhere is not that confirmation.
+The Geometry teacher approved the content going back up (site owner confirmed, Sept 2026). Keep following the copyright rules above.
+
+- **Unit 1** (Polynomials & Geometry Basics, 1.1–1.7): guide with 7 tabs, 34 flashcards in 4 categories, 39-question quiz (runtime shuffle). All worked examples and quiz problems use original numbers, checked by script. 1.8 is a review sheet; its geometric proofs are tested on Unit 2.
+- **Unit 2** (Proofs, 2.1–2.6 plus 2.13 coordinate formulas): guide with 7 tabs, 32 flashcards, 31-question quiz. 2.7 and 2.8 are test reviews with no new content.
+- **Unit 3** (Quadrilaterals, 3.1–3.10; no 3.5/3.8 materials): guide with 6 tabs, 34 flashcards in 5 categories, 31-question quiz.
 
 ### Biology (live)
 
 - **Unit 1** (Bonding & Water, Macromolecules, Enzymes): guide with 4 tabs, 22 flashcards, 21-question quiz.
-- **Unit 2** (Cells & Organelles, lessons 2.1–2.2): guide, 24 flashcards, 28-question quiz.
-- **Unit 2, Lesson 2.3** (The Cell Membrane): guide with 4 tabs (Job & Fluid Mosaic, Lipids, Proteins & Carbs, What Gets Through), 20 flashcards in 3 categories, 22-question quiz. Built from the lecture recording and slides; follows the lecture's definition of peripheral proteins and flags that the 2.6 worksheet defines them differently.
-- **Not yet built:** Unit 2 lessons 2.7–2.12 (passive transport, osmosis, surface area to volume, active transport). Source materials exist.
+- **Unit 2** (Cells, the Membrane & Transport, 2.1–2.12): guide with 9 tabs (2.1 ×2, 2.2, 2.3 ×2, 2.7, 2.7–2.8, 2.10, 2.11–2.12), 63 flashcards in 6 categories, 75-question quiz with a per-lesson picker. No materials exist for 2.4, 2.5, 2.9; 2.6 is the same membrane content as 2.3.
+- **Source conflicts flagged on the pages:** peripheral proteins (2.3 lecture vs. 2.6 worksheet key); origin of the cotransport gradient (2.11 slide vs. 2.12 worksheet key).
+- **Third-party handouts in Unit 2 (scope only, never copied):** Bethany Lau worksheets (2.6, 2.7, 2.11/2.12 keys), NCCSTS "Osmosis Is Serious Business!" case (2.8), 3D Molecular Designs modeling kit (2.12).

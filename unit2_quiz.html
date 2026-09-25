@@ -113,7 +113,7 @@
   <a class="back-link" href="index.html">&larr; Back to study site</a>
   <div class="hero">
     <h1>Unit 2 Quiz</h1>
-    <p>25 questions covering segment proofs, angle pairs, transversals, exterior angles, and parallel-line converses.</p>
+    <p>31 questions covering segment proofs, angle pairs, transversals, exterior angles, parallel-line converses, and the 2.13 coordinate formulas.</p>
   </div>
 
   <div id="quizArea">
@@ -183,114 +183,219 @@ var Q = [
   {kicker:'Segments', text:'What is the Segment Addition Postulate?', opts:[
     'If B is between A and C, then AB + BC = AC.',
     'If M is the midpoint of XY, then XM = MY.',
-    'Two angles whose measures sum to 180°.',
-    'An exterior angle equals the sum of its remote interior angles.'
+    'An exterior angle equals the sum of its remote interior angles.',
+    'Two angles whose measures sum to 180°.'
   ], correct:0, explain:'Segment Addition Postulate lets you break one long segment into two measurable pieces (or combine two pieces into the whole).'},
 
   {kicker:'Transversals · Diagram', text:'What type of angle pair is highlighted below?', diagram:[3,6], opts:[
-    'Corresponding Angles','Alternate Interior Angles','Alternate Exterior Angles','Consecutive Interior Angles'
-  ], correct:1, explain:'∠3 and ∠6 are both interior (between the two lines) and on opposite sides of the transversal — that\'s Alternate Interior.'},
+    'Corresponding Angles',
+    'Consecutive Interior Angles',
+    'Alternate Exterior Angles',
+    'Alternate Interior Angles'
+  ], correct:3, explain:'∠3 and ∠6 are both interior (between the two lines) and on opposite sides of the transversal — that\'s Alternate Interior.'},
 
   {kicker:'Transversals · Diagram', text:'What type of angle pair is highlighted below?', diagram:[1,8], opts:[
-    'Corresponding Angles','Alternate Interior Angles','Alternate Exterior Angles','Consecutive Interior Angles'
-  ], correct:2, explain:'∠1 and ∠8 are both exterior (outside the two lines) and on opposite sides of the transversal — that\'s Alternate Exterior.'},
+    'Corresponding Angles',
+    'Alternate Exterior Angles',
+    'Consecutive Interior Angles',
+    'Alternate Interior Angles'
+  ], correct:1, explain:'∠1 and ∠8 are both exterior (outside the two lines) and on opposite sides of the transversal — that\'s Alternate Exterior.'},
 
   {kicker:'Angle Pairs', text:'A linear pair is best described as:', opts:[
-    'Two angles whose measures sum to 90°',
+    'Two angles that don\'t share a vertex',
     'Two angles across from each other where two lines cross',
-    'Adjacent, supplementary angles that form a straight line',
-    'Two angles that don\'t share a vertex'
-  ], correct:2, explain:'Linear pair = adjacent (shares a ray) + supplementary (sums to 180°) + forms a straight line.'},
+    'Two angles whose measures sum to 90°',
+    'Adjacent, supplementary angles that form a straight line'
+  ], correct:3, explain:'Linear pair = adjacent (shares a ray) + supplementary (sums to 180°) + forms a straight line.'},
 
   {kicker:'Proof Toolkit', text:'In a proof you write "m∠2 = m∠2." What\'s the reason?', opts:[
-    'Reflexive Property','Transitive Property','Substitution Property','Definition of Congruent Angles'
-  ], correct:0, explain:'Reflexive Property: any quantity equals itself. It shows up whenever the same angle appears on both sides of an argument.'},
+    'Substitution Property',
+    'Transitive Property',
+    'Definition of Congruent Angles',
+    'Reflexive Property'
+  ], correct:3, explain:'Reflexive Property: any quantity equals itself. It shows up whenever the same angle appears on both sides of an argument.'},
 
   {kicker:'Angle Pairs', text:'The Vertical Angles Theorem tells you that vertical angles are always:', opts:[
-    'Supplementary','Complementary','Congruent','Adjacent'
-  ], correct:2, explain:'Vertical Angles Theorem: if two angles are vertical angles, then they are congruent.'},
+    'Complementary',
+    'Adjacent',
+    'Supplementary',
+    'Congruent'
+  ], correct:3, explain:'Vertical Angles Theorem: if two angles are vertical angles, then they are congruent.'},
 
   {kicker:'Transversals · Diagram', text:'What type of angle pair is highlighted below?', diagram:[3,5], opts:[
-    'Corresponding Angles','Alternate Interior Angles','Alternate Exterior Angles','Consecutive Interior Angles'
-  ], correct:3, explain:'∠3 and ∠5 are both interior and on the same side of the transversal — that\'s Consecutive (Same-Side) Interior.'},
+    'Corresponding Angles',
+    'Consecutive Interior Angles',
+    'Alternate Interior Angles',
+    'Alternate Exterior Angles'
+  ], correct:1, explain:'∠3 and ∠5 are both interior and on the same side of the transversal — that\'s Consecutive (Same-Side) Interior.'},
 
   {kicker:'Exterior Angle · Applied', text:'A triangle\'s exterior angle measures 130°. One remote interior angle is 48°. What is the other remote interior angle?', opts:[
-    '82°','48°','130°','178°'
-  ], correct:0, explain:'Exterior Angle Theorem: exterior = remote₁ + remote₂, so 130 − 48 = 82°.'},
+    '130°',
+    '82°',
+    '48°',
+    '178°'
+  ], correct:1, explain:'Exterior Angle Theorem: exterior = remote₁ + remote₂, so 130 − 48 = 82°.'},
 
   {kicker:'Angle Pairs', text:'Which of these angle pairs is never adjacent?', opts:[
-    'Linear pair','A complementary pair that shares a ray','Vertical angles','Adjacent angles'
-  ], correct:2, explain:'Vertical angles only share the vertex, not a side — so they\'re never adjacent, even though they\'re formed by the same two lines.'},
+    'A complementary pair that shares a ray',
+    'Vertical angles',
+    'Linear pair',
+    'Adjacent angles'
+  ], correct:1, explain:'Vertical angles only share the vertex, not a side — so they\'re never adjacent, even though they\'re formed by the same two lines.'},
 
   {kicker:'Converse Theorems', text:'You\'re given that two consecutive interior angles are supplementary. Which theorem lets you conclude the lines are parallel?', opts:[
     'Corresponding Angles Converse Postulate',
-    'Alternate Interior Angles Converse Theorem',
     'Consecutive Interior Angles Converse Theorem',
+    'Alternate Interior Angles Converse Theorem',
     'Alternate Exterior Angles Converse Theorem'
-  ], correct:2, explain:'Consecutive Interior Angles Converse Theorem is the one built on a supplementary (not congruent) relationship.'},
+  ], correct:1, explain:'Consecutive Interior Angles Converse Theorem is the one built on a supplementary (not congruent) relationship.'},
 
   {kicker:'Proof Toolkit', text:'If a = b and b = c, which property lets you conclude a = c?', opts:[
-    'Reflexive Property','Transitive Property','Symmetric Property','Substitution Property'
+    'Substitution Property',
+    'Transitive Property',
+    'Symmetric Property',
+    'Reflexive Property'
   ], correct:1, explain:'Transitive Property chains two separate equalities (or congruences) into one.'},
 
   {kicker:'Angle Pairs', text:'The Triangle Sum Theorem says the interior angles of a triangle always sum to:', opts:[
-    '90°','180°','270°','360°'
-  ], correct:1, explain:'m∠A + m∠B + m∠C = 180° for every triangle.'},
+    '180°',
+    '90°',
+    '270°',
+    '360°'
+  ], correct:0, explain:'m∠A + m∠B + m∠C = 180° for every triangle.'},
 
   {kicker:'Transversals · Diagram', text:'What type of angle pair is highlighted below?', diagram:[1,5], opts:[
-    'Corresponding Angles','Alternate Interior Angles','Alternate Exterior Angles','Consecutive Interior Angles'
+    'Corresponding Angles',
+    'Alternate Exterior Angles',
+    'Alternate Interior Angles',
+    'Consecutive Interior Angles'
   ], correct:0, explain:'∠1 and ∠5 sit in the same relative position at each intersection — that\'s Corresponding.'},
 
   {kicker:'Proof-writing trap', text:'You\'re asked to prove the Alternate Interior Angles Converse Theorem. Which reason can you NOT use anywhere in that proof?', opts:[
-    'Vertical Angles Theorem','Linear Pair Postulate','Alternate Interior Angles Converse Theorem','Corresponding Angles Converse Postulate'
+    'Corresponding Angles Converse Postulate',
+    'Vertical Angles Theorem',
+    'Alternate Interior Angles Converse Theorem',
+    'Linear Pair Postulate'
   ], correct:2, explain:'Citing the exact theorem you\'re trying to prove, inside its own proof, is circular reasoning — build it from a different tool instead (usually Vertical Angles + another converse).'},
 
   {kicker:'Angle Pairs', text:'Two angles whose measures add up to 90° are called:', opts:[
-    'Supplementary','Complementary','Congruent','Vertical'
+    'Supplementary',
+    'Complementary',
+    'Congruent',
+    'Vertical'
   ], correct:1, explain:'Complementary angles sum to 90°; supplementary angles sum to 180°.'},
 
   {kicker:'Segments · Solve', text:'On a line, AB = (2x+3), BC = (x+9), and AC = 42. What is x?', opts:[
-    '10','8','13','11'
-  ], correct:0, explain:'Segment Addition Postulate: AB + BC = AC, so (2x+3)+(x+9) = 42 → 3x+12 = 42 → x = 10.'},
+    '13',
+    '8',
+    '11',
+    '10'
+  ], correct:3, explain:'Segment Addition Postulate: AB + BC = AC, so (2x+3)+(x+9) = 42 → 3x+12 = 42 → x = 10.'},
 
   {kicker:'Segments · Solve', text:'M is the midpoint of PQ. PM = (5x−2) and MQ = (3x+8). What is x?', opts:[
-    '5','4','6','10'
+    '5',
+    '6',
+    '10',
+    '4'
   ], correct:0, explain:'Definition of Midpoint: PM = MQ, so 5x−2 = 3x+8 → 2x = 10 → x = 5.'},
 
   {kicker:'Angle Pairs · Solve', text:'Two vertical angles measure (3x+8)° and 62°. What is x?', opts:[
-    '18','54','20','16'
+    '18',
+    '16',
+    '54',
+    '20'
   ], correct:0, explain:'Vertical angles are congruent: 3x+8 = 62 → 3x = 54 → x = 18.'},
 
   {kicker:'Angle Pairs · Solve', text:'A linear pair measures (4x+10)° and (2x+20)°. What is x?', opts:[
-    '25','15','30','20'
+    '25',
+    '15',
+    '20',
+    '30'
   ], correct:0, explain:'Linear Pair Postulate: the two measures sum to 180°. (4x+10)+(2x+20) = 180 → 6x+30 = 180 → x = 25.'},
 
   {kicker:'Angle Pairs · Solve', text:'Two complementary angles measure (5n−3)° and 38°. What is n?', opts:[
-    '11','9','13','17'
-  ], correct:0, explain:'Complementary angles sum to 90°: (5n−3)+38 = 90 → 5n = 55 → n = 11.'},
+    '13',
+    '17',
+    '11',
+    '9'
+  ], correct:2, explain:'Complementary angles sum to 90°: (5n−3)+38 = 90 → 5n = 55 → n = 11.'},
 
   {kicker:'Transversals · Solve', text:'l ∥ m ∥ n, all cut by one transversal. A pair of corresponding angles measure (6x−4)° and (4x+10)°. What is x?', opts:[
-    '7','14','2','9'
-  ], correct:0, explain:'Corresponding Angles Postulate: the two measures are equal. 6x−4 = 4x+10 → 2x = 14 → x = 7.'},
+    '9',
+    '14',
+    '2',
+    '7'
+  ], correct:3, explain:'Corresponding Angles Postulate: the two measures are equal. 6x−4 = 4x+10 → 2x = 14 → x = 7.'},
 
   {kicker:'Triangle Sum · Solve', text:'A triangle\'s three interior angles measure (2x+5)°, (3x−1)°, and 66°. What is x?', opts:[
-    '22','18','24','20'
+    '22',
+    '20',
+    '18',
+    '24'
   ], correct:0, explain:'Triangle Sum Theorem: the three measures add to 180°. (2x+5)+(3x−1)+66 = 180 → 5x+70 = 180 → x = 22.'},
 
   {kicker:'Exterior Angle · Solve', text:'A triangle\'s exterior angle measures (7x+4)°. Its two remote interior angles measure (3x+10)° and 38°. What is x?', opts:[
-    '11','9','13','7'
-  ], correct:0, explain:'Exterior Angle Theorem: exterior = remote₁ + remote₂. 7x+4 = (3x+10)+38 → 4x = 44 → x = 11.'},
+    '13',
+    '7',
+    '11',
+    '9'
+  ], correct:2, explain:'Exterior Angle Theorem: exterior = remote₁ + remote₂. 7x+4 = (3x+10)+38 → 4x = 44 → x = 11.'},
 
   {kicker:'Exterior Angle · Tricky', text:'Two lines cross right at each end of a triangle\'s side. The vertical angles opposite the triangle\'s own interior angles there measure (x+50)° and (x+70)°, and the triangle\'s third interior angle is 100°. What is x?', opts:[
-    '−20','20','40','−40'
-  ], correct:0, explain:'Vertical Angles Theorem makes the marked angles equal to the triangle\'s actual interior angles there, so Triangle Sum still applies: 100+(x+50)+(x+70) = 180 → 2x+220 = 180 → x = −20. Negative is fine here — plug it back in and the three angles (100°, 30°, 50°) really do sum to 180°.'},
+    '20',
+    '−20',
+    '40',
+    '−40'
+  ], correct:1, explain:'Vertical Angles Theorem makes the marked angles equal to the triangle\'s actual interior angles there, so Triangle Sum still applies: 100+(x+50)+(x+70) = 180 → 2x+220 = 180 → x = −20. Negative is fine here — plug it back in and the three angles (100°, 30°, 50°) really do sum to 180°.'},
 
   {kicker:'Converse Theorems', text:'You\'re given that a pair of alternate exterior angles are congruent. Which theorem lets you conclude the two lines are parallel?', opts:[
-    'Alternate Exterior Angles Converse Theorem',
     'Alternate Interior Angles Converse Theorem',
+    'Consecutive Interior Angles Converse Theorem',
     'Corresponding Angles Converse Postulate',
-    'Consecutive Interior Angles Converse Theorem'
-  ], correct:0, explain:'Match the angle pair in the Given to the converse theorem built on that exact pair — congruent alternate exterior angles call for the Alternate Exterior Angles Converse Theorem.'}
+    'Alternate Exterior Angles Converse Theorem'
+  ], correct:3, explain:'Match the angle pair in the Given to the converse theorem built on that exact pair — congruent alternate exterior angles call for the Alternate Exterior Angles Converse Theorem.'},
+
+  {kicker:'2.13 Coordinate Formulas', text:'Find the midpoint of (−6, 4) and (2, −8).', opts:[
+    '(−8, 12)',
+    '(−4, 6)',
+    '(−2, 2)',
+    '(−2, −2)'
+  ], correct:3, explain:'Average: ((−6 + 2)/2, (4 − 8)/2) = (−2, −2).'},
+
+  {kicker:'2.13 Coordinate Formulas', text:'One endpoint is (9, 5) and the midpoint is (3, −1). What is the other endpoint?', opts:[
+    '(15, 11)',
+    '(−3, −7)',
+    '(−3, 7)',
+    '(6, 2)'
+  ], correct:1, explain:'3 = (9 + x)/2 → x = −3; −1 = (5 + y)/2 → y = −7.'},
+
+  {kicker:'2.13 Coordinate Formulas', text:'What is the slope through (−2, 5) and (4, −3)?', opts:[
+    '−4/3',
+    '−3/4',
+    '−8/2',
+    '4/3'
+  ], correct:0, explain:'(−3 − 5)/(4 − (−2)) = −8/6 = −4/3.'},
+
+  {kicker:'2.13 Coordinate Formulas', text:'A line has slope −4/3. What is the slope of a line perpendicular to it?', opts:[
+    '−3/4',
+    '3/4',
+    '−4/3',
+    '4/3'
+  ], correct:1, explain:'Negative reciprocal: flip to 3/4 and change the sign from − to +.'},
+
+  {kicker:'2.13 Coordinate Formulas', text:'Find the distance between (−1, 4) and (5, −4).', opts:[
+    '10',
+    '√28',
+    '100',
+    '14'
+  ], correct:0, explain:'√(6² + (−8)²) = √(36 + 64) = √100 = 10.'},
+
+  {kicker:'2.13 Coordinate Formulas', text:'Find the distance between (0, 0) and (3, 6), in simplest radical form.', opts:[
+    '5√3',
+    '3√5',
+    '√45',
+    '9'
+  ], correct:1, explain:'√(9 + 36) = √45 = √9·√5 = 3√5.'}
 ];
 
 var idx = 0, score = 0, answered = false, missed = [];

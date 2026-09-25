@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Unit 2 Flashcards: Geometry Proofs</title>
+<title>Unit 1 Flashcards: Polynomials &amp; Geometry Basics</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -149,8 +149,8 @@
 <div class="wrap">
   <a class="back-link" href="index.html">&larr; Back to study site</a>
   <div class="hero">
-    <h1>Unit 2 Flashcards</h1>
-    <p>Definitions, postulates, and theorems from Segment Proofs through Parallel Line Converses &mdash; tap a card to flip it.</p>
+    <h1>Unit 1 Flashcards</h1>
+    <p>Polynomials, properties and proof, quadratics, and geometry basics &mdash; tap a card to flip it.</p>
   </div>
 
   <div class="tabs" id="tabs"></div>
@@ -370,55 +370,118 @@ function diagCongruent(){
 }
 
 /* ============ Card data ============ */
+/* ---- Unit 1 diagram helpers (self-contained) ---- */
+function g1svg(inner, vb, h){ return '<svg viewBox="'+vb+'" width="100%" height="'+(h||170)+'" xmlns="http://www.w3.org/2000/svg">'+inner+'</svg>'; }
+function g1line(x1,y1,x2,y2,c,w,dash){ return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+(c||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round"'+(dash?' stroke-dasharray="5 4"':'')+'/>'; }
+function g1dot(x,y,c){ return '<circle cx="'+x+'" cy="'+y+'" r="3.6" fill="'+(c||'var(--ink)')+'"/>'; }
+function g1txt(x,y,s,c,size,weight,anchor){ return '<text x="'+x+'" y="'+y+'" fill="'+(c||'var(--ink)')+'" font-family="Space Grotesk, sans-serif" font-size="'+(size||13)+'" font-weight="'+(weight||700)+'" text-anchor="'+(anchor||'middle')+'">'+s+'</text>'; }
+function g1head(x,y,dx,dy,c){ var L=Math.sqrt(dx*dx+dy*dy),ux=dx/L,uy=dy/L,px=-uy,py=ux;
+  return '<polygon points="'+(x)+','+(y)+' '+(x-ux*11+px*5)+','+(y-uy*11+py*5)+' '+(x-ux*11-px*5)+','+(y-uy*11-py*5)+'" fill="'+(c||'var(--ink)')+'"/>'; }
+function g1tick(x,y,c){ return g1line(x-4,y+8,x+4,y-8,c||'var(--coral)',2.2); }
+
+function diagBox(){
+  var c='var(--blue)', inner=''
+    + '<rect x="90" y="40" width="200" height="110" fill="none" stroke="var(--ink)" stroke-width="2"/>'
+    + g1line(190,40,190,150,'var(--ink)',2) + g1line(90,95,290,95,'var(--ink)',2)
+    + g1txt(140,30,'3x',c,14) + g1txt(240,30,'−2',c,14)
+    + g1txt(70,72,'x','var(--teal)',14) + g1txt(70,127,'+4','var(--teal)',14)
+    + g1txt(140,72,'3x²','var(--ink)',14) + g1txt(240,72,'−2x','var(--ink)',14)
+    + g1txt(140,127,'+12x','var(--ink)',14) + g1txt(240,127,'−8','var(--ink)',14)
+    + g1txt(190,175,'(x + 4)(3x − 2) = 3x² + 10x − 8','var(--coral)',13);
+  return g1svg(inner,'40 10 300 175',175);
+}
+function diagRays(){
+  var inner=''
+    + g1line(40,40,260,40) + g1head(262,40,1,0) + g1dot(70,40) + g1dot(170,40)
+    + g1txt(70,62,'A') + g1txt(170,62,'B') + g1txt(300,45,'ray AB','var(--blue)',12,700,'start')
+    + g1line(270,100,50,100) + g1head(48,100,-1,0) + g1dot(130,100) + g1dot(230,100)
+    + g1txt(130,122,'A') + g1txt(230,122,'B') + g1txt(300,105,'ray BA','var(--teal)',12,700,'start')
+    + g1line(60,160,260,160) + g1head(58,160,-1,0) + g1head(262,160,1,0) + g1dot(100,160) + g1dot(160,160) + g1dot(220,160)
+    + g1txt(100,182,'P') + g1txt(160,182,'Q') + g1txt(220,182,'R') + g1txt(300,158,'QP and QR:','var(--coral)',12,700,'start') + g1txt(300,173,'opposite rays','var(--coral)',12,700,'start');
+  return g1svg(inner,'20 15 390 180',180);
+}
+function diagSAP(){
+  var y=90, a=40, bx=160, c=300, inner=''
+    + g1line(a,y,c,y) + g1dot(a,y) + g1dot(bx,y) + g1dot(c,y)
+    + g1txt(a,y-14,'A') + g1txt(bx,y-14,'B') + g1txt(c,y-14,'C')
+    + g1line(a,y+22,bx,y+22,'var(--blue)',2.5) + g1txt((a+bx)/2,y+40,'AB','var(--blue)',12)
+    + g1line(bx,y+22,c,y+22,'var(--teal)',2.5) + g1txt((bx+c)/2,y+40,'BC','var(--teal)',12)
+    + g1line(a,y-40,c,y-40,'var(--coral)',2.5) + g1txt((a+c)/2,y-50,'AC = AB + BC','var(--coral)',13);
+  return g1svg(inner,'20 25 300 130',150);
+}
+function diagMid(){
+  var y=70, a=40, mm=170, bb=300, inner=''
+    + g1line(a,y,bb,y) + g1dot(a,y) + g1dot(mm,y) + g1dot(bb,y)
+    + g1txt(a,y+26,'A') + g1txt(mm,y+26,'M') + g1txt(bb,y+26,'B')
+    + g1tick((a+mm)/2,y) + g1tick((mm+bb)/2,y)
+    + g1txt(mm,y-22,'AM = MB, so AB = 2·AM','var(--coral)',13);
+  return g1svg(inner,'20 30 300 80',130);
+}
+function diagAAP(){
+  var S=[60,160], inner=''
+    + g1line(S[0],S[1],300,160) + g1head(302,160,1,0)
+    + g1line(S[0],S[1],270,40) + g1head(272,39,0.87,-0.5)
+    + g1line(S[0],S[1],290,100,'var(--teal)') + g1head(292,99,0.97,-0.26,'var(--teal)')
+    + g1dot(S[0],S[1]) + g1txt(S[0]-12,S[1]+6,'S')
+    + g1txt(262,32,'R') + g1txt(304,98,'P','var(--teal)') + g1txt(300,178,'T')
+    + '<path d="M 110 160 A 50 50 0 0 0 107 146" fill="none" stroke="var(--blue)" stroke-width="2"/>'
+    + '<path d="M 130 140 A 72 72 0 0 0 122 124" fill="none" stroke="var(--coral)" stroke-width="2"/>'
+    + g1txt(175,195,'m∠RSP + m∠PST = m∠RST','var(--coral)',13);
+  return g1svg(inner,'20 20 320 185',185);
+}
+function diagBisector(){
+  var V=[60,150], inner=''
+    + g1line(V[0],V[1],290,150) + g1head(292,150,1,0)
+    + g1line(V[0],V[1],250,40) + g1head(252,39,0.87,-0.5)
+    + g1line(V[0],V[1],280,93,'var(--blue)') + g1head(282,92,0.97,-0.26,'var(--blue)')
+    + g1dot(V[0],V[1]) + g1txt(V[0]-12,V[1]+6,'B') + g1txt(244,30,'A') + g1txt(296,88,'D','var(--blue)') + g1txt(290,170,'C')
+    + g1txt(128,139,'2','var(--ink)',12) + g1txt(120,118,'1','var(--ink)',12)
+    + g1txt(175,190,'BD bisects ∠ABC → m∠1 = m∠2','var(--coral)',13);
+  return g1svg(inner,'20 20 310 180',180);
+}
+
 var CATS = [
-  {key:'segments', label:'Segments', color:'var(--blue)'},
-  {key:'angles', label:'Angle Pairs', color:'var(--teal)'},
-  {key:'transversals', label:'Transversals', color:'var(--coral)'},
-  {key:'exterior', label:'Exterior Angle', color:'var(--amber)'},
-  {key:'converse', label:'Converse Thms', color:'var(--violet)'},
-  {key:'toolkit', label:'Proof Toolkit', color:'var(--ink)'},
-  {key:'formulas', label:'2.13 Formulas', color:'var(--blue)'}
+  {key:'poly', label:'Polynomials', color:'var(--blue)'},
+  {key:'proof', label:'Properties & Proof', color:'var(--teal)'},
+  {key:'quad', label:'Quadratics', color:'var(--violet)'},
+  {key:'geo', label:'Geometry Basics', color:'var(--coral)'}
 ];
 function catInfo(key){ for(var i=0;i<CATS.length;i++) if(CATS[i].key===key) return CATS[i]; return CATS[0]; }
-
 var CARDS = [
-  {cat:'segments', term:'Segment Addition Postulate', def:'If B is between A and C, then AB + BC = AC.', extra:'Lets you break one long segment into two measurable pieces — or combine two pieces into the whole.', diagram:diagSegAdd},
-  {cat:'segments', term:'Definition of Midpoint', def:'If M is the midpoint of segment XY, then XM = MY.', extra:'Always the first move in a segment proof — it\'s Given, so it costs nothing.', diagram:diagMidpoint},
-
-  {cat:'angles', term:'Adjacent Angles', def:'Two angles that share a vertex and a side (ray), and don\'t overlap.', extra:'Being adjacent says nothing about the total — it just means they\'re next-door neighbors.', diagram:diagAdjacent},
-  {cat:'angles', term:'Complementary Angles', def:'Two angles whose measures add up to 90°.', extra:'They don\'t need to touch — complementary is only about the sum.', diagram:diagComplementary},
-  {cat:'angles', term:'Supplementary Angles', def:'Two angles whose measures add up to 180°.', extra:'Like complementary, they don\'t need to be adjacent — only the sum matters.', diagram:diagSupplementary},
-  {cat:'angles', term:'Linear Pair', def:'Adjacent, supplementary angles — they share a ray and together form a straight line.', extra:'A linear pair is always supplementary, but not every supplementary pair is a linear pair.', diagram:diagLinearPair},
-  {cat:'angles', term:'Vertical Angles', def:'Two angles across from each other where two lines cross.', extra:'They\'re never adjacent — they only share the vertex, not a side.', diagram:function(){return diagVertical(false);}},
-  {cat:'angles', term:'Linear Pair Postulate', def:'If two angles form a linear pair, then they are supplementary.', extra:'This is a postulate — accepted as true, not proved.', diagram:diagLinearPair},
-  {cat:'angles', term:'Vertical Angles Theorem', def:'If two angles are vertical angles, then they are congruent.', extra:'Unlike the Linear Pair Postulate, this one can be proved from other facts.', diagram:function(){return diagVertical(true);}},
-  {cat:'angles', term:'Triangle Sum Theorem', def:'The sum of the interior angles in a triangle is 180°.', extra:'m∠A + m∠B + m∠C = 180°', diagram:diagTriangleSum},
-
-  {cat:'transversals', term:'Transversal', def:'A line that crosses two other lines, each at a different point.', extra:'The angle-pair names below only exist because of the transversal — always name which two lines and which transversal you\'re using.', diagram:function(){return diagParallel({linesOnly:true});}},
-  {cat:'transversals', term:'Corresponding Angles', def:'Two angles in the same relative position at each intersection — same side of the transversal, one interior + one exterior.', extra:'', diagram:function(){return diagParallel({highlight:[1,5], color:'var(--coral)', lineTicks:true});}},
-  {cat:'transversals', term:'Alternate Interior Angles', def:'Two interior angles on opposite sides of the transversal.', extra:'', diagram:function(){return diagParallel({highlight:[3,6], color:'var(--coral)', lineTicks:true});}},
-  {cat:'transversals', term:'Alternate Exterior Angles', def:'Two exterior angles on opposite sides of the transversal.', extra:'', diagram:function(){return diagParallel({highlight:[1,8], color:'var(--coral)', lineTicks:true});}},
-  {cat:'transversals', term:'Consecutive Interior Angles', def:'Two interior angles on the same side of the transversal.', extra:'Also called Same-Side Interior Angles.', diagram:function(){return diagParallel({highlight:[3,5], color:'var(--coral)', lineTicks:true});}},
-
-  {cat:'exterior', term:'Exterior Angle (of a triangle)', def:'An angle that forms a linear pair with one interior angle of the triangle.', extra:'Check two things: does it form a linear pair with an interior angle, and is it outside the triangle?', diagram:function(){return diagTriangleExt({bext:true, caption:'the highlighted angle is exterior'});}},
-  {cat:'exterior', term:'Remote Interior Angles', def:'The two interior angles of a triangle that are NOT adjacent to a given exterior angle.', extra:'', diagram:function(){return diagTriangleExt({remote:true, caption:'∠A and ∠C are remote from the exterior angle at B'});}},
-  {cat:'exterior', term:'Exterior Angle Theorem', def:'An exterior angle of a triangle equals the sum of the two remote interior angles.', extra:'exterior = remote₁ + remote₂', diagram:function(){return diagTriangleExt({remote:true, bext:true, caption:'ext = m∠A + m∠C'});}},
-
-  {cat:'converse', term:'Corresponding Angles Converse Postulate', def:'If corresponding angles are congruent, then the lines are parallel.', extra:'This flips the direction: angle relationship → parallel lines.', diagram:function(){return diagParallel({highlight:[1,5], color:'var(--violet)'});}},
-  {cat:'converse', term:'Alternate Interior Angles Converse Theorem', def:'If alternate interior angles are congruent, then the lines are parallel.', extra:'', diagram:function(){return diagParallel({highlight:[3,6], color:'var(--violet)'});}},
-  {cat:'converse', term:'Alternate Exterior Angles Converse Theorem', def:'If alternate exterior angles are congruent, then the lines are parallel.', extra:'', diagram:function(){return diagParallel({highlight:[1,8], color:'var(--violet)'});}},
-  {cat:'converse', term:'Consecutive Interior Angles Converse Theorem', def:'If consecutive interior angles are supplementary, then the lines are parallel.', extra:'Supplementary here, not congruent — the other three converses use congruent angles.', diagram:function(){return diagParallel({highlight:[3,5], color:'var(--violet)'});}},
-
-  {cat:'toolkit', term:'Definition of Congruent Angles', def:'Congruent angles (≅) have equal measures.', extra:'∠A ≅ ∠B means m∠A = m∠B — use this to turn a congruence statement into an equation you can do algebra with.', diagram:diagCongruent},
-  {cat:'toolkit', term:'Reflexive Property', def:'Any quantity is equal to itself.', extra:'Example: m∠2 = m∠2. Useful when the same angle or segment shows up on both sides of an argument.', diagram:null},
-  {cat:'toolkit', term:'Transitive Property', def:'If a = b and b = c, then a = c.', extra:'The tool that lets you chain two separate congruences into one.', diagram:null},
-  {cat:'toolkit', term:'Substitution Property', def:'If a = b, you may replace a with b (or b with a) in any equation.', extra:'Combine two equations that share an expression by substituting one into the other.', diagram:null},
-  {cat:'formulas', term:'Midpoint formula', def:'((x₁ + x₂)/2, (y₁ + y₂)/2). Average the x\'s and average the y\'s.', extra:'Midpoint of (2, −5) and (8, 3) is (5, −1).', diagram:null},
-  {cat:'formulas', term:'Finding a missing endpoint', def:'Set each midpoint coordinate equal to (known + unknown)/2 and solve.', extra:'Endpoint (−2, 7), midpoint (1, 4) → other endpoint (4, 1).', diagram:null},
-  {cat:'formulas', term:'Slope formula', def:'m = (y₂ − y₁)/(x₂ − x₁): rise over run.', extra:'(−3, 2) and (5, 6) → 4/8 = 1/2', diagram:null},
-  {cat:'formulas', term:'Parallel vs. perpendicular slopes', def:'Parallel lines have the same slope. Perpendicular slopes are negative reciprocals.', extra:'Slope 3 → parallel 3, perpendicular −1/3.', diagram:null},
-  {cat:'formulas', term:'Distance formula', def:'d = √((x₂ − x₁)² + (y₂ − y₁)²)', extra:'(1, −2) to (7, 6) → √(36 + 64) = 10. Simplify radicals: √52 = 2√13.', diagram:null},
-  {cat:'formulas', term:'Using the formulas on quadrilaterals', def:'Midpoint: do diagonals bisect each other? Distance: are sides/diagonals congruent? Slope: are sides parallel or perpendicular?', extra:'This is how Unit 3 classifies shapes on the coordinate plane.', diagram:null}
+  {cat:'poly', term:'Standard form', def:'Combine like terms, put variables in ABC order, and write exponents on the first variable from highest to lowest.', extra:'Example: 3x + 5x⁴ − 7 + 2x² → 5x⁴ + 2x² + 3x − 7', diagram:null},
+  {cat:'poly', term:'Like terms', def:'Terms with the same variable and the same exponent.', extra:'4x² and −x² are like terms; 4x² and 4x are not.', diagram:null},
+  {cat:'poly', term:'Degree of a polynomial', def:'The highest sum of exponents in any single term.', extra:'4a²b³ − 2ab + 9 has degree 2 + 3 = 5 (quintic).', diagram:null},
+  {cat:'poly', term:'Leading coefficient', def:'The number in front of the first term once the polynomial is in standard form.', extra:'6 − 2y + 8y³ − y⁵ → −y⁵ + … so it\'s −1.', diagram:null},
+  {cat:'poly', term:'Names by degree', def:'0 constant · 1 linear · 2 quadratic · 3 cubic · 4 quartic · 5 quintic', extra:null, diagram:null},
+  {cat:'poly', term:'Names by number of terms', def:'1 monomial · 2 binomial · 3 trinomial · 4+ polynomial of n terms', extra:null, diagram:null},
+  {cat:'poly', term:'Subtracting polynomials', def:'Distribute a −1: change the sign of every term in the second polynomial, then combine like terms.', extra:'"A subtracted from B" means B − A.', diagram:null},
+  {cat:'poly', term:'Multiplying (box method)', def:'Put one polynomial on top and one on the side, multiply into each box, then combine like terms. Add exponents when multiplying variables.', extra:'(x + 4)(3x − 2) = 3x² + 10x − 8', diagram:diagBox},
+  {cat:'poly', term:'Perimeter & area of a rectangle', def:'Perimeter = 2(length + width). Area = length × width.', extra:'Sides x + 6 and 2x − 1: P = 6x + 10, A = 2x² + 11x − 6', diagram:null},
+  {cat:'proof', term:'Proof / postulate / theorem', def:'Proof: a logical argument showing a conclusion is true. Postulate: accepted without proof. Theorem: can be proven true.', extra:'Acceptable reasons: given, definitions, properties, postulates, theorems.', diagram:null},
+  {cat:'proof', term:'Addition / Subtraction POE', def:'If a = b, then a + c = b + c (or a − c = b − c).', extra:'POE = Property of Equality.', diagram:null},
+  {cat:'proof', term:'Multiplication / Division POE', def:'If a = b, then ac = bc (or a/c = b/c).', extra:null, diagram:null},
+  {cat:'proof', term:'Reflexive property', def:'a = a. Anything equals itself.', extra:'In geometry: XY = XY, ∠A ≅ ∠A.', diagram:null},
+  {cat:'proof', term:'Symmetric property', def:'If a = b, then b = a.', extra:'Useful at the end of a proof: 2 = x → x = 2.', diagram:null},
+  {cat:'proof', term:'Transitive property', def:'If a = b and b = c, then a = c.', extra:'It replaces a whole side.', diagram:null},
+  {cat:'proof', term:'Substitution', def:'Replace a single item with something equal to it.', extra:'Works with = only.', diagram:null},
+  {cat:'proof', term:'Distributive property', def:'a(b + c) = ab + ac.', extra:null, diagram:null},
+  {cat:'proof', term:'Literal equation', def:'An equation with several variables, like a formula. Solve it for the requested letter.', extra:'V = lwh → h = V/(lw)', diagram:null},
+  {cat:'quad', term:'Quadratic equation', def:'ax² + bx + c = 0, where a ≠ 0. It can have two, one, or zero real solutions.', extra:null, diagram:null},
+  {cat:'quad', term:'Solving by factoring', def:'Set = 0, check for a GCF, factor, set each factor = 0, solve.', extra:'x² − 2x − 15 = 0 → (x − 5)(x + 3) → x = 5, −3', diagram:null},
+  {cat:'quad', term:'Square root method', def:'Use when there\'s only a squared term and a constant. Isolate the square, then take ± the square root.', extra:'(x − 2)² = 25 → x − 2 = ±5 → x = 7, −3. A negative under the root = no real solution.', diagram:null},
+  {cat:'quad', term:'Completing the square', def:'Move c to the right, add (b/2)² to both sides, factor into a perfect square, then take ± the square root.', extra:'x² + 10x = 11 → add 25 → (x + 5)² = 36 → x = 1, −11', diagram:null},
+  {cat:'quad', term:'Quadratic formula', def:'x = (−b ± √(b² − 4ac)) / 2a', extra:'Works on any quadratic. Simplify the radical at the end.', diagram:null},
+  {cat:'geo', term:'Undefined terms', def:'Point, line, and plane.', extra:'No formal definition, just an agreement about what they mean.', diagram:null},
+  {cat:'geo', term:'Segment vs. line vs. ray', def:'Segment: two endpoints (bar). Line: goes forever both ways (double arrow). Ray: one endpoint, goes forever one way (single arrow, endpoint named first).', extra:null, diagram:diagRays},
+  {cat:'geo', term:'Opposite rays', def:'Two rays with the same endpoint going in opposite directions along the same line.', extra:'The points are collinear.', diagram:diagRays},
+  {cat:'geo', term:'Length vs. congruent', def:'Lengths are equal (AB = CD, no bar). Segments are congruent (≅, with bars).', extra:'Tick marks show congruent segments; arcs show congruent angles.', diagram:null},
+  {cat:'geo', term:'Midpoint / segment bisector', def:'A midpoint splits a segment into two congruent parts. A segment bisector crosses a segment at its midpoint.', extra:null, diagram:diagMid},
+  {cat:'geo', term:'Naming an angle', def:'∠BAC, ∠CAB, ∠A, or ∠1. With three letters, the vertex goes in the middle.', extra:'Measure: m∠A.', diagram:null},
+  {cat:'geo', term:'Angle types', def:'Acute < 90° · right = 90° · obtuse > 90° · straight = 180°', extra:null, diagram:null},
+  {cat:'geo', term:'Segment Addition Postulate', def:'If B is between A and C, then AB + BC = AC.', extra:null, diagram:diagSAP},
+  {cat:'geo', term:'Angle Addition Postulate', def:'If P is in the interior of ∠RST, then m∠RSP + m∠PST = m∠RST.', extra:null, diagram:diagAAP},
+  {cat:'geo', term:'Angle bisector', def:'A ray or line through the vertex that splits an angle into two congruent angles.', extra:'Set the two halves equal to solve.', diagram:diagBisector},
+  {cat:'geo', term:'Proof strategy: add or subtract?', def:'Small → big (parts to wholes): add. Big → small (wholes to parts): subtract.', extra:'Geometric proofs will be tested on Unit 2.', diagram:null}
 ];
 
 /* ============ Deck state & rendering ============ */
