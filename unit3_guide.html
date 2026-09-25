@@ -3,49 +3,734 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Geometry - Removed per Teacher Request</title>
+<title>Unit 3: Quadrilaterals</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #FBFAF7;
+    --grid-line: rgba(28,43,74,0.055);
     --ink: #1C2B4A;
     --text: #2B3648;
     --text-soft: #64707F;
     --blue: #2E86AB;
     --blue-soft: #E9F3F8;
-    --border: #E4E0D4;
+    --amber: #D98A2B;
+    --amber-soft: #FCF1DE;
+    --coral: #D65A5A;
+    --coral-soft: #FBEBEB;
+    --teal: #2C9C82;
+    --teal-soft: #E6F5F0;
+    --violet: #7C5CBF;
+    --violet-soft: #EFE9F8;
+    --gray: #94A0AD;
+    --gray-line: #CBD3DC;
     --card-bg: #FFFFFF;
+    --border: #E4E0D4;
   }
+
   * { box-sizing: border-box; }
   html, body {
     margin: 0; padding: 0;
     background: var(--bg);
     color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif;
+    font-family: 'Inter', sans-serif;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 28px 28px;
   }
-  .wrap { max-width: 720px; margin: 0 auto; padding: 48px 20px 80px; }
+
+  h1, h2, h3, .display {
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--ink);
+  }
+
   a { color: inherit; }
   .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--text-soft); text-decoration: none; font-size: 0.88rem; font-weight: 600; margin-bottom: 18px; }
   .back-link:hover { color: var(--blue); }
-  h1 { color: var(--ink); font-size: 1.6rem; margin: 0 0 8px; }
-  .notice {
-    background: var(--card-bg);
-    border: 1px dashed var(--border);
-    border-radius: 14px;
-    padding: 32px 26px;
-    text-align: center;
+
+  .wrap {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
   }
-  .notice .icon { font-size: 1.8rem; margin-bottom: 10px; }
-  .notice p { margin: 0; color: var(--text-soft); font-size: 0.95rem; max-width: 46ch; margin: 0 auto; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: var(--ink);
+    border-radius: 18px;
+    padding: 28px 30px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-text h1 {
+    color: #fff;
+    font-size: 1.9rem;
+    margin: 0 0 6px;
+    line-height: 1.15;
+  }
+  .hero-text p {
+    margin: 0;
+    color: #C8D3E0;
+    font-size: 0.98rem;
+    max-width: 48ch;
+  }
+  .hero svg { flex-shrink: 0; }
+
+  /* ---------- Tabs ---------- */
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 26px 0 20px;
+  }
+  .tab-btn {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.86rem;
+    border: 1.5px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text-soft);
+    padding: 9px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    transition: transform 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+  }
+  .tab-btn:hover { transform: translateY(-1px); }
+  .tab-btn.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: #fff;
+  }
+  .tab-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  /* ---------- Panels ---------- */
+  .panel { display: none; animation: fade .18s ease; }
+  .panel.active { display: block; }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+  .section-title {
+    font-size: 1.3rem;
+    margin: 0 0 4px;
+  }
+  .section-sub {
+    color: var(--text-soft);
+    font-size: 0.92rem;
+    margin: 0 0 18px;
+  }
+
+  /* ---------- Callout boxes ---------- */
+  .box {
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin: 14px 0;
+    border-left: 4px solid transparent;
+  }
+  .box h4 {
+    margin: 0 0 6px;
+    font-size: 0.98rem;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .box p, .box ul { margin: 0; font-size: 0.93rem; line-height: 1.55; }
+  .box ul { padding-left: 20px; }
+
+  .box.theorem { background: var(--blue-soft); border-color: var(--blue); }
+  .box.theorem h4 { color: var(--blue); }
+  .box.postulate { background: var(--teal-soft); border-color: var(--teal); }
+  .box.postulate h4 { color: var(--teal); }
+  .box.watch { background: var(--coral-soft); border-color: var(--coral); }
+  .box.watch h4 { color: var(--coral); }
+  .box.tip { background: var(--amber-soft); border-color: var(--amber); }
+  .box.tip h4 { color: var(--amber); }
+
+  /* ---------- Definition grid ---------- */
+  .def-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 10px;
+    margin: 14px 0;
+  }
+  .def-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .def-card .term {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--ink);
+    display: block;
+    margin-bottom: 3px;
+  }
+  .def-card .desc { font-size: 0.85rem; color: var(--text-soft); }
+
+  /* ---------- Proof/step tables ---------- */
+  .proof-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--ink);
+    margin: 18px 0 8px;
+  }
+  table.proof {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 6px;
+    font-size: 0.88rem;
+    background: var(--card-bg);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  table.proof th {
+    text-align: left;
+    background: var(--ink);
+    color: #fff;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
+    padding: 8px 12px;
+  }
+  table.proof td {
+    padding: 8px 12px;
+    border-top: 1px solid var(--border);
+  }
+  table.proof td:first-child { width: 55%; }
+  table.proof tr:nth-child(even) td { background: #FAF9F5; }
+
+  /* ---------- Numeric example ---------- */
+  .numex {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 10px 0;
+    font-size: 0.9rem;
+  }
+  .numex .setup { color: var(--text-soft); margin-bottom: 6px; }
+  .numex .steps { font-family: 'Space Grotesk', sans-serif; color: var(--ink); line-height: 1.7; }
+
+  /* ---------- Family tree ---------- */
+  .tree-box {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 10px 0;
+    font-size: 0.88rem;
+    line-height: 1.9;
+  }
+  .tree-box .lvl0 { font-weight: 700; color: var(--ink); font-family: 'Space Grotesk', sans-serif; }
+  .tree-box .lvl1 { padding-left: 22px; color: var(--ink); }
+  .tree-box .lvl2 { padding-left: 44px; color: var(--text-soft); }
+  .tree-box .note { color: var(--text-soft); font-size: 0.82rem; }
+
+  /* ---------- Footer: reasons bank + checklist ---------- */
+  .foot-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 16px;
+    margin-top: 34px;
+  }
+  @media (max-width: 700px) { .foot-grid { grid-template-columns: 1fr; } }
+
+  .foot-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+  }
+  .foot-card h3 { font-size: 1rem; margin: 0 0 10px; }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    font-size: 0.78rem;
+    background: var(--blue-soft);
+    color: var(--blue);
+    border-radius: 999px;
+    padding: 5px 11px;
+    font-weight: 600;
+  }
+  .checklist { list-style: none; margin: 0; padding: 0; font-size: 0.87rem; }
+  .checklist li {
+    display: flex;
+    gap: 9px;
+    align-items: flex-start;
+    padding: 6px 0;
+    border-bottom: 1px dashed var(--border);
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checkmark {
+    flex-shrink: 0;
+    width: 18px; height: 18px;
+    border-radius: 5px;
+    background: var(--teal-soft);
+    color: var(--teal);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem;
+    margin-top: 1px;
+  }
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <a class="back-link" href="index.html">&larr; All subjects</a>
-    <h1>Geometry - Removed per Teacher Request</h1>
-    <div class="notice">
-      <div class="icon">🚫</div>
-      <p>This Geometry study guide has been taken down at the teacher's request and is no longer available on this site.</p>
+<div class="wrap">
+  <a class="back-link" href="geometry.html">&larr; Back to Geometry</a>
+
+  <div class="hero">
+    <div class="hero-text">
+      <h1>Unit 3 &mdash; Quadrilaterals</h1>
+      <p>Slope and the coordinate formulas are the tools. The unit is about knowing each quadrilateral's properties, using them to solve for missing pieces, and proving what a shape is from its coordinates.</p>
+    </div>
+    <svg width="100" height="100" viewBox="0 0 100 100" fill="none">
+      <polygon points="20,75 35,25 80,30 65,80" stroke="#4A6FA5" stroke-width="3" fill="none"/>
+      <line x1="10" y1="15" x2="45" y2="15" stroke="#E9A23B" stroke-width="3"/>
+      <line x1="55" y1="15" x2="15" y2="55" stroke="#2C9C82" stroke-width="3"/>
+    </svg>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+  <div id="panels"></div>
+
+  <div class="foot-grid">
+    <div class="foot-card">
+      <h3>Property bank</h3>
+      <div class="chip-row">
+        <span class="chip">Opposite sides ≅ / ∥</span>
+        <span class="chip">Opposite angles ≅</span>
+        <span class="chip">Consecutive angles supp.</span>
+        <span class="chip">Diagonals bisect each other</span>
+        <span class="chip">Rectangle: diagonals ≅</span>
+        <span class="chip">Rhombus: diagonals ⊥</span>
+        <span class="chip">Kite: consecutive sides ≅</span>
+        <span class="chip">Iso. trapezoid: legs ≅, diagonals ≅</span>
+        <span class="chip">∥ = same slope</span>
+        <span class="chip">⊥ = negative reciprocal slopes</span>
+        <span class="chip">Midpoint formula</span>
+        <span class="chip">Distance formula</span>
+      </div>
+    </div>
+    <div class="foot-card">
+      <h3>Before you answer</h3>
+      <ul class="checklist">
+        <li><span class="checkmark">✓</span>Sketch the points first. The picture tells you what to guess.</li>
+        <li><span class="checkmark">✓</span>Parallelogram? Check the diagonals' midpoints. Same midpoint = parallelogram.</li>
+        <li><span class="checkmark">✓</span>Then the diagonals: ≅ → rectangle, ⊥ → rhombus, both → square.</li>
+        <li><span class="checkmark">✓</span>Not a parallelogram? One pair of ∥ sides → trapezoid; 2 pairs of consecutive ≅ sides → kite.</li>
+        <li><span class="checkmark">✓</span>Algebra question: are the marked parts opposite, consecutive, or diagonal pieces? That decides the equation.</li>
+        <li><span class="checkmark">✓</span>Solved for x? Plug it back in if they asked for a side or angle. Use ± when you square-root.</li>
+      </ul>
     </div>
   </div>
+
+</div>
+
+<script>
+/* ============ Coordinate-plane plot helper ============
+   pts: [[x,y],...] in order; labels: ['A','B',...]
+   opts: {min,max, diags:bool, color, diagColor, h} */
+function coordPlot(pts, labels, opts){
+  opts = opts || {};
+  var min = (opts.min!==undefined)?opts.min:-7, max=(opts.max!==undefined)?opts.max:7;
+  var u = 16, pad = 14, n = max-min, size = n*u + pad*2;
+  function X(x){ return pad + (x-min)*u; }
+  function Y(y){ return pad + (max-y)*u; }
+  var s = '';
+  for(var i=min;i<=max;i++){
+    s += '<line x1="'+X(i)+'" y1="'+Y(min)+'" x2="'+X(i)+'" y2="'+Y(max)+'" stroke="var(--gray-line)" stroke-width="0.7"/>';
+    s += '<line x1="'+X(min)+'" y1="'+Y(i)+'" x2="'+X(max)+'" y2="'+Y(i)+'" stroke="var(--gray-line)" stroke-width="0.7"/>';
+  }
+  if(min<0 && max>0){
+    s += '<line x1="'+X(0)+'" y1="'+Y(min)+'" x2="'+X(0)+'" y2="'+Y(max)+'" stroke="var(--gray)" stroke-width="1.6"/>';
+    s += '<line x1="'+X(min)+'" y1="'+Y(0)+'" x2="'+X(max)+'" y2="'+Y(0)+'" stroke="var(--gray)" stroke-width="1.6"/>';
+  }
+  var col = opts.color || 'var(--blue)';
+  if(opts.diags && pts.length===4){
+    var dc = opts.diagColor || 'var(--coral)';
+    s += '<line x1="'+X(pts[0][0])+'" y1="'+Y(pts[0][1])+'" x2="'+X(pts[2][0])+'" y2="'+Y(pts[2][1])+'" stroke="'+dc+'" stroke-width="1.8" stroke-dasharray="5 4"/>';
+    s += '<line x1="'+X(pts[1][0])+'" y1="'+Y(pts[1][1])+'" x2="'+X(pts[3][0])+'" y2="'+Y(pts[3][1])+'" stroke="'+dc+'" stroke-width="1.8" stroke-dasharray="5 4"/>';
+  }
+  var ptsStr = pts.map(function(p){ return X(p[0])+','+Y(p[1]); }).join(' ');
+  s += (pts.length>2 ? '<polygon points="'+ptsStr+'" fill="none" stroke="'+col+'" stroke-width="2.6" stroke-linejoin="round"/>'
+                     : '<polyline points="'+ptsStr+'" fill="none" stroke="'+col+'" stroke-width="2.6"/>');
+  var cx=0, cy=0; pts.forEach(function(p){cx+=p[0];cy+=p[1];}); cx/=pts.length; cy/=pts.length;
+  pts.forEach(function(p,i){
+    s += '<circle cx="'+X(p[0])+'" cy="'+Y(p[1])+'" r="3.6" fill="var(--ink)"/>';
+    if(labels && labels[i]){
+      var dx=p[0]-cx, dy=p[1]-cy, L=Math.sqrt(dx*dx+dy*dy)||1;
+      var lx=X(p[0])+dx/L*13, ly=Y(p[1])-dy/L*13+5;
+      s += '<text x="'+lx+'" y="'+ly+'" fill="var(--ink)" font-family="Space Grotesk, sans-serif" font-size="13" font-weight="700" text-anchor="middle">'+labels[i]+'</text>';
+    }
+  });
+  return '<svg viewBox="0 0 '+size+' '+size+'" width="100%" height="'+(opts.h||220)+'" xmlns="http://www.w3.org/2000/svg">'+s+'</svg>';
+}
+
+const sections = [
+  {
+    id: "s31",
+    label: "3.1 Slopes",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="21" x2="21" y2="3"/><line x1="3" y1="3" x2="10" y2="10"/></svg>',
+    title: "Literal Equations, Parallel & Perpendicular Lines",
+    sub: "Solving y = mx + b for one letter, then using slope to write parallel and perpendicular lines.",
+    body: `
+      <div class="box tip">
+        <h4>What's a literal equation?</h4>
+        <p>A literal equation has more than one variable, like <b>y = mx + b</b>. "Solve for m" means isolate m with the same moves you'd use on any equation. Treat the other letters (x, y, b) like ordinary numbers.</p>
+      </div>
+      <div class="proof-label">Solving the slope-intercept formula for m</div>
+      <div class="numex">
+        <div class="setup">Start: y = mx + b &nbsp;&rarr;&nbsp; subtract b from both sides &nbsp;&rarr;&nbsp; divide both sides by x</div>
+        <div class="steps">m = (y &minus; b) / x</div>
+      </div>
+
+      <div class="box postulate">
+        <h4>Parallel lines ( // )</h4>
+        <p>Parallel lines have the <b>same slope</b>.</p>
+      </div>
+      <div class="box theorem">
+        <h4>Perpendicular lines ( &perp; )</h4>
+        <p>Perpendicular lines have slopes that are <b>negative reciprocals</b>: flip the fraction, then switch the sign. Example: 3 and &minus;1/3, or 2/3 and &minus;3/2.</p>
+      </div>
+
+      <div class="proof-label">Worked example: write the parallel and perpendicular lines through a point</div>
+      <div class="numex">
+        <div class="setup">The original line is y = 2x &minus; 1. Write the line through (4, 3) that is (A) parallel and (B) perpendicular to it.</div>
+        <div class="steps">(A) Parallel &rarr; same slope, m = 2. Plug in the point: 3 = 2(4) + b &rarr; 3 = 8 + b &rarr; b = &minus;5 &nbsp;&rarr;&nbsp; <b>y = 2x &minus; 5</b><br>(B) Perpendicular &rarr; m = &minus;1/2. Plug in the point: 3 = &minus;&frac12;(4) + b &rarr; 3 = &minus;2 + b &rarr; b = 5 &nbsp;&rarr;&nbsp; <b>y = &minus;&frac12;x + 5</b></div>
+      </div>
+
+      <div class="proof-label">Worked example: perpendicular slope from a y-intercept and a point</div>
+      <div class="numex">
+        <div class="setup">A line has a y-intercept of 12 and passes through (4, 38). What is the slope of a line perpendicular to it?</div>
+        <div class="steps">Step 1: find the line's own slope. 38 = m(4) + 12 &rarr; 26 = 4m &rarr; m = 13/2<br>Step 2: flip and negate. Perpendicular slope = &minus;2/13</div>
+      </div>
+
+      <div class="box watch">
+        <h4>Two stages: don't stop early</h4>
+        <p>Sometimes you're handed the slope; sometimes you have to find it first (from a y-intercept and a point, using y = mx + b). Find the original slope, THEN decide whether to keep it (parallel) or flip-and-negate it (perpendicular), THEN plug in the point to get b.</p>
+      </div>
+    `
+  },
+  {
+    id: "s32a",
+    label: "3.2 Quad Properties",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 4 L20 20 M20 4 L4 20" stroke-dasharray="2 2"/></svg>',
+    title: "Quadrilateral Properties & Family Tree",
+    sub: "Every quadrilateral has 4 sides, 4 angles, and angles that add to 360°. The special ones add properties on top.",
+    body: `
+      <div class="def-grid">
+        <div class="def-card"><span class="term">Parallelogram</span><span class="desc">2 pairs of opposite sides ∥ and ≅; opposite angles ≅; consecutive angles supplementary; diagonals bisect each other</span></div>
+        <div class="def-card"><span class="term">Rectangle</span><span class="desc">Everything a parallelogram has, PLUS: 4 right angles and congruent diagonals</span></div>
+        <div class="def-card"><span class="term">Rhombus</span><span class="desc">Everything a parallelogram has, PLUS: 4 congruent sides, perpendicular diagonals, diagonals bisect the angles</span></div>
+        <div class="def-card"><span class="term">Square</span><span class="desc">Everything a parallelogram, rectangle, AND rhombus has</span></div>
+        <div class="def-card"><span class="term">Trapezoid</span><span class="desc">Only ONE pair of parallel sides (the bases); consecutive angles between the bases are supplementary</span></div>
+        <div class="def-card"><span class="term">Isosceles Trapezoid</span><span class="desc">A trapezoid with congruent legs (non-parallel sides); congruent diagonals; congruent base angles; opposite angles supplementary</span></div>
+        <div class="def-card"><span class="term">Kite</span><span class="desc">Exactly 2 pairs of CONSECUTIVE congruent sides; 1 pair of opposite angles ≅; perpendicular diagonals; only 1 diagonal gets bisected</span></div>
+      </div>
+
+      <div class="proof-label">Quadrilateral family tree</div>
+      <div class="tree-box">
+        <div class="lvl0">Quadrilateral <span class="note">(4 sides, angles sum to 360°)</span></div>
+        <div class="lvl1">├─ Parallelogram</div>
+        <div class="lvl2">├─ Rectangle</div>
+        <div class="lvl2">├─ Rhombus</div>
+        <div class="lvl2" style="padding-left:66px;">└─ <b>Square</b> <span class="note">(rectangle + rhombus, together)</span></div>
+        <div class="lvl1">├─ Trapezoid</div>
+        <div class="lvl2">└─ Isosceles Trapezoid</div>
+        <div class="lvl1">└─ Kite <span class="note">(not in the parallelogram branch)</span></div>
+      </div>
+
+      <div class="box tip">
+        <h4>Always, sometimes, never</h4>
+        <ul>
+          <li>A square is <b>always</b> a parallelogram, a rectangle, and a rhombus.</li>
+          <li>A parallelogram is only <b>sometimes</b> a rectangle; a rhombus is only <b>sometimes</b> a square.</li>
+          <li>A trapezoid is <b>never</b> a parallelogram: it has only ONE pair of parallel sides.</li>
+        </ul>
+      </div>
+
+      <div class="box watch">
+        <h4>True/false traps worth memorizing</h4>
+        <ul>
+          <li>A rectangle's diagonals are <b>congruent</b>, not perpendicular. Perpendicular diagonals belong to rhombi, squares, and kites.</li>
+          <li>A parallelogram's diagonals bisect each other, but they're only congruent if it's a rectangle (or square).</li>
+          <li>A rhombus doesn't have 4 right angles. It has 4 congruent <b>sides</b>.</li>
+          <li>A kite's congruent sides are CONSECUTIVE (next to each other). A parallelogram's are OPPOSITE.</li>
+          <li>Only an <b>isosceles</b> trapezoid has congruent diagonals. A plain trapezoid doesn't.</li>
+          <li>The equal sides of an isosceles trapezoid have a name: the <b>legs</b>.</li>
+        </ul>
+      </div>
+    `
+  },
+  {
+    id: "s32b",
+    label: "3.2–3.3 Quad Algebra",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6 L20 6 M4 6 L4 18 L20 18 L20 6" /><line x1="4" y1="6" x2="20" y2="18" stroke-dasharray="2 2"/></svg>',
+    title: "Using Properties to Solve for x",
+    sub: "Figure out which property the diagram is showing, write the equation, solve.",
+    body: `
+      <div class="box tip">
+        <h4>Which property do I use?</h4>
+        <ul>
+          <li>Two OPPOSITE sides labeled &rarr; opposite sides are ≅ (set equal).</li>
+          <li>Two OPPOSITE angles labeled &rarr; opposite angles are ≅ (set equal).</li>
+          <li>Two CONSECUTIVE angles labeled (parallelogram, or between a trapezoid's bases) &rarr; they add to 180°.</li>
+          <li>Diagonal pieces in a parallelogram &rarr; diagonals bisect each other (each piece equals the piece across from it).</li>
+          <li>Full diagonals in a rectangle, square, or isosceles trapezoid &rarr; the diagonals are ≅ (set equal).</li>
+          <li>Any two sides of a rhombus or square &rarr; all 4 sides are ≅.</li>
+          <li>Diagonals meet at a right angle (rhombus, square, kite) &rarr; a right triangle, so use <b>a² + b² = c²</b>.</li>
+        </ul>
+      </div>
+
+      <div class="proof-label">Parallelogram: consecutive angles</div>
+      <div class="numex">
+        <div class="setup">In parallelogram JKLM, consecutive angles J and K measure (3y + 10)° and (2y + 15)°.</div>
+        <div class="steps">(3y + 10) + (2y + 15) = 180 &rarr; 5y + 25 = 180 &rarr; y = 31 &nbsp;&rarr;&nbsp; m∠J = 103°, m∠K = 77°</div>
+      </div>
+
+      <div class="proof-label">Parallelogram: diagonal piece vs. whole diagonal</div>
+      <div class="numex">
+        <div class="setup">The diagonals of parallelogram ABCD meet at E. AE = 3x &minus; 1 and the whole diagonal AC = 5x + 2.</div>
+        <div class="steps">E is the midpoint of AC, so AE + EC = AC: (3x &minus; 1) + (3x &minus; 1) = 5x + 2 &rarr; 6x &minus; 2 = 5x + 2 &rarr; x = 4 &nbsp;&rarr;&nbsp; AC = 22</div>
+      </div>
+
+      <div class="proof-label">Rectangle: congruent diagonals</div>
+      <div class="numex">
+        <div class="setup">In rectangle PQRS, PR = 4x + 3 and QS = 7x &minus; 12.</div>
+        <div class="steps">4x + 3 = 7x &minus; 12 &rarr; 15 = 3x &rarr; x = 5 &nbsp;&rarr;&nbsp; each diagonal = 23</div>
+      </div>
+
+      <div class="proof-label">Rhombus: diagonals make right triangles</div>
+      <div class="numex">
+        <div class="setup">A rhombus has diagonals of length 18 and 24. How long is each side?</div>
+        <div class="steps">Diagonals bisect each other, so the halves are 9 and 12. They meet at 90°: 9² + 12² = c² &rarr; 81 + 144 = 225 &rarr; side = 15</div>
+      </div>
+
+      <div class="proof-label">Kite: the bisected diagonal</div>
+      <div class="numex">
+        <div class="setup">Kite ABCD has diagonals meeting at E. AE = EC = 8, BE = 6, and DE = 15. Find AB and AD.</div>
+        <div class="steps">Diagonals are ⊥, so each piece is a right triangle: AB = √(8² + 6²) = √100 = 10; &nbsp;AD = √(8² + 15²) = √289 = 17</div>
+      </div>
+
+      <div class="proof-label">Isosceles trapezoid: angles</div>
+      <div class="numex">
+        <div class="setup">One base angle of an isosceles trapezoid is 68°. Find the other three angles.</div>
+        <div class="steps">Base angles are ≅ &rarr; the other angle on that base is 68°. Consecutive angles between the bases add to 180° &rarr; the top two angles are 112° each.</div>
+      </div>
+
+      <div class="box watch">
+        <h4>Read what the question asks for</h4>
+        <p>Solving for x is often only step one. If the question asks for a side, an angle, or a diagonal, plug x back in. And watch for a piece of a diagonal vs. the whole diagonal: the piece is half.</p>
+      </div>
+      <div class="box watch">
+        <h4>"For what value of x is this a parallelogram?"</h4>
+        <p>Use a parallelogram property in reverse: set the two expressions that <i>would</i> have to be equal (opposite sides, opposite angles, or diagonal pieces) equal to each other and solve.</p>
+      </div>
+    `
+  },
+  {
+    id: "s34",
+    label: "3.4 Formulas",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="20" x2="20" y2="4"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/><path d="M4 20 L20 20 L20 4" stroke-dasharray="2 2"/></svg>',
+    title: "Midpoint, Slope & Distance Formulas",
+    sub: "Three formulas that turn coordinates into facts about segments.",
+    body: `
+      <div class="def-grid">
+        <div class="def-card"><span class="term">Midpoint</span><span class="desc">(x<sub>m</sub>, y<sub>m</sub>) = ( (x₁ + x₂)/2 , (y₁ + y₂)/2 ). Average the x's, average the y's.</span></div>
+        <div class="def-card"><span class="term">Slope</span><span class="desc">m = rise/run = (y₂ &minus; y₁) / (x₂ &minus; x₁)</span></div>
+        <div class="def-card"><span class="term">Distance</span><span class="desc">d = √[ (x₂ &minus; x₁)² + (y₂ &minus; y₁)² ]. It's the Pythagorean theorem on the grid.</span></div>
+      </div>
+
+      <div class="proof-label">Midpoint</div>
+      <div class="numex">
+        <div class="setup">Find the midpoint of (&minus;3, 8) and (5, &minus;2).</div>
+        <div class="steps">( (&minus;3 + 5)/2 , (8 + &minus;2)/2 ) = ( 2/2 , 6/2 ) = <b>(1, 3)</b></div>
+      </div>
+
+      <div class="proof-label">Missing endpoint (midpoint run backwards)</div>
+      <div class="numex">
+        <div class="setup">One endpoint is A(2, &minus;7) and the midpoint is M(5, &minus;1). Find the other endpoint B(x, y).</div>
+        <div class="steps">x: (2 + x)/2 = 5 &rarr; 2 + x = 10 &rarr; x = 8 &nbsp;&nbsp; y: (&minus;7 + y)/2 = &minus;1 &rarr; &minus;7 + y = &minus;2 &rarr; y = 5 &nbsp;&rarr;&nbsp; <b>B(8, 5)</b></div>
+      </div>
+
+      <div class="proof-label">Slope</div>
+      <div class="numex">
+        <div class="setup">Find the slope between (&minus;2, 6) and (4, &minus;3).</div>
+        <div class="steps">(&minus;3 &minus; 6) / (4 &minus; (&minus;2)) = &minus;9/6 = <b>&minus;3/2</b></div>
+      </div>
+
+      <div class="proof-label">Distance (and simplifying the radical)</div>
+      <div class="numex">
+        <div class="setup">Find the distance from (&minus;1, 3) to (4, &minus;2).</div>
+        <div class="steps">√[ (4 &minus; (&minus;1))² + (&minus;2 &minus; 3)² ] = √(25 + 25) = √50 = √(25 · 2) = <b>5√2</b> &nbsp;(&asymp; 7.1)</div>
+      </div>
+
+      <div class="proof-label">Missing coordinate from a slope</div>
+      <div class="numex">
+        <div class="setup">The slope of AB is 3. A(2, 5) and B(4, y). Find y.</div>
+        <div class="steps">3 = (y &minus; 5)/(4 &minus; 2) &rarr; 3 = (y &minus; 5)/2 &rarr; 6 = y &minus; 5 &rarr; <b>y = 11</b></div>
+      </div>
+
+      <div class="proof-label">Missing coordinate from a distance (two answers!)</div>
+      <div class="numex">
+        <div class="setup">The distance between (2, y) and (&minus;10, 4) is 13. Find y.</div>
+        <div class="steps">13 = √[ (&minus;12)² + (y &minus; 4)² ] &rarr; square both sides: 169 = 144 + (y &minus; 4)² &rarr; (y &minus; 4)² = 25 &rarr; y &minus; 4 = ±5 &rarr; <b>y = 9 or y = &minus;1</b></div>
+      </div>
+
+      <div class="box watch">
+        <h4>Sign slips are the #1 mistake</h4>
+        <p>Subtracting a negative is adding: 4 &minus; (&minus;2) = 6. Write the parentheses every time. And when you take a square root to undo a square, remember the <b>±</b>: there are usually two answers.</p>
+      </div>
+      <div class="box tip">
+        <h4>Perimeter and area on the grid</h4>
+        <p>Use the distance formula on each side and add them for perimeter. For a rectangle, area = length × width using two consecutive side lengths (e.g. 2√2 × 5√2 = 10 · 2 = 20).</p>
+      </div>
+    `
+  },
+  {
+    id: "s36",
+    label: "3.6–3.7 Coordinate Quads",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="22" stroke-width="1.2"/><line x1="2" y1="12" x2="22" y2="12" stroke-width="1.2"/><polygon points="6,8 14,5 18,15 10,18"/></svg>',
+    title: "Parallelograms, Rectangles, Rhombi & Squares on the Coordinate Plane",
+    sub: "Each formula checks one property. Match the formula to the property you need to show.",
+    body: `
+      <div class="def-grid">
+        <div class="def-card"><span class="term">Slope shows…</span><span class="desc">Parallel sides (same slope). Perpendicular sides or diagonals (negative reciprocals), which means right angles.</span></div>
+        <div class="def-card"><span class="term">Distance shows…</span><span class="desc">Equal lengths: opposite sides, consecutive sides, or diagonals.</span></div>
+        <div class="def-card"><span class="term">Midpoint shows…</span><span class="desc">Two segments share a midpoint, so the diagonals bisect each other.</span></div>
+      </div>
+
+      <div class="proof-label">Ways to prove a quadrilateral is a parallelogram</div>
+      <table class="proof">
+        <tr><th>Show that…</th><th>Formula to use</th></tr>
+        <tr><td>Both pairs of opposite sides are parallel</td><td>Slope (4 slopes)</td></tr>
+        <tr><td>Both pairs of opposite sides are congruent</td><td>Distance (4 lengths)</td></tr>
+        <tr><td>Both pairs of opposite angles are congruent</td><td>Not practical with coordinates</td></tr>
+        <tr><td>One pair of opposite sides is BOTH congruent and parallel</td><td>Distance + slope on the same pair</td></tr>
+        <tr><td>The diagonals bisect each other</td><td>Midpoint of each diagonal (fastest: only 2 calculations)</td></tr>
+      </table>
+
+      <div class="proof-label">Then: which kind of parallelogram?</div>
+      <table class="proof">
+        <tr><th>Diagonals are…</th><th>So it's a…</th></tr>
+        <tr><td>Congruent (distance) but NOT perpendicular</td><td>Rectangle</td></tr>
+        <tr><td>Perpendicular (slope) but NOT congruent</td><td>Rhombus</td></tr>
+        <tr><td>Congruent AND perpendicular</td><td>Square</td></tr>
+        <tr><td>Neither</td><td>Just a parallelogram</td></tr>
+      </table>
+      <p class="section-sub" style="margin-top:8px;">You can also check the sides: consecutive sides ⊥ &rarr; right angles (rectangle); all 4 sides ≅ &rarr; rhombus; both &rarr; square.</p>
+
+      <div class="proof-label">Worked example: is it a parallelogram, and which kind?</div>
+      <div class="numex">
+        <div class="setup">A(&minus;3, &minus;1), B(&minus;1, 3), C(5, 0), D(3, &minus;4)</div>
+        ${coordPlot([[-3,-1],[-1,3],[5,0],[3,-4]],['A','B','C','D'],{diags:true,min:-5,max:6,h:230})}
+        <div class="steps">Midpoint AC = ( (&minus;3+5)/2 , (&minus;1+0)/2 ) = (1, &minus;&frac12;) &nbsp; Midpoint BD = ( (&minus;1+3)/2 , (3+&minus;4)/2 ) = (1, &minus;&frac12;) &rarr; same midpoint, so it's a <b>parallelogram</b><br>AC = √(8² + 1²) = √65 &nbsp; BD = √(4² + 7²) = √65 &rarr; diagonals ≅<br>Slope AC = 1/8, slope BD = &minus;7/4 &rarr; not negative reciprocals, diagonals NOT ⊥<br>&rarr; <b>Rectangle</b> (a parallelogram with congruent diagonals)</div>
+      </div>
+
+      <div class="proof-label">Worked example: a square</div>
+      <div class="numex">
+        <div class="setup">A(1, 1), B(4, 3), C(2, 6), D(&minus;1, 4)</div>
+        ${coordPlot([[1,1],[4,3],[2,6],[-1,4]],['A','B','C','D'],{diags:true,min:-2,max:7,h:210})}
+        <div class="steps">Midpoints: AC = (1.5, 3.5), BD = (1.5, 3.5) &rarr; parallelogram<br>AC = √(1² + 5²) = √26, BD = √(5² + 1²) = √26 &rarr; diagonals ≅<br>Slope AC = 5, slope BD = &minus;1/5 &rarr; negative reciprocals, diagonals ⊥<br>&rarr; <b>Square</b> (congruent AND perpendicular diagonals)</div>
+      </div>
+
+      <div class="proof-label">Worked example: just a parallelogram</div>
+      <div class="numex">
+        <div class="setup">A(&minus;3, 1), B(1, 4), C(5, 2), D(1, &minus;1)</div>
+        <div class="steps">Midpoints: AC = (1, 1.5), BD = (1, 1.5) &rarr; parallelogram<br>AC = √65, BD = √25 = 5 &rarr; not ≅ &nbsp;&nbsp; Slope AC = 1/8, slope BD = undefined (vertical) &rarr; not ⊥<br>&rarr; <b>Parallelogram</b>, with no extra properties</div>
+      </div>
+
+      <div class="box watch">
+        <h4>Slope alone can't prove a square</h4>
+        <p>Slopes can show right angles, but a rectangle has right angles too. "Might be a square" from slope still needs <b>distance</b> to confirm the consecutive sides are congruent: a parallelogram whose consecutive sides are both ⊥ AND ≅ is a square.</p>
+      </div>
+      <div class="box tip">
+        <h4>Sketch it first</h4>
+        <p>Plot the points before calculating. The picture tells you what to guess (kite? rhombus?) and which formula will confirm it. Then write the "because" sentence using the property you proved.</p>
+      </div>
+    `
+  },
+  {
+    id: "s39",
+    label: "3.9 Kites & Trapezoids",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,3 18,10 12,21 6,10"/></svg>',
+    title: "Kites, Trapezoids & Generic Quads on the Coordinate Plane",
+    sub: "If the midpoints of the diagonals don't match, it's not a parallelogram. Check whether it's a trapezoid or a kite.",
+    body: `
+      <div class="proof-label">Decision path when it's NOT a parallelogram</div>
+      <table class="proof">
+        <tr><th>Check</th><th>Result</th></tr>
+        <tr><td>Slope: exactly ONE pair of opposite sides parallel?</td><td>Trapezoid</td></tr>
+        <tr><td>&hellip;and distance: the legs (non-parallel sides) are ≅?</td><td>Isosceles trapezoid</td></tr>
+        <tr><td>Distance: 2 pairs of CONSECUTIVE sides ≅?</td><td>Kite</td></tr>
+        <tr><td>None of the above</td><td>Just a quadrilateral (not a parallelogram, kite, or trapezoid)</td></tr>
+      </table>
+
+      <div class="proof-label">Worked example: isosceles trapezoid</div>
+      <div class="numex">
+        <div class="setup">A(&minus;4, &minus;2), B(&minus;2, 2), C(2, 2), D(4, &minus;2)</div>
+        ${coordPlot([[-4,-2],[-2,2],[2,2],[4,-2]],['A','B','C','D'],{min:-5,max:5,h:200})}
+        <div class="steps">Slopes: BC = 0, AD = 0 &rarr; BC ∥ AD. &nbsp;AB = 2, CD = &minus;2 &rarr; not ∥. So exactly one pair of ∥ sides: <b>trapezoid</b><br>Legs: AB = √(2² + 4²) = √20 = 2√5, CD = √(2² + 4²) = 2√5 &rarr; legs ≅<br>&rarr; <b>Isosceles trapezoid</b> (∥ bases and ≅ legs)</div>
+      </div>
+
+      <div class="proof-label">Worked example: kite</div>
+      <div class="numex">
+        <div class="setup">A(0, 4), B(3, 1), C(0, &minus;5), D(&minus;3, 1)</div>
+        ${coordPlot([[0,4],[3,1],[0,-5],[-3,1]],['A','B','C','D'],{diags:true,min:-6,max:5,h:220})}
+        <div class="steps">Midpoints: AC = (0, &minus;&frac12;), BD = (0, 1) &rarr; different, so NOT a parallelogram<br>AB = √(9 + 9) = 3√2, &nbsp;DA = 3√2 &nbsp;&nbsp; BC = √(9 + 36) = 3√5, &nbsp;CD = 3√5<br>&rarr; <b>Kite</b> (2 pairs of consecutive ≅ sides). The diagonals are ⊥ too: AC is vertical, BD is horizontal.</div>
+      </div>
+
+      <div class="proof-label">Worked example: none of the above</div>
+      <div class="numex">
+        <div class="setup">A(0, 0), B(2, 5), C(7, 4), D(6, &minus;1)</div>
+        <div class="steps">Slopes: AB = 5/2, BC = &minus;1/5, CD = 5, DA = &minus;1/6 &rarr; no parallel sides (not a parallelogram or trapezoid)<br>Sides: AB = √29, BC = √26, CD = √26, DA = √37 &rarr; only one pair of consecutive sides ≅ (not a kite)<br>&rarr; <b>Just a quadrilateral</b>: it's not a parallelogram, kite, or trapezoid</div>
+      </div>
+
+      <div class="box watch">
+        <h4>Perpendicular diagonals ≠ automatically a rhombus</h4>
+        <p>Kites have perpendicular diagonals too. Check the midpoints first: a rhombus's diagonals bisect each other; a kite's don't (only one gets bisected).</p>
+      </div>
+      <div class="box watch">
+        <h4>Kite vs. parallelogram sides</h4>
+        <p>Kite: the congruent sides are <b>next to each other</b> (AB = DA and BC = CD). Parallelogram: the congruent sides are <b>across from each other</b> (AB = CD and BC = DA). Label your side lengths in order around the shape so you can see which pattern you have.</p>
+      </div>
+    `
+  }
+];
+
+const tabsEl = document.getElementById('tabs');
+const panelsEl = document.getElementById('panels');
+
+sections.forEach((s, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
+  btn.innerHTML = s.icon + '<span>' + s.label + '</span>';
+  btn.onclick = () => selectTab(s.id);
+  btn.dataset.id = s.id;
+  tabsEl.appendChild(btn);
+
+  const panel = document.createElement('div');
+  panel.className = 'panel' + (i === 0 ? ' active' : '');
+  panel.id = s.id;
+  panel.innerHTML =
+    '<h2 class="section-title">' + s.title + '</h2>' +
+    '<p class="section-sub">' + s.sub + '</p>' +
+    s.body;
+  panelsEl.appendChild(panel);
+});
+
+function selectTab(id) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.id === id));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === id));
+}
+</script>
 </body>
 </html>
