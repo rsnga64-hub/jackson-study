@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cell Membrane Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FBFAF7;
+    --grid-line: rgba(28,43,74,0.055);
+    --ink: #1C2B4A;
+    --text: #2B3648;
+    --text-soft: #64707F;
+    --blue: #2E86AB;
+    --blue-soft: #E9F3F8;
+    --amber: #D98A2B;
+    --amber-soft: #FCF1DE;
+    --coral: #D65A5A;
+    --coral-soft: #FBEBEB;
+    --teal: #2C9C82;
+    --teal-soft: #E6F5F0;
+    --violet: #7C5CBF;
+    --violet-soft: #EFE9F8;
+    --card-bg: #FFFFFF;
+    --border: #E4E0D4;
+    --gray: #94A0AD;
+    --gray-line: #CBD3DC;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; color: var(--ink); }
+  .wrap { max-width: 680px; margin: 0 auto; padding: 32px 20px 80px; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--text-soft); text-decoration: none; font-size: 0.88rem; font-weight: 600; margin-bottom: 18px; }
+  .back-link:hover { color: var(--blue); }
+
+  .hero { background: var(--ink); border-radius: 18px; padding: 26px 28px; color: #fff; margin-bottom: 22px; }
+  .hero h1 { color: #fff; font-size: 1.7rem; margin: 0 0 6px; }
+  .hero p { margin: 0; color: #C8D3E0; font-size: 0.96rem; max-width: 52ch; }
+
+  .statline { display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text-soft); margin-bottom: 8px; }
+  .statline b { color: var(--ink); }
+  .progress-track { height: 6px; background: var(--border); border-radius: 999px; overflow: hidden; margin-bottom: 20px; }
+  .progress-fill { height: 100%; background: var(--blue); border-radius: 999px; transition: width 0.25s ease; }
+
+  .qcard {
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px;
+    padding: 26px 28px; box-shadow: 0 4px 18px rgba(28,43,74,0.06);
+  }
+  .qkicker { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.72rem; letter-spacing: 0.03em; text-transform: uppercase; color: var(--blue); margin: 0 0 8px; }
+  .qtext { font-size: 1.1rem; font-weight: 700; color: var(--ink); line-height: 1.35; margin: 0 0 16px; }
+  .diagram-wrap { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 6px; margin-bottom: 18px; }
+  .diagram-wrap svg { display: block; width: 100%; height: auto; }
+
+  .opt {
+    display: flex; align-items: center; gap: 10px;
+    width: 100%; text-align: left; font-family: 'Inter', sans-serif; font-size: 0.96rem; font-weight: 600;
+    color: var(--ink); background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 12px;
+    padding: 12px 16px; margin-bottom: 10px; cursor: pointer; transition: all 0.15s ease;
+  }
+  .opt:hover:not(.locked) { border-color: var(--blue); background: var(--blue-soft); }
+  .opt .letter {
+    flex-shrink: 0; width: 24px; height: 24px; border-radius: 999px; border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 700; color: var(--text-soft);
+  }
+  .opt.correct { border-color: var(--teal); background: var(--teal-soft); }
+  .opt.correct .letter { background: var(--teal); border-color: var(--teal); color: #fff; }
+  .opt.incorrect { border-color: var(--coral); background: var(--coral-soft); }
+  .opt.incorrect .letter { background: var(--coral); border-color: var(--coral); color: #fff; }
+  .opt.locked { cursor: default; }
+  .opt.dim { opacity: 0.55; }
+
+  .explain {
+    display: none; margin-top: 14px; padding: 12px 14px; border-radius: 10px;
+    background: var(--blue-soft); color: var(--ink); font-size: 0.9rem; line-height: 1.45;
+  }
+  .explain.show { display: block; }
+  .explain b { color: var(--blue); }
+
+  .qcontrols { display: flex; justify-content: flex-end; margin-top: 18px; }
+  .btn {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.92rem;
+    border: 1px solid var(--ink); background: var(--ink); color: #fff;
+    border-radius: 10px; padding: 11px 20px; cursor: pointer; transition: opacity 0.15s ease;
+  }
+  .btn:hover { opacity: 0.88; }
+  .btn:disabled { opacity: 0.35; cursor: default; }
+  .btn.ghost { background: var(--card-bg); color: var(--ink); }
+
+  /* results screen */
+  .results { text-align: center; }
+  .score-big { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 3rem; color: var(--ink); margin: 6px 0; }
+  .score-msg { font-size: 1rem; color: var(--text-soft); margin-bottom: 22px; }
+  .missed-list { text-align: left; margin: 20px 0; padding: 0; list-style: none; }
+  .missed-list li { padding: 10px 0; border-top: 1px solid var(--border); font-size: 0.88rem; color: var(--text-soft); }
+  .missed-list li b { color: var(--ink); display: block; margin-bottom: 2px; }
+
+  @media (max-width: 480px) {
+    .qtext { font-size: 1.02rem; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="biology.html">&larr; Back to Biology</a>
+  <div class="hero">
+    <h1>Cell Membrane Quiz</h1>
+    <p id="heroSub">Lesson 2.3: membrane structure, proteins and carbohydrates, and selective permeability.</p>
+  </div>
+
+  <div id="quizArea">
+    <div class="statline">
+      <span>Question <b id="qNum">1</b> of <b id="qTotal">20</b></span>
+      <span id="scoreLive">Score: 0</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+    <div class="qcard">
+      <p class="qkicker" id="qKicker"></p>
+      <p class="qtext" id="qText"></p>
+      <div class="diagram-wrap" id="diagramWrap" style="display:none;"></div>
+      <div id="optsWrap"></div>
+      <div class="explain" id="explain"></div>
+      <div class="qcontrols">
+        <button class="btn" id="btnNext" disabled>Next Question &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="resultsArea" style="display:none;">
+    <div class="qcard results">
+      <p class="qkicker">Quiz complete</p>
+      <div class="score-big" id="finalScore">0 / 20</div>
+      <p class="score-msg" id="finalMsg"></p>
+      <ul class="missed-list" id="missedList"></ul>
+      <button class="btn" id="btnRetake">Retake Quiz</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---- shared diagram helpers (same small library as the flashcards page) ---- */
+function svg(inner, vb, h) { return '<svg viewBox="'+vb+'" width="100%" height="'+(h||180)+'" xmlns="http://www.w3.org/2000/svg">'+inner+'</svg>'; }
+function lineEl(x1,y1,x2,y2,color,w,dash){ return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round"'+(dash?' stroke-dasharray="5 4"':'')+'/>'; }
+function dot(x,y,color,r){ return '<circle cx="'+x+'" cy="'+y+'" r="'+(r||3.2)+'" fill="'+(color||'var(--ink)')+'"/>'; }
+function txt(x,y,s,color,size,weight,anchor){ return '<text x="'+x+'" y="'+y+'" fill="'+(color||'var(--ink)')+'" font-family="Space Grotesk, sans-serif" font-size="'+(size||13)+'" font-weight="'+(weight||700)+'" text-anchor="'+(anchor||'middle')+'">'+s+'</text>'; }
+function poly(pts,color,w,fill){ return '<polygon points="'+pts+'" fill="'+(fill||'none')+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linejoin="round"/>'; }
+function ellipseEl(cx,cy,rx,ry,fill,stroke,w){ return '<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rx+'" ry="'+ry+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(w||2.5)+'"/>'; }
+function circleEl(cx,cy,r,fill,stroke,w){ return '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(w||2.5)+'"/>'; }
+function rectEl(x,y,w,h,rx,fill,stroke,sw){ return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+(rx||0)+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(sw||2.5)+'"/>'; }
+function pathEl(d,stroke,w,fill,dash){ return '<path d="'+d+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round"'+(dash?' stroke-dasharray="4 3"':'')+'/>'; }
+function wavy(x1,y1,x2,y2,amp,cycles,color,w){
+  var n=28, pts=[];
+  var dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy)||1;
+  var ux=dx/len, uy=dy/len, px=-uy, py=ux;
+  for(var i=0;i<=n;i++){
+    var t=i/n;
+    var bx=x1+dx*t, by=y1+dy*t;
+    var off=Math.sin(t*Math.PI*2*cycles)*amp;
+    pts.push((bx+px*off).toFixed(1)+','+(by+py*off).toFixed(1));
+  }
+  return '<polyline points="'+pts.join(' ')+'" fill="none" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.2)+'" stroke-linecap="round"/>';
+}
+
+/* ============ 2.3 Cell Membrane diagrams (original, same helper library) ============ */
+function diagPhospholipid(){
+  var inner =
+      circleEl(80,50,30,'var(--blue-soft)','var(--blue)',2.5)
+    + txt(80,46,'phosphate','var(--blue)',9,700)
+    + txt(80,58,'+ glycerol','var(--blue)',9,700)
+    + lineEl(68,80,68,178,'var(--ink)',3)
+    + pathEl('M92,80 L92,118 L106,132 L106,178','var(--ink)',3)
+    + txt(215,44,'Polar head','var(--blue)',12,700,'start') + txt(215,60,'hydrophilic (water-loving)','var(--text-soft)',10,600,'start')
+    + lineEl(112,50,208,50,'var(--blue)',1.5,true)
+    + txt(215,126,'Nonpolar tails','var(--ink)',12,700,'start') + txt(215,142,'2 fatty acids — hydrophobic','var(--text-soft)',10,600,'start')
+    + lineEl(112,132,208,132,'var(--ink)',1.5,true)
+    + txt(50,196,'saturated','var(--text-soft)',9,600) + txt(116,196,'unsaturated (kink)','var(--text-soft)',9,600);
+  return svg(inner,'0 0 400 206',200);
+}
+
+function diagPhospholipidBilayer(){
+  var xs=[30,72,114,156,198,240,282];
+  var inner='';
+  inner += rectEl(0,40,312,100,0,'var(--amber-soft)','none',0);
+  for(var i=0;i<xs.length;i++){
+    var x=xs[i];
+    inner += circleEl(x,26,11,'var(--blue-soft)','var(--blue)',2);
+    inner += lineEl(x-4,37,x-4,72,'var(--ink)',2.2) + lineEl(x+4,37,x+4,72,'var(--ink)',2.2);
+    inner += lineEl(x-4,108,x-4,143,'var(--ink)',2.2) + lineEl(x+4,108,x+4,143,'var(--ink)',2.2);
+    inner += circleEl(x,154,11,'var(--blue-soft)','var(--blue)',2);
+  }
+  inner += txt(156,10,'OUTSIDE (extracellular) — watery','var(--blue)',9.5,700);
+  inner += txt(156,94,'hydrophobic core: tails face inward','var(--amber)',9.5,700);
+  inner += txt(156,182,'INSIDE (cytoplasm) — watery','var(--blue)',9.5,700);
+  return svg(inner,'0 0 312 190',170);
+}
+
+function diagMembraneParts(){
+  var inner='', xs=[];
+  for(var x=20;x<=400;x+=22) xs.push(x);
+  inner += rectEl(0,70,420,60,0,'var(--amber-soft)','none',0);
+  for(var i=0;i<xs.length;i++){
+    var x=xs[i];
+    if((x>100&&x<170)||(x>250&&x<300)) continue;
+    inner += circleEl(x,62,8,'var(--blue-soft)','var(--blue)',1.6) + circleEl(x,138,8,'var(--blue-soft)','var(--blue)',1.6);
+  }
+  // integral, spans membrane
+  inner += rectEl(106,36,58,128,22,'var(--coral-soft)','var(--coral)',2.5);
+  inner += txt(135,186,'integral (spans)','var(--coral)',9.5,700);
+  // integral, partway
+  inner += rectEl(252,42,46,62,18,'var(--coral-soft)','var(--coral)',2.5);
+  inner += txt(275,186,'integral (partway)','var(--coral)',9.5,700);
+  // peripheral
+  inner += ellipseEl(350,160,26,12,'var(--violet-soft)','var(--violet)',2.2);
+  inner += txt(350,186,'peripheral','var(--violet)',9.5,700);
+  // glycoprotein chain
+  inner += pathEl('M135,36 L135,22 L125,12 M135,22 L147,12 M147,12 L155,4','var(--teal)',2.5);
+  inner += txt(186,14,'carbohydrate chain','var(--teal)',9,700,'start');
+  // cholesterol
+  inner += rectEl(206,88,18,24,4,'var(--amber)','var(--amber)',1.5);
+  inner += txt(215,160,'cholesterol','var(--amber)',9,700);
+  inner += lineEl(215,114,215,150,'var(--amber)',1.2,true);
+  inner += txt(30,20,'outside','var(--text-soft)',9,600,'start');
+  return svg(inner,'0 0 420 196',190);
+}
+
+function diagPermeability(){
+  var inner =
+      rectEl(0,70,420,50,0,'var(--amber-soft)','none',0)
+    + lineEl(0,70,420,70,'var(--blue)',3) + lineEl(0,120,420,120,'var(--blue)',3)
+    + txt(12,98,'bilayer','var(--amber)',9,700,'start')
+    // gas passes
+    + circleEl(95,40,7,'var(--teal-soft)','var(--teal)',2) + lineEl(95,50,95,150,'var(--teal)',2.5) + poly('89,146 95,158 101,146','var(--teal)',2,'var(--teal)')
+    + txt(95,20,'O₂, CO₂','var(--teal)',10,700) + txt(95,176,'passes easily','var(--teal)',9,600)
+    // water slow
+    + circleEl(200,40,8,'var(--blue-soft)','var(--blue)',2) + lineEl(200,50,200,150,'var(--blue)',2.5,true) + poly('194,146 200,158 206,146','var(--blue)',2,'var(--blue)')
+    + txt(200,20,'water','var(--blue)',10,700) + txt(200,176,'a little, slowly','var(--blue)',9,600)
+    // large & charged blocked
+    + circleEl(300,38,16,'var(--coral-soft)','var(--coral)',2) + txt(300,42,'glucose','var(--coral)',7.5,700)
+    + circleEl(370,40,9,'var(--coral-soft)','var(--coral)',2) + txt(370,44,'+','var(--coral)',12,700)
+    + lineEl(300,58,300,66,'var(--coral)',2.5) + lineEl(290,66,310,66,'var(--coral)',3)
+    + lineEl(370,52,370,66,'var(--coral)',2.5) + lineEl(360,66,380,66,'var(--coral)',3)
+    + txt(335,176,'large or charged: blocked','var(--coral)',9,700);
+  return svg(inner,'0 0 420 186',185);
+}
+
+function diagChannelCarrier(){
+  var inner =
+      rectEl(0,60,420,70,0,'var(--amber-soft)','none',0)
+    + lineEl(0,60,420,60,'var(--blue)',3) + lineEl(0,130,420,130,'var(--blue)',3)
+    // channel
+    + rectEl(70,40,28,110,8,'var(--coral-soft)','var(--coral)',2.5) + rectEl(122,40,28,110,8,'var(--coral-soft)','var(--coral)',2.5)
+    + dot(110,30,'var(--blue)',4) + dot(110,80,'var(--blue)',4) + dot(110,110,'var(--blue)',4) + dot(110,162,'var(--blue)',4)
+    + txt(110,184,'Channel protein','var(--coral)',11,700) + txt(110,198,'open tunnel (aquaporin = water)','var(--text-soft)',9,600)
+    // carrier state 1
+    + pathEl('M255,40 L255,150 L300,150 L300,95 L285,80 L300,65 L300,40 Z','var(--violet)',2.5,'var(--violet-soft)')
+    + circleEl(275,28,9,'var(--teal-soft)','var(--teal)',2)
+    + lineEl(318,95,346,95,'var(--ink)',2.2) + poly('346,89 358,95 346,101','var(--ink)',2,'var(--ink)')
+    // carrier state 2
+    + pathEl('M368,40 L368,150 L413,150 L413,125 L398,110 L413,95 L413,40 Z','var(--violet)',2.5,'var(--violet-soft)')
+    + circleEl(390,165,9,'var(--teal-soft)','var(--teal)',2)
+    + txt(335,184,'Carrier protein','var(--violet)',11,700) + txt(335,198,'binds, changes shape, shuttles','var(--text-soft)',9,600);
+  return svg(inner,'0 0 420 206',205);
+}
+
+function diagramFor(key){
+  if(key==='phospholipid') return diagPhospholipid();
+  if(key==='bilayer') return diagPhospholipidBilayer();
+  if(key==='parts') return diagMembraneParts();
+  if(key==='permeability') return diagPermeability();
+  if(key==='channelCarrier') return diagChannelCarrier();
+  return '';
+}
+
+var Q = [
+  {kicker:'Job of the membrane', text:'What does "selectively permeable" mean?', opts:[
+    'The membrane lets nothing in or out.','The membrane only lets water through.','The membrane chooses what can enter and exit the cell.','The membrane lets everything pass freely.'
+  ], correct:2, explain:'Selective = it discriminates. Some things pass easily, some need help, and some can\'t pass at all.'},
+  {kicker:'Fluid mosaic model', text:'In the "fluid mosaic" model, what does "mosaic" refer to?', opts:[
+    'The membrane is made of many different macromolecules.','Carbohydrates form colorful patterns.','Proteins and lipids move sideways.','The membrane has two layers.'
+  ], correct:0, explain:'Mosaic = made of many different pieces. "Fluid" is the part about lipids and proteins shifting sideways.'},
+  {kicker:'Fluid mosaic model', text:'Which part of the membrane moves faster sideways, and why?', opts:[
+    'Proteins, because they are larger than lipids.','Nothing moves; the membrane is rigid.','Lipids, because they are smaller than proteins.','Carbohydrates, because they are on the outside.'
+  ], correct:2, explain:'Both lipids and proteins shift laterally, but the smaller lipids move faster.'},
+  {kicker:'Membrane components', text:'Which macromolecule is NOT part of the cell membrane?', opts:[
+    'Carbohydrates','Nucleic acids','Lipids','Proteins'
+  ], correct:1, explain:'The membrane has lipids, proteins, and carbohydrates. Nucleic acids are the one left out.'},
+  {kicker:'Phospholipid — Diagram', text:'On this phospholipid, which part is hydrophilic?', diagram:'phospholipid', opts:[
+    'The head (phosphate group + glycerol)','Both fatty acid tails','The unsaturated tail','The saturated tail'
+  ], correct:0, explain:'The head is polar, so it interacts well with water (also polar). The fatty acid tails are nonpolar and hydrophobic.'},
+  {kicker:'Phospholipid', text:'The two tails of a phospholipid are best described as:', opts:[
+    'Two phosphate groups, both polar','Glycerol chains that attract water','Carbohydrate chains used as ID tags','Fatty acids, one saturated and one unsaturated, both nonpolar'
+  ], correct:3, explain:'The tails are fatty acids (one saturated, one unsaturated). They are nonpolar, so they are hydrophobic.'},
+  {kicker:'Bilayer — Diagram', text:'Why do the tails in this bilayer point toward each other in the middle?', diagram:'bilayer', opts:[
+    'They are charged and repel the heads.','They are hydrophobic, so they fold inward away from the water on both sides.','They are hydrophilic and are attracted to each other.','Cholesterol pulls them together.'
+  ], correct:1, explain:'Both sides of the membrane are watery (cytoplasm inside, interstitial fluid outside), so the hydrophobic tails tuck into the middle.'},
+  {kicker:'Bilayer', text:'The fluid between cells, such as blood and lymph, is called:', opts:[
+    'Cytosolic fluid','Interstitial fluid','Cytoplasm','Glycerol'
+  ], correct:1, explain:'Interstitial fluid is outside the cells (extracellular). Cytoplasm/cytosolic fluid is inside. Both are mostly water.'},
+  {kicker:'Cholesterol', text:'What is cholesterol\'s job in the cell membrane?', opts:[
+    'It acts as an ID tag for cell recognition.','It forms the phospholipid heads.','It keeps fluidity balanced: not too much movement, and no solidifying in the cold.','It transports glucose into the cell.'
+  ], correct:2, explain:'Cholesterol stops phospholipids from moving too freely and stops them from packing too closely at low temperatures.'},
+  {kicker:'Cholesterol', text:'Where is cholesterol found in the membrane?', opts:[
+    'Only on peripheral proteins','In the hydrophobic middle, among the fatty acid tails','Floating in the cytoplasm','Attached to carbohydrates on the outside'
+  ], correct:1, explain:'Cholesterol is a lipid and is hydrophobic, so it sits in the hydrophobic region.'},
+  {kicker:'Membrane proteins — Diagram', text:'According to the lecture, what makes a protein "integral"?', diagram:'parts', opts:[
+    'It is built into the hydrophobic middle, either all the way across or partway.','It only touches the phosphate heads.','It is found only inside the cell.','It has a carbohydrate attached.'
+  ], correct:0, explain:'Integral proteins are integrated into the hydrophobic region. Peripheral proteins sit loosely on the surface.'},
+  {kicker:'Membrane proteins', text:'According to the lecture and slides, a peripheral protein is:', opts:[
+    'Not embedded; loosely bound to the membrane surface or to other proteins','Always a transport protein','A lipid with a sugar attached','Spanning the membrane from inside to outside'
+  ], correct:0, explain:'"Peripheral" = on the edge. (The 2.6 worksheet uses different categories, so ask which version the test uses.)'},
+  {kicker:'Membrane proteins', text:'Which membrane protein function is the main focus of this unit?', opts:[
+    'Intercellular joining','Attachment to the cytoskeleton','Signal transduction','Transport'
+  ], correct:3, explain:'Transport is this unit\'s focus. Enzymatic activity comes back in Unit 3.'},
+  {kicker:'Carbohydrates', text:'A carbohydrate chain attached to a protein is called a:', opts:[
+    'Glycoprotein','Glycolipid','Phospholipid','Aquaporin'
+  ], correct:0, explain:'"Glyco" = carbohydrate. Attached to a protein = glycoprotein; attached to a lipid = glycolipid.'},
+  {kicker:'Carbohydrates', text:'What is the main job of carbohydrates on the membrane?', opts:[
+    'Storing genetic information','Keeping the membrane from freezing','Cell-to-cell recognition (ID tags)','Moving water into the cell'
+  ], correct:2, explain:'Carbohydrate chains, mostly on the outside, help cells recognize each other.'},
+  {kicker:'Selective permeability — Diagram', text:'Which of these crosses the phospholipid bilayer most easily on its own?', diagram:'permeability', opts:[
+    'Glucose','Oxygen gas','A large protein','A charged ion'
+  ], correct:1, explain:'Gases are small and nonpolar, so they pass easily. Glucose is large, ions are charged, and proteins are large.'},
+  {kicker:'Selective permeability', text:'How does water move across the phospholipid bilayer on its own?', opts:[
+    'It can\'t cross at all.','It crosses faster than any other molecule.','Only by attaching to cholesterol.','Some gets through, but slowly and not in large amounts.'
+  ], correct:3, explain:'Water is small but polar, so it crosses the bilayer poorly. Aquaporins let large amounts through.'},
+  {kicker:'Selective permeability', text:'"Large and in charge" is a hint for remembering which molecules:', opts:[
+    'Make up the phospholipid heads','Cross the bilayer the fastest','Cannot cross the bilayer on their own','Act as ID tags'
+  ], correct:2, explain:'Large polar molecules and charged particles are blocked by the hydrophobic middle and need a transport protein.'},
+  {kicker:'Transport proteins', text:'Cells need glucose, but it can\'t pass between phospholipids. How does it get in?', opts:[
+    'Through a transport protein','It dissolves in the fatty acid tails','It attaches to a glycolipid','Cholesterol carries it'
+  ], correct:0, explain:'Glucose is too large for the bilayer, so it needs a transport protein.'},
+  {kicker:'Transport proteins — Diagram', text:'In this diagram, how is the carrier protein (right) different from the channel protein (left)?', diagram:'channelCarrier', opts:[
+    'There is no difference.','The carrier moves only water.','The carrier is peripheral; the channel is integral.','The carrier binds the material and changes shape; the channel stays open like a tunnel.'
+  ], correct:3, explain:'Channels are open hydrophilic tunnels. Carriers bind a specific material, then change shape to shuttle it across.'},
+  {kicker:'Transport proteins', text:'An aquaporin is:', opts:[
+    'A glycoprotein ID tag','A channel protein that lets large amounts of water in and out','A carrier protein for glucose','A type of cholesterol'
+  ], correct:1, explain:'Aquaporins are water channels. Water can cross the bilayer on its own, but only slowly.'},
+  {kicker:'Transport proteins', text:'Which statement about transport proteins is true?', opts:[
+    'They are peripheral proteins on the outer surface.','They are made of phospholipids.','They are integral, transmembrane proteins, and each is specific to what it transports.','Any transport protein can move any molecule.'
+  ], correct:2, explain:'Transport proteins span the whole membrane, and each one only moves certain materials.'}
+];
+
+var idx = 0, score = 0, answered = false, missed = [];
+
+function render(){
+  var q = Q[idx];
+  document.getElementById('qNum').textContent = idx+1;
+  document.getElementById('qTotal').textContent = Q.length;
+  document.getElementById('scoreLive').textContent = 'Score: '+score;
+  document.getElementById('progressFill').style.width = Math.round((idx/Q.length)*100)+'%';
+  document.getElementById('qKicker').textContent = q.kicker;
+  document.getElementById('qText').textContent = q.text;
+
+  var dWrap = document.getElementById('diagramWrap');
+  if(q.diagram){ dWrap.style.display='block'; dWrap.innerHTML = diagramFor(q.diagram); }
+  else { dWrap.style.display='none'; dWrap.innerHTML=''; }
+
+  var optsWrap = document.getElementById('optsWrap');
+  optsWrap.innerHTML='';
+  var letters=['A','B','C','D'];
+  q.opts.forEach(function(optText, i){
+    var b = document.createElement('button');
+    b.className='opt';
+    b.innerHTML = '<span class="letter">'+letters[i]+'</span><span>'+optText+'</span>';
+    b.addEventListener('click', function(){ selectAnswer(i); });
+    optsWrap.appendChild(b);
+  });
+
+  document.getElementById('explain').classList.remove('show');
+  document.getElementById('explain').textContent='';
+  document.getElementById('btnNext').disabled = true;
+  answered = false;
+}
+
+function selectAnswer(i){
+  if(answered) return;
+  answered = true;
+  var q = Q[idx];
+  var opts = document.querySelectorAll('.opt');
+  opts.forEach(function(el,i2){
+    el.classList.add('locked');
+    if(i2===q.correct) el.classList.add('correct');
+    else if(i2===i) el.classList.add('incorrect');
+    else el.classList.add('dim');
+  });
+  if(i===q.correct){ score++; }
+  else { missed.push(q); }
+  document.getElementById('scoreLive').textContent = 'Score: '+score;
+  var ex = document.getElementById('explain');
+  ex.innerHTML = '<b>'+(i===q.correct?'Correct. ':'Not quite. ')+'</b>'+q.explain;
+  ex.classList.add('show');
+  document.getElementById('btnNext').disabled = false;
+}
+
+function nextQuestion(){
+  if(idx < Q.length-1){ idx++; render(); }
+  else { showResults(); }
+}
+
+function showResults(){
+  document.getElementById('quizArea').style.display='none';
+  document.getElementById('resultsArea').style.display='block';
+  document.getElementById('finalScore').textContent = score+' / '+Q.length;
+  var pct = Math.round((score/Q.length)*100);
+  var msg;
+  if(pct===100) msg = 'Perfect score. The cell membrane is locked in.';
+  else if(pct>=80) msg = 'Strong work. Review the missed ones below and you\'ve got this lesson.';
+  else if(pct>=60) msg = 'Good start — a few gaps to close. Check the missed questions below.';
+  else msg = 'Worth another pass through the flashcards before the next round.';
+  document.getElementById('finalMsg').textContent = msg+' ('+pct+'%)';
+
+  var list = document.getElementById('missedList');
+  list.innerHTML='';
+  if(missed.length===0){
+    var li=document.createElement('li'); li.textContent='No missed questions — nice.'; list.appendChild(li);
+  } else {
+    missed.forEach(function(q){
+      var li=document.createElement('li');
+      li.innerHTML = '<b>'+q.text+'</b>Correct answer: '+q.opts[q.correct];
+      list.appendChild(li);
+    });
+  }
+}
+
+document.getElementById('btnNext').addEventListener('click', nextQuestion);
+document.getElementById('btnRetake').addEventListener('click', function(){
+  idx=0; score=0; missed=[]; answered=false;
+  document.getElementById('resultsArea').style.display='none';
+  document.getElementById('quizArea').style.display='block';
+  render();
+});
+
+document.getElementById('heroSub').textContent = Q.length+' questions on lesson 2.3: membrane structure, proteins and carbohydrates, and selective permeability.';
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 2: The Cell Membrane</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FBFAF7;
+    --grid-line: rgba(28,43,74,0.055);
+    --ink: #1C2B4A;
+    --text: #2B3648;
+    --text-soft: #64707F;
+    --blue: #2E86AB;
+    --blue-soft: #E9F3F8;
+    --amber: #D98A2B;
+    --amber-soft: #FCF1DE;
+    --coral: #D65A5A;
+    --coral-soft: #FBEBEB;
+    --teal: #2C9C82;
+    --teal-soft: #E6F5F0;
+    --violet: #7C5CBF;
+    --violet-soft: #EFE9F8;
+    --card-bg: #FFFFFF;
+    --border: #E4E0D4;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  h1, h2, h3, .display {
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--ink);
+  }
+
+  a { color: inherit; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--text-soft); text-decoration: none; font-size: 0.88rem; font-weight: 600; margin-bottom: 18px; }
+  .back-link:hover { color: var(--blue); }
+
+  .wrap {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: var(--ink);
+    border-radius: 18px;
+    padding: 28px 30px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-text h1 {
+    color: #fff;
+    font-size: 1.9rem;
+    margin: 0 0 6px;
+    line-height: 1.15;
+  }
+  .hero-text p {
+    margin: 0;
+    color: #C8D3E0;
+    font-size: 0.98rem;
+    max-width: 48ch;
+  }
+  .hero svg { flex-shrink: 0; }
+
+  /* ---------- Tabs ---------- */
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 26px 0 20px;
+  }
+  .tab-btn {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.86rem;
+    border: 1.5px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text-soft);
+    padding: 9px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    transition: transform 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+  }
+  .tab-btn:hover { transform: translateY(-1px); }
+  .tab-btn.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: #fff;
+  }
+  .tab-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  /* ---------- Panels ---------- */
+  .panel { display: none; animation: fade .18s ease; }
+  .panel.active { display: block; }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+  .section-title {
+    font-size: 1.3rem;
+    margin: 0 0 4px;
+  }
+  .section-sub {
+    color: var(--text-soft);
+    font-size: 0.92rem;
+    margin: 0 0 18px;
+  }
+
+  /* ---------- Callout boxes ---------- */
+  .box {
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin: 14px 0;
+    border-left: 4px solid transparent;
+  }
+  .box h4 {
+    margin: 0 0 6px;
+    font-size: 0.98rem;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .box p, .box ul { margin: 0; font-size: 0.93rem; line-height: 1.55; }
+  .box ul { padding-left: 20px; }
+  .box ul li { margin: 4px 0; }
+
+  .box.theorem { background: var(--blue-soft); border-color: var(--blue); }
+  .box.theorem h4 { color: var(--blue); }
+  .box.postulate { background: var(--teal-soft); border-color: var(--teal); }
+  .box.postulate h4 { color: var(--teal); }
+  .box.watch { background: var(--coral-soft); border-color: var(--coral); }
+  .box.watch h4 { color: var(--coral); }
+  .box.tip { background: var(--amber-soft); border-color: var(--amber); }
+  .box.tip h4 { color: var(--amber); }
+
+  /* ---------- Definition grid ---------- */
+  .def-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 10px;
+    margin: 14px 0;
+  }
+  .def-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .def-card .term {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--ink);
+    display: block;
+    margin-bottom: 3px;
+  }
+  .def-card .desc { font-size: 0.85rem; color: var(--text-soft); }
+
+  .proof-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--ink);
+    margin: 18px 0 8px;
+  }
+
+  /* ---------- Numeric example (reused here for worked facts) ---------- */
+  .numex {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 10px 0;
+    font-size: 0.9rem;
+  }
+  .numex .setup { color: var(--text-soft); margin-bottom: 6px; }
+  .numex .steps { font-family: 'Space Grotesk', sans-serif; color: var(--ink); line-height: 1.7; }
+
+  /* ---------- Diagram wrapper ---------- */
+  .diagram-wrap {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px;
+    margin: 14px auto 4px;
+    max-width: 440px;
+  }
+  .diagram-wrap svg { display: block; width: 100%; height: auto; }
+  .diagram-caption {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-soft);
+    margin: 0 0 16px;
+  }
+
+  /* ---------- Footer: reasons bank + checklist ---------- */
+  .foot-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 16px;
+    margin-top: 34px;
+  }
+  @media (max-width: 700px) { .foot-grid { grid-template-columns: 1fr; } }
+
+  .foot-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+  }
+  .foot-card h3 { font-size: 1rem; margin: 0 0 10px; }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    font-size: 0.78rem;
+    background: var(--blue-soft);
+    color: var(--blue);
+    border-radius: 999px;
+    padding: 5px 11px;
+    font-weight: 600;
+  }
+  .checklist { list-style: none; margin: 0; padding: 0; font-size: 0.87rem; }
+  .checklist li {
+    display: flex;
+    gap: 9px;
+    align-items: flex-start;
+    padding: 6px 0;
+    border-bottom: 1px dashed var(--border);
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checkmark {
+    flex-shrink: 0;
+    width: 18px; height: 18px;
+    border-radius: 5px;
+    background: var(--teal-soft);
+    color: var(--teal);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem;
+    margin-top: 1px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="biology.html">&larr; Back to Biology</a>
+
+  <div class="hero">
+    <div class="hero-text">
+      <h1>Unit 2 &mdash; The Cell Membrane</h1>
+      <p>Lesson 2.3: what the membrane does, the fluid mosaic model, phospholipids and cholesterol, membrane proteins and carbohydrates, and what can and can't get through.</p>
+    </div>
+    <svg width="100" height="100" viewBox="0 0 100 100" fill="none">
+      <ellipse cx="50" cy="52" rx="42" ry="34" stroke="#4A6FA5" stroke-width="3"/>
+      <circle cx="38" cy="42" r="13" stroke="#E9A23B" stroke-width="3"/>
+      <circle cx="38" cy="42" r="3" fill="#E9A23B"/>
+      <circle cx="66" cy="60" r="4" fill="#2C9C82"/>
+      <circle cx="60" cy="72" r="3" fill="#2C9C82"/>
+      <circle cx="70" cy="42" r="3" fill="#2C9C82"/>
+    </svg>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+  <div id="panels"></div>
+
+  <div class="foot-grid">
+    <div class="foot-card">
+      <h3>Term bank</h3>
+      <div class="chip-row">
+        <span class="chip">Selectively permeable</span><span class="chip">Fluid mosaic</span><span class="chip">Phospholipid</span><span class="chip">Bilayer</span><span class="chip">Hydrophilic</span><span class="chip">Hydrophobic</span><span class="chip">Cholesterol</span><span class="chip">Integral protein</span><span class="chip">Peripheral protein</span><span class="chip">Transmembrane</span><span class="chip">Glycoprotein</span><span class="chip">Glycolipid</span><span class="chip">Channel protein</span><span class="chip">Aquaporin</span><span class="chip">Carrier protein</span>
+      </div>
+    </div>
+    <div class="foot-card">
+      <h3>Before you answer</h3>
+      <ul class="checklist">
+        <li><span class="checkmark">✓</span><span><b>Heads vs. tails:</b> head = polar = hydrophilic; tails = nonpolar = hydrophobic. Tails point <i>in</i>, heads point <i>out</i> on both sides.</span></li>
+        <li><span class="checkmark">✓</span><span><b>Can it cross?</b> Small and nonpolar: yes. Water: slowly. Large or charged: no, it needs a transport protein.</span></li>
+        <li><span class="checkmark">✓</span><span><b>Channel vs. carrier:</b> a channel stays open like a tunnel; a carrier changes shape.</span></li>
+        <li><span class="checkmark">✓</span><span><b>Heads up on "peripheral":</b> the lecture and slides say peripheral proteins are <i>not</i> embedded (they sit on the surface). The 2.6 worksheet uses three categories (integral, peripheral, surface) and describes peripheral proteins as going partway into the membrane. Ask the teacher which one the test uses; this site follows the lecture.</span></li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ============ Diagram helpers (same small library used on the flashcards & quiz pages) ============ */
+function svg(inner, vb, h) { return '<svg viewBox="'+vb+'" width="100%" height="'+(h||180)+'" xmlns="http://www.w3.org/2000/svg">'+inner+'</svg>'; }
+function lineEl(x1,y1,x2,y2,color,w,dash){ return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round"'+(dash?' stroke-dasharray="5 4"':'')+'/>'; }
+function dot(x,y,color,r){ return '<circle cx="'+x+'" cy="'+y+'" r="'+(r||3.2)+'" fill="'+(color||'var(--ink)')+'"/>'; }
+function txt(x,y,s,color,size,weight,anchor){ return '<text x="'+x+'" y="'+y+'" fill="'+(color||'var(--ink)')+'" font-family="Space Grotesk, sans-serif" font-size="'+(size||13)+'" font-weight="'+(weight||700)+'" text-anchor="'+(anchor||'middle')+'">'+s+'</text>'; }
+function poly(pts,color,w,fill){ return '<polygon points="'+pts+'" fill="'+(fill||'none')+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linejoin="round"/>'; }
+function ellipseEl(cx,cy,rx,ry,fill,stroke,w){ return '<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rx+'" ry="'+ry+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(w||2.5)+'"/>'; }
+function circleEl(cx,cy,r,fill,stroke,w){ return '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(w||2.5)+'"/>'; }
+function rectEl(x,y,w,h,rx,fill,stroke,sw){ return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+(rx||0)+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(sw||2.5)+'"/>'; }
+function pathEl(d,stroke,w,fill,dash){ return '<path d="'+d+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round"'+(dash?' stroke-dasharray="4 3"':'')+'/>'; }
+function wavy(x1,y1,x2,y2,amp,cycles,color,w){
+  var n=28, pts=[];
+  var dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy)||1;
+  var ux=dx/len, uy=dy/len, px=-uy, py=ux;
+  for(var i=0;i<=n;i++){
+    var t=i/n;
+    var bx=x1+dx*t, by=y1+dy*t;
+    var off=Math.sin(t*Math.PI*2*cycles)*amp;
+    pts.push((bx+px*off).toFixed(1)+','+(by+py*off).toFixed(1));
+  }
+  return '<polyline points="'+pts.join(' ')+'" fill="none" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.2)+'" stroke-linecap="round"/>';
+}
+
+/* ============ 2.3 Cell Membrane diagrams (original, same helper library) ============ */
+function diagPhospholipid(){
+  var inner =
+      circleEl(80,50,30,'var(--blue-soft)','var(--blue)',2.5)
+    + txt(80,46,'phosphate','var(--blue)',9,700)
+    + txt(80,58,'+ glycerol','var(--blue)',9,700)
+    + lineEl(68,80,68,178,'var(--ink)',3)
+    + pathEl('M92,80 L92,118 L106,132 L106,178','var(--ink)',3)
+    + txt(215,44,'Polar head','var(--blue)',12,700,'start') + txt(215,60,'hydrophilic (water-loving)','var(--text-soft)',10,600,'start')
+    + lineEl(112,50,208,50,'var(--blue)',1.5,true)
+    + txt(215,126,'Nonpolar tails','var(--ink)',12,700,'start') + txt(215,142,'2 fatty acids — hydrophobic','var(--text-soft)',10,600,'start')
+    + lineEl(112,132,208,132,'var(--ink)',1.5,true)
+    + txt(50,196,'saturated','var(--text-soft)',9,600) + txt(116,196,'unsaturated (kink)','var(--text-soft)',9,600);
+  return svg(inner,'0 0 400 206',200);
+}
+
+function diagPhospholipidBilayer(){
+  var xs=[30,72,114,156,198,240,282];
+  var inner='';
+  inner += rectEl(0,40,312,100,0,'var(--amber-soft)','none',0);
+  for(var i=0;i<xs.length;i++){
+    var x=xs[i];
+    inner += circleEl(x,26,11,'var(--blue-soft)','var(--blue)',2);
+    inner += lineEl(x-4,37,x-4,72,'var(--ink)',2.2) + lineEl(x+4,37,x+4,72,'var(--ink)',2.2);
+    inner += lineEl(x-4,108,x-4,143,'var(--ink)',2.2) + lineEl(x+4,108,x+4,143,'var(--ink)',2.2);
+    inner += circleEl(x,154,11,'var(--blue-soft)','var(--blue)',2);
+  }
+  inner += txt(156,10,'OUTSIDE (extracellular) — watery','var(--blue)',9.5,700);
+  inner += txt(156,94,'hydrophobic core: tails face inward','var(--amber)',9.5,700);
+  inner += txt(156,182,'INSIDE (cytoplasm) — watery','var(--blue)',9.5,700);
+  return svg(inner,'0 0 312 190',170);
+}
+
+function diagMembraneParts(){
+  var inner='', xs=[];
+  for(var x=20;x<=400;x+=22) xs.push(x);
+  inner += rectEl(0,70,420,60,0,'var(--amber-soft)','none',0);
+  for(var i=0;i<xs.length;i++){
+    var x=xs[i];
+    if((x>100&&x<170)||(x>250&&x<300)) continue;
+    inner += circleEl(x,62,8,'var(--blue-soft)','var(--blue)',1.6) + circleEl(x,138,8,'var(--blue-soft)','var(--blue)',1.6);
+  }
+  // integral, spans membrane
+  inner += rectEl(106,36,58,128,22,'var(--coral-soft)','var(--coral)',2.5);
+  inner += txt(135,186,'integral (spans)','var(--coral)',9.5,700);
+  // integral, partway
+  inner += rectEl(252,42,46,62,18,'var(--coral-soft)','var(--coral)',2.5);
+  inner += txt(275,186,'integral (partway)','var(--coral)',9.5,700);
+  // peripheral
+  inner += ellipseEl(350,160,26,12,'var(--violet-soft)','var(--violet)',2.2);
+  inner += txt(350,186,'peripheral','var(--violet)',9.5,700);
+  // glycoprotein chain
+  inner += pathEl('M135,36 L135,22 L125,12 M135,22 L147,12 M147,12 L155,4','var(--teal)',2.5);
+  inner += txt(186,14,'carbohydrate chain','var(--teal)',9,700,'start');
+  // cholesterol
+  inner += rectEl(206,88,18,24,4,'var(--amber)','var(--amber)',1.5);
+  inner += txt(215,160,'cholesterol','var(--amber)',9,700);
+  inner += lineEl(215,114,215,150,'var(--amber)',1.2,true);
+  inner += txt(30,20,'outside','var(--text-soft)',9,600,'start');
+  return svg(inner,'0 0 420 196',190);
+}
+
+function diagPermeability(){
+  var inner =
+      rectEl(0,70,420,50,0,'var(--amber-soft)','none',0)
+    + lineEl(0,70,420,70,'var(--blue)',3) + lineEl(0,120,420,120,'var(--blue)',3)
+    + txt(12,98,'bilayer','var(--amber)',9,700,'start')
+    // gas passes
+    + circleEl(95,40,7,'var(--teal-soft)','var(--teal)',2) + lineEl(95,50,95,150,'var(--teal)',2.5) + poly('89,146 95,158 101,146','var(--teal)',2,'var(--teal)')
+    + txt(95,20,'O₂, CO₂','var(--teal)',10,700) + txt(95,176,'passes easily','var(--teal)',9,600)
+    // water slow
+    + circleEl(200,40,8,'var(--blue-soft)','var(--blue)',2) + lineEl(200,50,200,150,'var(--blue)',2.5,true) + poly('194,146 200,158 206,146','var(--blue)',2,'var(--blue)')
+    + txt(200,20,'water','var(--blue)',10,700) + txt(200,176,'a little, slowly','var(--blue)',9,600)
+    // large & charged blocked
+    + circleEl(300,38,16,'var(--coral-soft)','var(--coral)',2) + txt(300,42,'glucose','var(--coral)',7.5,700)
+    + circleEl(370,40,9,'var(--coral-soft)','var(--coral)',2) + txt(370,44,'+','var(--coral)',12,700)
+    + lineEl(300,58,300,66,'var(--coral)',2.5) + lineEl(290,66,310,66,'var(--coral)',3)
+    + lineEl(370,52,370,66,'var(--coral)',2.5) + lineEl(360,66,380,66,'var(--coral)',3)
+    + txt(335,176,'large or charged: blocked','var(--coral)',9,700);
+  return svg(inner,'0 0 420 186',185);
+}
+
+function diagChannelCarrier(){
+  var inner =
+      rectEl(0,60,420,70,0,'var(--amber-soft)','none',0)
+    + lineEl(0,60,420,60,'var(--blue)',3) + lineEl(0,130,420,130,'var(--blue)',3)
+    // channel
+    + rectEl(70,40,28,110,8,'var(--coral-soft)','var(--coral)',2.5) + rectEl(122,40,28,110,8,'var(--coral-soft)','var(--coral)',2.5)
+    + dot(110,30,'var(--blue)',4) + dot(110,80,'var(--blue)',4) + dot(110,110,'var(--blue)',4) + dot(110,162,'var(--blue)',4)
+    + txt(110,184,'Channel protein','var(--coral)',11,700) + txt(110,198,'open tunnel (aquaporin = water)','var(--text-soft)',9,600)
+    // carrier state 1
+    + pathEl('M255,40 L255,150 L300,150 L300,95 L285,80 L300,65 L300,40 Z','var(--violet)',2.5,'var(--violet-soft)')
+    + circleEl(275,28,9,'var(--teal-soft)','var(--teal)',2)
+    + lineEl(318,95,346,95,'var(--ink)',2.2) + poly('346,89 358,95 346,101','var(--ink)',2,'var(--ink)')
+    // carrier state 2
+    + pathEl('M368,40 L368,150 L413,150 L413,125 L398,110 L413,95 L413,40 Z','var(--violet)',2.5,'var(--violet-soft)')
+    + circleEl(390,165,9,'var(--teal-soft)','var(--teal)',2)
+    + txt(335,184,'Carrier protein','var(--violet)',11,700) + txt(335,198,'binds, changes shape, shuttles','var(--text-soft)',9,600);
+  return svg(inner,'0 0 420 206',205);
+}
+
+var DIAGRAMS = {
+  phospholipid: diagPhospholipid,
+  bilayer: diagPhospholipidBilayer,
+  parts: diagMembraneParts,
+  permeability: diagPermeability,
+  channelCarrier: diagChannelCarrier
+};
+
+const sections = [
+  {
+    id: "m1",
+    label: "Job & Fluid Mosaic",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5" stroke-dasharray="3 2"/></svg>',
+    title: "What the membrane does & the fluid mosaic model",
+    sub: "The membrane is the cell's boundary, and its mix of molecules is what lets it pick what gets through.",
+    body: `
+      <div class="box postulate">
+        <h4>Job of the cell membrane</h4>
+        <p>It's the <b>boundary of the cell</b> and decides what can enter and exit. It doesn't just block everything: some materials have to get across. That makes it <b>selectively permeable</b>: the cell can <b>discriminate</b> (choose) what it exchanges with its environment.</p>
+      </div>
+      <div class="box theorem">
+        <h4>Why it can be selective</h4>
+        <p>The membrane is built from many different carbon-based molecules. That <b>complex structure</b> is what lets it be selectively permeable.</p>
+      </div>
+      <div class="proof-label">Why is it called the "fluid mosaic" model?</div>
+      <div class="def-grid">
+        <div class="def-card"><span class="term">Mosaic</span><span class="desc">The membrane is made of many different macromolecules, not one kind of thing.</span></div>
+        <div class="def-card"><span class="term">Fluid</span><span class="desc">Proteins and lipids can shift <b>laterally</b> (sideways) past each other. Lipids are smaller, so they move faster than the larger proteins.</span></div>
+      </div>
+      <div class="proof-label">The three macromolecules in every cell membrane</div>
+      <div class="def-grid">
+        <div class="def-card"><span class="term">Lipids</span><span class="desc">Phospholipids (the main structure) and cholesterol.</span></div>
+        <div class="def-card"><span class="term">Proteins</span><span class="desc">Many types. They determine what the membrane can do, including transport.</span></div>
+        <div class="def-card"><span class="term">Carbohydrates</span><span class="desc">Attached to lipids or proteins, mostly on the outside of the cell.</span></div>
+      </div>
+      <div class="box watch">
+        <h4>Which macromolecule is missing?</h4>
+        <p><b>Nucleic acids</b> are the only macromolecule not part of the membrane.</p>
+      </div>
+      <div class="diagram-wrap" data-diagram="parts"></div>
+      <p class="diagram-caption">A side view (cross section) of a small piece of membrane. Picture this wrapped all the way around the cell like the skin of a ball.</p>
+    `
+  },
+  {
+    id: "m2",
+    label: "Lipids",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="6" r="3.5"/><line x1="10" y1="10" x2="10" y2="21"/><line x1="14" y1="10" x2="14" y2="21"/></svg>',
+    title: "Phospholipids, the bilayer & cholesterol",
+    sub: "Phospholipids are the main building block. How they face water explains the whole layout.",
+    body: `
+      <div class="box tip">
+        <h4>You need to be able to draw this</h4>
+        <p>Draw and label a phospholipid: the <b>phosphate head</b>, the <b>fatty acid tails</b>, which part is <b>hydrophilic/polar</b> and which is <b>hydrophobic/nonpolar</b>.</p>
+      </div>
+      <div class="diagram-wrap" data-diagram="phospholipid"></div>
+      <p class="diagram-caption">One phospholipid</p>
+      <div class="def-grid">
+        <div class="def-card"><span class="term">Polar head</span><span class="desc">Phosphate group + glycerol. <b>Hydrophilic</b> (water-loving), because water is polar and polar molecules interact well with it.</span></div>
+        <div class="def-card"><span class="term">Nonpolar tails</span><span class="desc">Two fatty acid tails: one <b>saturated</b>, one <b>unsaturated</b>. <b>Hydrophobic</b> (water-fearing), because nonpolar molecules don't interact well with water.</span></div>
+      </div>
+      <div class="proof-label">Phospholipid bilayer</div>
+      <p>The membrane has <b>two layers</b> of phospholipids (bi = two). The tails <b>fold inward</b>, facing each other and away from water, so the middle of the membrane is hydrophobic. The heads face out on both sides.</p>
+      <div class="diagram-wrap" data-diagram="bilayer"></div>
+      <p class="diagram-caption">Both surfaces are hydrophilic; the core is hydrophobic.</p>
+      <div class="box theorem">
+        <h4>Why the heads face out on both sides</h4>
+        <ul>
+          <li><b>Inside</b> the cell (intracellular) is the cytosolic fluid, the cytoplasm, which is mostly water.</li>
+          <li><b>Outside</b> the cell (extracellular) is interstitial fluid, the fluid between cells (think blood and lymph), which is also mostly water.</li>
+          <li>Both sides are watery, so both surfaces need hydrophilic heads.</li>
+        </ul>
+      </div>
+      <div class="proof-label">Cholesterol</div>
+      <div class="box postulate">
+        <h4>Keeps fluidity "just right"</h4>
+        <ul>
+          <li>It's a lipid, and hydrophobic, so it sits in the hydrophobic middle of the bilayer.</li>
+          <li>Stops phospholipids from <b>moving too freely</b>.</li>
+          <li>Stops them from <b>packing too closely</b> (solidifying) at low temperatures.</li>
+        </ul>
+      </div>
+    `
+  },
+  {
+    id: "m3",
+    label: "Proteins & Carbs",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="3" width="8" height="18" rx="3"/><path d="M12 3V1M12 1l-3-1M12 1l3-1"/></svg>',
+    title: "Membrane proteins & carbohydrates",
+    sub: "Proteins determine what a membrane can do. Carbohydrates are the cell's ID tags.",
+    body: `
+      <div class="proof-label">Two kinds by location</div>
+      <div class="def-grid">
+        <div class="def-card"><span class="term">Integral proteins</span><span class="desc">Built <b>into</b> the hydrophobic middle. Some span the whole membrane from inside to outside; others go only partway in.</span></div>
+        <div class="def-card"><span class="term">Peripheral proteins</span><span class="desc"><b>Not embedded</b>. Loosely bound to the surface (the heads) or to other proteins. "Peripheral" = on the edge.</span></div>
+      </div>
+      <div class="proof-label">6 major functions of membrane proteins</div>
+      <div class="numex"><div class="steps">1. Transport &nbsp;·&nbsp; 2. Enzymatic activity &nbsp;·&nbsp; 3. Signal transduction &nbsp;·&nbsp; 4. Cell-cell recognition &nbsp;·&nbsp; 5. Intercellular joining &nbsp;·&nbsp; 6. Attachment to the cytoskeleton and ECM</div></div>
+      <div class="box tip">
+        <h4>What to focus on</h4>
+        <p><b>Transport</b> is the one this unit is about. <b>Enzymes</b> come back in Unit 3. The other four are for recognizing only; the teacher said she won't go deep on them.</p>
+      </div>
+      <div class="proof-label">Carbohydrates</div>
+      <div class="box postulate">
+        <h4>ID tags for the cell</h4>
+        <ul>
+          <li>Job: <b>cell-to-cell recognition</b>, so cells can recognize each other.</li>
+          <li>Short, branched chains of sugars, mostly on the outside of the cell.</li>
+          <li>Attached to a lipid = <b>glycolipid</b>. Attached to a protein = <b>glycoprotein</b>. ("Glyco" = carbohydrate.)</li>
+        </ul>
+      </div>
+      <div class="diagram-wrap" data-diagram="parts"></div>
+      <p class="diagram-caption">The carbohydrate chain here is on a protein, so it's a glycoprotein.</p>
+    `
+  },
+  {
+    id: "m4",
+    label: "What Gets Through",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="10" x2="22" y2="10"/><line x1="2" y1="15" x2="22" y2="15"/><path d="M8 3v18M8 21l-2-2M8 21l2-2"/></svg>',
+    title: "Selective permeability & transport proteins",
+    sub: "What slips through the bilayer by itself, what can't, and how the cell moves the rest.",
+    body: `
+      <div class="diagram-wrap" data-diagram="permeability"></div>
+      <div class="def-grid">
+        <div class="def-card"><span class="term">Pass easily</span><span class="desc"><b>Gases</b> (small and nonpolar) and <b>hydrophobic molecules</b>, which mix well with the hydrophobic middle.</span></div>
+        <div class="def-card"><span class="term">Pass, but poorly</span><span class="desc"><b>Small polar molecules like water</b>. Some gets through, but slowly and not in large amounts.</span></div>
+        <div class="def-card"><span class="term">Can't pass</span><span class="desc"><b>Large polar molecules</b> and anything <b>charged</b> (ions).</span></div>
+      </div>
+      <div class="box tip">
+        <h4>Memory hook: "Large and in charge"</h4>
+        <p>If a molecule is <b>large</b> or <b>charged</b>, it can't cross the bilayer on its own.</p>
+      </div>
+      <div class="box theorem">
+        <h4>Example: glucose</h4>
+        <p>Cells need glucose (sugar) for energy, but it's too large to slip between phospholipids. It needs a transport protein.</p>
+      </div>
+      <div class="proof-label">Transport proteins</div>
+      <p>Transport proteins are <b>integral</b> proteins that go all the way across (<b>transmembrane</b>). They come in two kinds:</p>
+      <div class="diagram-wrap" data-diagram="channelCarrier"></div>
+      <div class="def-grid">
+        <div class="def-card"><span class="term">Channel protein</span><span class="desc">Forms an open, <b>hydrophilic channel</b> that things flow through. <b>Aquaporins</b> are channels for <b>water</b>, so cells can move large amounts of water in and out.</span></div>
+        <div class="def-card"><span class="term">Carrier protein</span><span class="desc">The material binds to it, which triggers a <b>shape change</b> that shuttles it across.</span></div>
+      </div>
+      <div class="box watch">
+        <h4>Transport proteins are specific</h4>
+        <p>Each transport protein only moves certain materials.</p>
+      </div>
+    `
+  }
+];
+
+const tabsEl = document.getElementById('tabs');
+const panelsEl = document.getElementById('panels');
+
+sections.forEach((s, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
+  btn.innerHTML = s.icon + '<span>' + s.label + '</span>';
+  btn.onclick = () => selectTab(s.id);
+  btn.dataset.id = s.id;
+  tabsEl.appendChild(btn);
+
+  const panel = document.createElement('div');
+  panel.className = 'panel' + (i === 0 ? ' active' : '');
+  panel.id = s.id;
+  panel.innerHTML =
+    '<h2 class="section-title">' + s.title + '</h2>' +
+    '<p class="section-sub">' + s.sub + '</p>' +
+    s.body;
+  panelsEl.appendChild(panel);
+});
+
+/* fill in every diagram placeholder */
+document.querySelectorAll('[data-diagram]').forEach(function(el){
+  var fn = DIAGRAMS[el.dataset.diagram];
+  if (fn) el.innerHTML = fn();
+});
+
+function selectTab(id) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.id === id));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === id));
+}
+</script>
+</body>
+</html>

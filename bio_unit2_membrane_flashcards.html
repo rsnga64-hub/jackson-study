@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cell Membrane Flashcards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FBFAF7;
+    --grid-line: rgba(28,43,74,0.055);
+    --ink: #1C2B4A;
+    --text: #2B3648;
+    --text-soft: #64707F;
+    --blue: #2E86AB;
+    --blue-soft: #E9F3F8;
+    --amber: #D98A2B;
+    --amber-soft: #FCF1DE;
+    --coral: #D65A5A;
+    --coral-soft: #FBEBEB;
+    --teal: #2C9C82;
+    --teal-soft: #E6F5F0;
+    --violet: #7C5CBF;
+    --violet-soft: #EFE9F8;
+    --card-bg: #FFFFFF;
+    --border: #E4E0D4;
+    --gray: #94A0AD;
+    --gray-line: #CBD3DC;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  h1, h2, h3, .display { font-family: 'Space Grotesk', sans-serif; color: var(--ink); }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 32px 20px 80px; }
+  a { color: inherit; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--text-soft); text-decoration: none; font-size: 0.88rem; font-weight: 600; margin-bottom: 18px; }
+  .back-link:hover { color: var(--blue); }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    background: var(--ink);
+    border-radius: 18px;
+    padding: 26px 28px;
+    color: #fff;
+    margin-bottom: 22px;
+  }
+  .hero h1 { color: #fff; font-size: 1.7rem; margin: 0 0 6px; line-height: 1.15; }
+  .hero p { margin: 0; color: #C8D3E0; font-size: 0.96rem; max-width: 52ch; }
+
+  /* ---------- Category tabs ---------- */
+  .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 20px; }
+  .tab-btn {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.84rem;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text-soft);
+    border-radius: 999px;
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .tab-btn:hover { border-color: var(--ink); color: var(--ink); }
+  .tab-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  /* ---------- Progress / stats ---------- */
+  .statline {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.82rem; color: var(--text-soft); margin-bottom: 10px; flex-wrap: wrap; gap: 6px;
+  }
+  .statline b { color: var(--ink); }
+  .progress-track { height: 6px; background: var(--border); border-radius: 999px; overflow: hidden; margin-bottom: 18px; }
+  .progress-fill { height: 100%; background: var(--blue); border-radius: 999px; transition: width 0.2s ease; }
+
+  /* ---------- Flashcard ---------- */
+  .stage { perspective: 1600px; margin-bottom: 18px; }
+  .flashcard {
+    position: relative;
+    min-height: 420px;
+    border-radius: 18px;
+    cursor: pointer;
+    transition: transform 0.5s cubic-bezier(.4,.2,.2,1);
+    transform-style: preserve-3d;
+  }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .face {
+    position: absolute; inset: 0;
+    -webkit-backface-visibility: hidden; backface-visibility: hidden;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    box-shadow: 0 4px 18px rgba(28,43,74,0.07);
+    padding: 26px 28px;
+    display: flex; flex-direction: column;
+  }
+  .face.back { transform: rotateY(180deg); overflow-y: auto; }
+  .cat-tag {
+    display: inline-flex; align-self: flex-start;
+    font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.72rem;
+    letter-spacing: 0.02em; text-transform: uppercase;
+    padding: 4px 11px; border-radius: 999px; margin-bottom: 14px;
+  }
+  .face.front { align-items: center; text-align: center; justify-content: center; }
+  .term { font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: var(--ink); font-size: 1.45rem; line-height: 1.25; margin: 0; }
+  .flip-hint { margin-top: 18px; font-size: 0.8rem; color: var(--gray); }
+  .def { font-size: 0.98rem; font-weight: 600; color: var(--ink); line-height: 1.42; margin: 0 0 10px; }
+  .extra { font-size: 0.86rem; color: var(--text-soft); line-height: 1.45; margin: 0 0 14px; }
+  .diagram-wrap { margin-top: auto; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 6px; }
+  .diagram-wrap svg { display: block; width: 100%; height: auto; }
+
+  /* ---------- Controls ---------- */
+  .controls { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  .btn {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.88rem;
+    border: 1px solid var(--border); background: var(--card-bg); color: var(--ink);
+    border-radius: 10px; padding: 10px 16px; cursor: pointer; transition: all 0.15s ease;
+  }
+  .btn:hover { border-color: var(--ink); }
+  .btn:disabled { opacity: 0.4; cursor: default; }
+  .btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .btn.primary:hover { opacity: 0.9; }
+  .rate-row { display: flex; gap: 10px; justify-content: center; margin-bottom: 6px; }
+  .btn.rate-bad { border-color: var(--coral); color: var(--coral); }
+  .btn.rate-bad:hover { background: var(--coral-soft); }
+  .btn.rate-good { border-color: var(--teal); color: var(--teal); }
+  .btn.rate-good:hover { background: var(--teal-soft); }
+
+  .tally { text-align: center; font-size: 0.82rem; color: var(--text-soft); margin-top: 4px; }
+  .tally b.good { color: var(--teal); }
+  .tally b.bad { color: var(--coral); }
+
+  @media (max-width: 480px) {
+    .flashcard { min-height: 460px; }
+    .term { font-size: 1.2rem; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="biology.html">&larr; Back to Biology</a>
+  <div class="hero">
+    <h1>Cell Membrane Flashcards</h1>
+    <p>Structure and lipids, proteins and carbohydrates, and what gets through the membrane. Tap a card to flip it.</p>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="statline">
+    <span>Card <b id="cardNum">1</b> of <b id="cardTotal">14</b></span>
+    <span id="filterLabel">All cards</span>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+  <div class="stage">
+    <div class="flashcard" id="flashcard">
+      <div class="face front">
+        <span class="cat-tag" id="catTagFront"></span>
+        <p class="term" id="termText"></p>
+        <p class="flip-hint">Tap the card to see the definition</p>
+      </div>
+      <div class="face back">
+        <span class="cat-tag" id="catTagBack"></span>
+        <p class="def" id="defText"></p>
+        <p class="extra" id="extraText"></p>
+        <div class="diagram-wrap" id="diagramWrap" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rate-row" id="rateRow" style="visibility:hidden;">
+    <button class="btn rate-bad" id="btnBad">Still learning</button>
+    <button class="btn rate-good" id="btnGood">Got it</button>
+  </div>
+
+  <div class="controls">
+    <button class="btn" id="btnPrev">&larr; Prev</button>
+    <button class="btn primary" id="btnShuffle">Shuffle</button>
+    <button class="btn" id="btnNext">Next &rarr;</button>
+  </div>
+
+  <p class="tally" id="tally"></p>
+</div>
+
+<script>
+/* ============ Diagram helpers ============ */
+function svg(inner, vb, h) {
+  return '<svg viewBox="'+vb+'" width="100%" height="'+(h||180)+'" xmlns="http://www.w3.org/2000/svg">'+inner+'</svg>';
+}
+function lineEl(x1,y1,x2,y2,color,w,dash){ return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round"'+(dash?' stroke-dasharray="5 4"':'')+'/>'; }
+function dot(x,y,color,r){ return '<circle cx="'+x+'" cy="'+y+'" r="'+(r||3.2)+'" fill="'+(color||'var(--ink)')+'"/>'; }
+function txt(x,y,s,color,size,weight,anchor){ return '<text x="'+x+'" y="'+y+'" fill="'+(color||'var(--ink)')+'" font-family="Space Grotesk, sans-serif" font-size="'+(size||13)+'" font-weight="'+(weight||700)+'" text-anchor="'+(anchor||'middle')+'">'+s+'</text>'; }
+function poly(pts,color,w,fill){ return '<polygon points="'+pts+'" fill="'+(fill||'none')+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linejoin="round"/>'; }
+function ellipseEl(cx,cy,rx,ry,fill,stroke,w){ return '<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rx+'" ry="'+ry+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(w||2.5)+'"/>'; }
+function circleEl(cx,cy,r,fill,stroke,w){ return '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(w||2.5)+'"/>'; }
+function rectEl(x,y,w,h,rx,fill,stroke,sw){ return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+(rx||0)+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(sw||2.5)+'"/>'; }
+function pathEl(d,stroke,w,fill,dash){ return '<path d="'+d+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round"'+(dash?' stroke-dasharray="4 3"':'')+'/>'; }
+/* gentle sine-wave line between two points — used for ER membranes, mRNA strands, flagella */
+function wavy(x1,y1,x2,y2,amp,cycles,color,w){
+  var n=28, pts=[];
+  var dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy)||1;
+  var ux=dx/len, uy=dy/len, px=-uy, py=ux;
+  for(var i=0;i<=n;i++){
+    var t=i/n;
+    var bx=x1+dx*t, by=y1+dy*t;
+    var off=Math.sin(t*Math.PI*2*cycles)*amp;
+    pts.push((bx+px*off).toFixed(1)+','+(by+py*off).toFixed(1));
+  }
+  return '<polyline points="'+pts.join(' ')+'" fill="none" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.2)+'" stroke-linecap="round"/>';
+}
+
+/* ============ Biology diagrams ============ */
+
+/* --- Generic eukaryotic cell cross-section --- */
+/* ============ 2.3 Cell Membrane diagrams (original, same helper library) ============ */
+function diagPhospholipid(){
+  var inner =
+      circleEl(80,50,30,'var(--blue-soft)','var(--blue)',2.5)
+    + txt(80,46,'phosphate','var(--blue)',9,700)
+    + txt(80,58,'+ glycerol','var(--blue)',9,700)
+    + lineEl(68,80,68,178,'var(--ink)',3)
+    + pathEl('M92,80 L92,118 L106,132 L106,178','var(--ink)',3)
+    + txt(215,44,'Polar head','var(--blue)',12,700,'start') + txt(215,60,'hydrophilic (water-loving)','var(--text-soft)',10,600,'start')
+    + lineEl(112,50,208,50,'var(--blue)',1.5,true)
+    + txt(215,126,'Nonpolar tails','var(--ink)',12,700,'start') + txt(215,142,'2 fatty acids — hydrophobic','var(--text-soft)',10,600,'start')
+    + lineEl(112,132,208,132,'var(--ink)',1.5,true)
+    + txt(50,196,'saturated','var(--text-soft)',9,600) + txt(116,196,'unsaturated (kink)','var(--text-soft)',9,600);
+  return svg(inner,'0 0 400 206',200);
+}
+
+function diagPhospholipidBilayer(){
+  var xs=[30,72,114,156,198,240,282];
+  var inner='';
+  inner += rectEl(0,40,312,100,0,'var(--amber-soft)','none',0);
+  for(var i=0;i<xs.length;i++){
+    var x=xs[i];
+    inner += circleEl(x,26,11,'var(--blue-soft)','var(--blue)',2);
+    inner += lineEl(x-4,37,x-4,72,'var(--ink)',2.2) + lineEl(x+4,37,x+4,72,'var(--ink)',2.2);
+    inner += lineEl(x-4,108,x-4,143,'var(--ink)',2.2) + lineEl(x+4,108,x+4,143,'var(--ink)',2.2);
+    inner += circleEl(x,154,11,'var(--blue-soft)','var(--blue)',2);
+  }
+  inner += txt(156,10,'OUTSIDE (extracellular) — watery','var(--blue)',9.5,700);
+  inner += txt(156,94,'hydrophobic core: tails face inward','var(--amber)',9.5,700);
+  inner += txt(156,182,'INSIDE (cytoplasm) — watery','var(--blue)',9.5,700);
+  return svg(inner,'0 0 312 190',170);
+}
+
+function diagMembraneParts(){
+  var inner='', xs=[];
+  for(var x=20;x<=400;x+=22) xs.push(x);
+  inner += rectEl(0,70,420,60,0,'var(--amber-soft)','none',0);
+  for(var i=0;i<xs.length;i++){
+    var x=xs[i];
+    if((x>100&&x<170)||(x>250&&x<300)) continue;
+    inner += circleEl(x,62,8,'var(--blue-soft)','var(--blue)',1.6) + circleEl(x,138,8,'var(--blue-soft)','var(--blue)',1.6);
+  }
+  // integral, spans membrane
+  inner += rectEl(106,36,58,128,22,'var(--coral-soft)','var(--coral)',2.5);
+  inner += txt(135,186,'integral (spans)','var(--coral)',9.5,700);
+  // integral, partway
+  inner += rectEl(252,42,46,62,18,'var(--coral-soft)','var(--coral)',2.5);
+  inner += txt(275,186,'integral (partway)','var(--coral)',9.5,700);
+  // peripheral
+  inner += ellipseEl(350,160,26,12,'var(--violet-soft)','var(--violet)',2.2);
+  inner += txt(350,186,'peripheral','var(--violet)',9.5,700);
+  // glycoprotein chain
+  inner += pathEl('M135,36 L135,22 L125,12 M135,22 L147,12 M147,12 L155,4','var(--teal)',2.5);
+  inner += txt(186,14,'carbohydrate chain','var(--teal)',9,700,'start');
+  // cholesterol
+  inner += rectEl(206,88,18,24,4,'var(--amber)','var(--amber)',1.5);
+  inner += txt(215,160,'cholesterol','var(--amber)',9,700);
+  inner += lineEl(215,114,215,150,'var(--amber)',1.2,true);
+  inner += txt(30,20,'outside','var(--text-soft)',9,600,'start');
+  return svg(inner,'0 0 420 196',190);
+}
+
+function diagPermeability(){
+  var inner =
+      rectEl(0,70,420,50,0,'var(--amber-soft)','none',0)
+    + lineEl(0,70,420,70,'var(--blue)',3) + lineEl(0,120,420,120,'var(--blue)',3)
+    + txt(12,98,'bilayer','var(--amber)',9,700,'start')
+    // gas passes
+    + circleEl(95,40,7,'var(--teal-soft)','var(--teal)',2) + lineEl(95,50,95,150,'var(--teal)',2.5) + poly('89,146 95,158 101,146','var(--teal)',2,'var(--teal)')
+    + txt(95,20,'O₂, CO₂','var(--teal)',10,700) + txt(95,176,'passes easily','var(--teal)',9,600)
+    // water slow
+    + circleEl(200,40,8,'var(--blue-soft)','var(--blue)',2) + lineEl(200,50,200,150,'var(--blue)',2.5,true) + poly('194,146 200,158 206,146','var(--blue)',2,'var(--blue)')
+    + txt(200,20,'water','var(--blue)',10,700) + txt(200,176,'a little, slowly','var(--blue)',9,600)
+    // large & charged blocked
+    + circleEl(300,38,16,'var(--coral-soft)','var(--coral)',2) + txt(300,42,'glucose','var(--coral)',7.5,700)
+    + circleEl(370,40,9,'var(--coral-soft)','var(--coral)',2) + txt(370,44,'+','var(--coral)',12,700)
+    + lineEl(300,58,300,66,'var(--coral)',2.5) + lineEl(290,66,310,66,'var(--coral)',3)
+    + lineEl(370,52,370,66,'var(--coral)',2.5) + lineEl(360,66,380,66,'var(--coral)',3)
+    + txt(335,176,'large or charged: blocked','var(--coral)',9,700);
+  return svg(inner,'0 0 420 186',185);
+}
+
+function diagChannelCarrier(){
+  var inner =
+      rectEl(0,60,420,70,0,'var(--amber-soft)','none',0)
+    + lineEl(0,60,420,60,'var(--blue)',3) + lineEl(0,130,420,130,'var(--blue)',3)
+    // channel
+    + rectEl(70,40,28,110,8,'var(--coral-soft)','var(--coral)',2.5) + rectEl(122,40,28,110,8,'var(--coral-soft)','var(--coral)',2.5)
+    + dot(110,30,'var(--blue)',4) + dot(110,80,'var(--blue)',4) + dot(110,110,'var(--blue)',4) + dot(110,162,'var(--blue)',4)
+    + txt(110,184,'Channel protein','var(--coral)',11,700) + txt(110,198,'open tunnel (aquaporin = water)','var(--text-soft)',9,600)
+    // carrier state 1
+    + pathEl('M255,40 L255,150 L300,150 L300,95 L285,80 L300,65 L300,40 Z','var(--violet)',2.5,'var(--violet-soft)')
+    + circleEl(275,28,9,'var(--teal-soft)','var(--teal)',2)
+    + lineEl(318,95,346,95,'var(--ink)',2.2) + poly('346,89 358,95 346,101','var(--ink)',2,'var(--ink)')
+    // carrier state 2
+    + pathEl('M368,40 L368,150 L413,150 L413,125 L398,110 L413,95 L413,40 Z','var(--violet)',2.5,'var(--violet-soft)')
+    + circleEl(390,165,9,'var(--teal-soft)','var(--teal)',2)
+    + txt(335,184,'Carrier protein','var(--violet)',11,700) + txt(335,198,'binds, changes shape, shuttles','var(--text-soft)',9,600);
+  return svg(inner,'0 0 420 206',205);
+}
+
+var CATS = [
+  {key:'structure', label:'Structure & Lipids', color:'var(--blue)'},
+  {key:'proteins', label:'Proteins & Carbs', color:'var(--teal)'},
+  {key:'transport', label:'What Gets Through', color:'var(--coral)'}
+];
+function catInfo(key){ for(var i=0;i<CATS.length;i++) if(CATS[i].key===key) return CATS[i]; return CATS[0]; }
+
+var CARDS = [
+  {cat:'structure', term:'Selectively permeable', def:'The membrane chooses what can enter and exit the cell: some things pass easily, some need help, some can\'t pass.', extra:'It\'s selective because of its complex structure, built from many different macromolecules.', diagram:null},
+  {cat:'structure', term:'Fluid mosaic model', def:'Mosaic = the membrane is made of many different macromolecules. Fluid = proteins and lipids can shift sideways (laterally) past each other.', extra:'Lipids are smaller, so they move faster than proteins.', diagram:diagMembraneParts},
+  {cat:'structure', term:'3 macromolecules in the membrane', def:'Lipids, proteins, and carbohydrates.', extra:'Nucleic acids are the only macromolecule not part of the membrane.', diagram:null},
+  {cat:'structure', term:'Phospholipid', def:'The main structural building block of the membrane: a polar head (phosphate group + glycerol) and two nonpolar fatty acid tails (one saturated, one unsaturated).', extra:'Be ready to draw and label one.', diagram:diagPhospholipid},
+  {cat:'structure', term:'Hydrophilic', def:'"Water-loving." Polar parts that interact well with water, like the phospholipid head.', extra:null, diagram:null},
+  {cat:'structure', term:'Hydrophobic', def:'"Water-fearing." Nonpolar parts that don\'t interact well with water, like the fatty acid tails.', extra:null, diagram:null},
+  {cat:'structure', term:'Phospholipid bilayer', def:'Two layers of phospholipids with the tails folded inward (away from water) and the heads facing out on both sides.', extra:'Both sides are watery: cytoplasm inside, interstitial fluid (like blood and lymph) outside. The middle is hydrophobic.', diagram:diagPhospholipidBilayer},
+  {cat:'structure', term:'Cholesterol', def:'A lipid in the hydrophobic middle of the bilayer that keeps membrane fluidity balanced.', extra:'Stops phospholipids from moving too freely, and stops them from packing too closely (solidifying) in the cold.', diagram:null},
+  {cat:'proteins', term:'Integral protein', def:'A protein built into the hydrophobic middle of the membrane. It can span the whole membrane or go only partway in.', extra:'Transport proteins are integral and span the whole membrane (transmembrane).', diagram:diagMembraneParts},
+  {cat:'proteins', term:'Peripheral protein', def:'A protein that is not embedded. It is loosely bound to the surface of the membrane (the heads) or to other proteins.', extra:'This is the lecture\'s definition. The 2.6 worksheet splits this into "peripheral" and "surface," so check which version the test uses.', diagram:null},
+  {cat:'proteins', term:'6 functions of membrane proteins', def:'Transport, enzymatic activity, signal transduction, cell-cell recognition, intercellular joining, and attachment to the cytoskeleton and ECM.', extra:'Transport is this unit\'s focus; enzymes return in Unit 3.', diagram:null},
+  {cat:'proteins', term:'Membrane carbohydrates', def:'Short, branched sugar chains that act as ID tags for cell-to-cell recognition.', extra:'Attached to lipids or proteins, mostly on the outside of the cell.', diagram:null},
+  {cat:'proteins', term:'Glycoprotein', def:'A carbohydrate chain attached to a protein.', extra:'"Glyco" = carbohydrate.', diagram:null},
+  {cat:'proteins', term:'Glycolipid', def:'A carbohydrate chain attached to a lipid.', extra:null, diagram:null},
+  {cat:'transport', term:'What crosses the bilayer easily?', def:'Gases (small and nonpolar) and hydrophobic molecules.', extra:'They mix well with the hydrophobic middle of the membrane.', diagram:diagPermeability},
+  {cat:'transport', term:'How does water cross?', def:'A little crosses the bilayer on its own, but slowly. Large amounts move through aquaporins.', extra:'Water is small but polar.', diagram:null},
+  {cat:'transport', term:'"Large and in charge"', def:'Large polar molecules and charged particles can\'t cross the bilayer on their own.', extra:'Example: glucose is too large, so cells need a transport protein to bring it in.', diagram:null},
+  {cat:'transport', term:'Channel protein', def:'A transport protein that forms an open hydrophilic channel for materials to flow through.', extra:'Aquaporins are channel proteins for water.', diagram:diagChannelCarrier},
+  {cat:'transport', term:'Aquaporin', def:'A channel protein specifically for water, allowing large amounts of water in and out of the cell.', extra:null, diagram:null},
+  {cat:'transport', term:'Carrier protein', def:'A transport protein that binds a specific material, changes shape, and shuttles it across the membrane.', extra:'Transport proteins are specific: each one only moves certain materials.', diagram:diagChannelCarrier}
+];
+
+var activeCat = 'all';
+var order = CARDS.map(function(_,i){return i;});
+var pos = 0;
+var flipped = false;
+var goodCount = 0, badCount = 0;
+var seenRated = {};
+
+function currentIndices(){
+  if(activeCat==='all') return order;
+  return order.filter(function(i){ return CARDS[i].cat===activeCat; });
+}
+
+function buildTabs(){
+  var tabsEl = document.getElementById('tabs');
+  var allBtn = document.createElement('button');
+  allBtn.className='tab-btn active'; allBtn.textContent='All'; allBtn.dataset.key='all';
+  tabsEl.appendChild(allBtn);
+  CATS.forEach(function(c){
+    var b=document.createElement('button');
+    b.className='tab-btn'; b.textContent=c.label; b.dataset.key=c.key;
+    tabsEl.appendChild(b);
+  });
+  tabsEl.addEventListener('click', function(e){
+    if(e.target.tagName!=='BUTTON') return;
+    activeCat = e.target.dataset.key;
+    Array.prototype.forEach.call(tabsEl.children, function(b){ b.classList.toggle('active', b.dataset.key===activeCat); });
+    document.getElementById('filterLabel').textContent = activeCat==='all' ? 'All cards' : catInfo(activeCat).label;
+    pos = 0; flipped=false;
+    renderCard();
+  });
+}
+
+function renderCard(){
+  var idxs = currentIndices();
+  if(idxs.length===0) return;
+  if(pos>=idxs.length) pos=0;
+  var card = CARDS[idxs[pos]];
+  var info = catInfo(card.cat);
+
+  document.getElementById('flashcard').classList.remove('flipped');
+  flipped=false;
+
+  document.getElementById('catTagFront').textContent = info.label;
+  document.getElementById('catTagFront').style.background = info.color;
+  document.getElementById('catTagFront').style.color = '#fff';
+  document.getElementById('catTagBack').textContent = info.label;
+  document.getElementById('catTagBack').style.background = info.color;
+  document.getElementById('catTagBack').style.color = '#fff';
+
+  document.getElementById('termText').textContent = card.term;
+  document.getElementById('defText').textContent = card.def;
+  document.getElementById('extraText').textContent = card.extra || '';
+
+  var dWrap = document.getElementById('diagramWrap');
+  if(card.diagram){
+    dWrap.style.display='block';
+    dWrap.innerHTML = card.diagram();
+  } else {
+    dWrap.style.display='none';
+    dWrap.innerHTML='';
+  }
+
+  document.getElementById('cardNum').textContent = pos+1;
+  document.getElementById('cardTotal').textContent = idxs.length;
+  document.getElementById('progressFill').style.width = Math.round(((pos+1)/idxs.length)*100)+'%';
+
+  document.getElementById('rateRow').style.visibility='hidden';
+  updateTally();
+}
+
+function updateTally(){
+  var t = document.getElementById('tally');
+  if(goodCount+badCount===0){ t.textContent=''; return; }
+  t.innerHTML = '<b class="good">'+goodCount+'</b> got it &middot; <b class="bad">'+badCount+'</b> still learning';
+}
+
+function nextCard(){ var idxs=currentIndices(); pos=(pos+1)%idxs.length; renderCard(); }
+function prevCard(){ var idxs=currentIndices(); pos=(pos-1+idxs.length)%idxs.length; renderCard(); }
+function shuffleDeck(){
+  for(var i=order.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=order[i]; order[i]=order[j]; order[j]=t; }
+  pos=0; goodCount=0; badCount=0; seenRated={}; renderCard();
+}
+
+document.getElementById('flashcard').addEventListener('click', function(){
+  flipped=!flipped;
+  this.classList.toggle('flipped', flipped);
+  document.getElementById('rateRow').style.visibility = flipped ? 'visible' : 'hidden';
+});
+document.getElementById('btnNext').addEventListener('click', function(e){ e.stopPropagation(); nextCard(); });
+document.getElementById('btnPrev').addEventListener('click', function(e){ e.stopPropagation(); prevCard(); });
+document.getElementById('btnShuffle').addEventListener('click', function(e){ e.stopPropagation(); shuffleDeck(); });
+document.getElementById('btnGood').addEventListener('click', function(e){
+  e.stopPropagation();
+  var idxs=currentIndices(); var key=idxs[pos];
+  if(seenRated[key]==='bad') badCount--; if(seenRated[key]!=='good'){ goodCount++; seenRated[key]='good'; }
+  updateTally(); nextCard();
+});
+document.getElementById('btnBad').addEventListener('click', function(e){
+  e.stopPropagation();
+  var idxs=currentIndices(); var key=idxs[pos];
+  if(seenRated[key]==='good') goodCount--; if(seenRated[key]!=='bad'){ badCount++; seenRated[key]='bad'; }
+  updateTally(); nextCard();
+});
+
+buildTabs();
+renderCard();
+</script>
+</body>
+</html>
