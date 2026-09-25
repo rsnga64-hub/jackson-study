@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biology Prefix &amp; Suffix Flashcards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FBFAF7;
+    --grid-line: rgba(28,43,74,0.055);
+    --ink: #1C2B4A;
+    --text: #2B3648;
+    --text-soft: #64707F;
+    --blue: #2E86AB;
+    --blue-soft: #E9F3F8;
+    --amber: #D98A2B;
+    --amber-soft: #FCF1DE;
+    --coral: #D65A5A;
+    --coral-soft: #FBEBEB;
+    --teal: #2C9C82;
+    --teal-soft: #E6F5F0;
+    --violet: #7C5CBF;
+    --violet-soft: #EFE9F8;
+    --card-bg: #FFFFFF;
+    --border: #E4E0D4;
+    --gray: #94A0AD;
+    --gray-line: #CBD3DC;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  h1, h2, h3, .display { font-family: 'Space Grotesk', sans-serif; color: var(--ink); }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 32px 20px 80px; }
+  a { color: inherit; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--text-soft); text-decoration: none; font-size: 0.88rem; font-weight: 600; margin-bottom: 18px; }
+  .back-link:hover { color: var(--blue); }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    background: var(--ink);
+    border-radius: 18px;
+    padding: 26px 28px;
+    color: #fff;
+    margin-bottom: 22px;
+  }
+  .hero h1 { color: #fff; font-size: 1.7rem; margin: 0 0 6px; line-height: 1.15; }
+  .hero p { margin: 0; color: #C8D3E0; font-size: 0.96rem; max-width: 52ch; }
+
+  /* ---------- Category tabs ---------- */
+  .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 20px; }
+  .tab-btn {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.84rem;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text-soft);
+    border-radius: 999px;
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .tab-btn:hover { border-color: var(--ink); color: var(--ink); }
+  .tab-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  /* ---------- Progress / stats ---------- */
+  .statline {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.82rem; color: var(--text-soft); margin-bottom: 10px; flex-wrap: wrap; gap: 6px;
+  }
+  .statline b { color: var(--ink); }
+  .progress-track { height: 6px; background: var(--border); border-radius: 999px; overflow: hidden; margin-bottom: 18px; }
+  .progress-fill { height: 100%; background: var(--blue); border-radius: 999px; transition: width 0.2s ease; }
+
+  /* ---------- Flashcard ---------- */
+  .stage { perspective: 1600px; margin-bottom: 18px; }
+  .flashcard {
+    position: relative;
+    min-height: 420px;
+    border-radius: 18px;
+    cursor: pointer;
+    transition: transform 0.5s cubic-bezier(.4,.2,.2,1);
+    transform-style: preserve-3d;
+  }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .face {
+    position: absolute; inset: 0;
+    -webkit-backface-visibility: hidden; backface-visibility: hidden;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    box-shadow: 0 4px 18px rgba(28,43,74,0.07);
+    padding: 26px 28px;
+    display: flex; flex-direction: column;
+  }
+  .face.back { transform: rotateY(180deg); overflow-y: auto; }
+  .cat-tag {
+    display: inline-flex; align-self: flex-start;
+    font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.72rem;
+    letter-spacing: 0.02em; text-transform: uppercase;
+    padding: 4px 11px; border-radius: 999px; margin-bottom: 14px;
+  }
+  .face.front { align-items: center; text-align: center; justify-content: center; }
+  .term { font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: var(--ink); font-size: 1.45rem; line-height: 1.25; margin: 0; }
+  .flip-hint { margin-top: 18px; font-size: 0.8rem; color: var(--gray); }
+  .def { font-size: 0.98rem; font-weight: 600; color: var(--ink); line-height: 1.42; margin: 0 0 10px; }
+  .extra { font-size: 0.86rem; color: var(--text-soft); line-height: 1.45; margin: 0 0 14px; }
+  .diagram-wrap { margin-top: auto; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 6px; }
+  .diagram-wrap svg { display: block; width: 100%; height: auto; }
+
+  /* ---------- Controls ---------- */
+  .controls { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  .btn {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.88rem;
+    border: 1px solid var(--border); background: var(--card-bg); color: var(--ink);
+    border-radius: 10px; padding: 10px 16px; cursor: pointer; transition: all 0.15s ease;
+  }
+  .btn:hover { border-color: var(--ink); }
+  .btn:disabled { opacity: 0.4; cursor: default; }
+  .btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .btn.primary:hover { opacity: 0.9; }
+  .rate-row { display: flex; gap: 10px; justify-content: center; margin-bottom: 6px; }
+  .btn.rate-bad { border-color: var(--coral); color: var(--coral); }
+  .btn.rate-bad:hover { background: var(--coral-soft); }
+  .btn.rate-good { border-color: var(--teal); color: var(--teal); }
+  .btn.rate-good:hover { background: var(--teal-soft); }
+
+  .tally { text-align: center; font-size: 0.82rem; color: var(--text-soft); margin-top: 4px; }
+  .tally b.good { color: var(--teal); }
+  .tally b.bad { color: var(--coral); }
+
+  @media (max-width: 480px) {
+    .flashcard { min-height: 460px; }
+    .term { font-size: 1.2rem; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="biology.html">&larr; Back to Biology</a>
+  <div class="hero">
+    <h1>Prefix &amp; Suffix Flashcards</h1>
+    <p>Groups 1&ndash;6 from the class word-part list. Pick a group or study them all &mdash; tap a card to see the meaning.</p>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="statline">
+    <span>Card <b id="cardNum">1</b> of <b id="cardTotal">14</b></span>
+    <span id="filterLabel">All cards</span>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+  <div class="stage">
+    <div class="flashcard" id="flashcard">
+      <div class="face front">
+        <span class="cat-tag" id="catTagFront"></span>
+        <p class="term" id="termText"></p>
+        <p class="flip-hint">Tap the card to see the meaning</p>
+      </div>
+      <div class="face back">
+        <span class="cat-tag" id="catTagBack"></span>
+        <p class="def" id="defText"></p>
+        <p class="extra" id="extraText"></p>
+        <div class="diagram-wrap" id="diagramWrap" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rate-row" id="rateRow" style="visibility:hidden;">
+    <button class="btn rate-bad" id="btnBad">Still learning</button>
+    <button class="btn rate-good" id="btnGood">Got it</button>
+  </div>
+
+  <div class="controls">
+    <button class="btn" id="btnPrev">&larr; Prev</button>
+    <button class="btn primary" id="btnShuffle">Shuffle</button>
+    <button class="btn" id="btnNext">Next &rarr;</button>
+  </div>
+
+  <p class="tally" id="tally"></p>
+</div>
+
+<script>
+var CATS = [
+  {key:'g1', label:'Group 1', color:'var(--blue)'},
+  {key:'g2', label:'Group 2', color:'var(--teal)'},
+  {key:'g3', label:'Group 3', color:'var(--violet)'},
+  {key:'g4', label:'Group 4', color:'var(--coral)'},
+  {key:'g5', label:'Group 5', color:'var(--amber)'},
+  {key:'g6', label:'Group 6', color:'var(--ink)'}
+];
+function catInfo(key){ for(var i=0;i<CATS.length;i++) if(CATS[i].key===key) return CATS[i]; return CATS[0]; }
+
+var CARDS = [
+  {cat:'g1', term:'A-, an-', def:'Without, not', extra:null, diagram:null},
+  {cat:'g1', term:'Ab-', def:'Away from', extra:null, diagram:null},
+  {cat:'g1', term:'Ad-, af-', def:'Near, toward', extra:null, diagram:null},
+  {cat:'g1', term:'Aero-', def:'Air', extra:null, diagram:null},
+  {cat:'g1', term:'Alb-', def:'White', extra:null, diagram:null},
+  {cat:'g1', term:'Algia-', def:'Pain', extra:null, diagram:null},
+  {cat:'g1', term:'Amphi-', def:'Both', extra:null, diagram:null},
+  {cat:'g1', term:'Anti-', def:'Against', extra:null, diagram:null},
+  {cat:'g1', term:'Aqua-', def:'Water', extra:null, diagram:null},
+  {cat:'g1', term:'Archae-', def:'Ancient', extra:null, diagram:null},
+  {cat:'g2', term:'Arthr-', def:'Joint', extra:null, diagram:null},
+  {cat:'g2', term:'-ase', def:'Enzyme', extra:null, diagram:null},
+  {cat:'g2', term:'-asis', def:'State of, condition', extra:null, diagram:null},
+  {cat:'g2', term:'Auto-', def:'Self', extra:null, diagram:null},
+  {cat:'g2', term:'Bi-', def:'Two, twice', extra:null, diagram:null},
+  {cat:'g2', term:'Bio-', def:'Life', extra:null, diagram:null},
+  {cat:'g2', term:'Blast-', def:'To germinate', extra:null, diagram:null},
+  {cat:'g2', term:'Brachi-', def:'Arm', extra:null, diagram:null},
+  {cat:'g2', term:'Card-', def:'Heart', extra:null, diagram:null},
+  {cat:'g2', term:'Carn-', def:'Flesh', extra:null, diagram:null},
+  {cat:'g3', term:'Cephalo-', def:'Head', extra:null, diagram:null},
+  {cat:'g3', term:'Chloro-', def:'Green', extra:null, diagram:null},
+  {cat:'g3', term:'Chondro-', def:'Cartilage', extra:null, diagram:null},
+  {cat:'g3', term:'Chromo-', def:'Color', extra:null, diagram:null},
+  {cat:'g3', term:'Cide-', def:'Kill', extra:null, diagram:null},
+  {cat:'g3', term:'Co-', def:'Together', extra:null, diagram:null},
+  {cat:'g3', term:'Coel-', def:'Cavity', extra:null, diagram:null},
+  {cat:'g3', term:'Con-', def:'With', extra:null, diagram:null},
+  {cat:'g3', term:'Costa-', def:'Rib', extra:null, diagram:null},
+  {cat:'g3', term:'Cyst-', def:'Capsule', extra:null, diagram:null},
+  {cat:'g4', term:'-cyto, cyte', def:'Cell', extra:null, diagram:null},
+  {cat:'g4', term:'Decid-', def:'To cut off', extra:null, diagram:null},
+  {cat:'g4', term:'Dendr-', def:'Tree', extra:null, diagram:null},
+  {cat:'g4', term:'Dent-, dont-', def:'Tooth', extra:null, diagram:null},
+  {cat:'g4', term:'Derm-', def:'Skin', extra:null, diagram:null},
+  {cat:'g4', term:'Di-', def:'Two', extra:null, diagram:null},
+  {cat:'g4', term:'Dis-, dys-', def:'Ill, bad', extra:null, diagram:null},
+  {cat:'g4', term:'Ecto-', def:'Outer', extra:null, diagram:null},
+  {cat:'g4', term:'-ectomy', def:'Removal', extra:null, diagram:null},
+  {cat:'g4', term:'Emia-', def:'Blood', extra:null, diagram:null},
+  {cat:'g5', term:'Endo-', def:'Inner', extra:null, diagram:null},
+  {cat:'g5', term:'Enter-', def:'Intestine', extra:null, diagram:null},
+  {cat:'g5', term:'Erythro-', def:'Red', extra:null, diagram:null},
+  {cat:'g5', term:'Eu-', def:'True', extra:null, diagram:null},
+  {cat:'g5', term:'Gastro-', def:'Stomach', extra:null, diagram:null},
+  {cat:'g5', term:'Geo-', def:'Earth', extra:null, diagram:null},
+  {cat:'g5', term:'-gen', def:'Producing', extra:null, diagram:null},
+  {cat:'g5', term:'Gymno-', def:'Naked', extra:null, diagram:null},
+  {cat:'g5', term:'Hemo-', def:'Blood', extra:null, diagram:null},
+  {cat:'g5', term:'Herb-', def:'Non-woody', extra:null, diagram:null},
+  {cat:'g6', term:'Hepato-', def:'Liver', extra:null, diagram:null},
+  {cat:'g6', term:'Hetero-', def:'Other', extra:null, diagram:null},
+  {cat:'g6', term:'Homo-, homeo-', def:'Same', extra:null, diagram:null},
+  {cat:'g6', term:'Hyper-', def:'Above, over', extra:null, diagram:null},
+  {cat:'g6', term:'Hypo-', def:'Below, under', extra:null, diagram:null},
+  {cat:'g6', term:'Inter-', def:'Between', extra:null, diagram:null},
+  {cat:'g6', term:'Intra-', def:'Within', extra:null, diagram:null},
+  {cat:'g6', term:'Iso-', def:'Same', extra:null, diagram:null},
+  {cat:'g6', term:'-itis', def:'Inflammation', extra:null, diagram:null},
+  {cat:'g6', term:'Karyo-', def:'Nucleus', extra:null, diagram:null}
+];
+
+var activeCat = 'all';
+var order = CARDS.map(function(_,i){return i;});
+var pos = 0;
+var flipped = false;
+var goodCount = 0, badCount = 0;
+var seenRated = {};
+
+function currentIndices(){
+  if(activeCat==='all') return order;
+  return order.filter(function(i){ return CARDS[i].cat===activeCat; });
+}
+
+function buildTabs(){
+  var tabsEl = document.getElementById('tabs');
+  var allBtn = document.createElement('button');
+  allBtn.className='tab-btn active'; allBtn.textContent='All'; allBtn.dataset.key='all';
+  tabsEl.appendChild(allBtn);
+  CATS.forEach(function(c){
+    var b=document.createElement('button');
+    b.className='tab-btn'; b.textContent=c.label; b.dataset.key=c.key;
+    tabsEl.appendChild(b);
+  });
+  tabsEl.addEventListener('click', function(e){
+    if(e.target.tagName!=='BUTTON') return;
+    activeCat = e.target.dataset.key;
+    Array.prototype.forEach.call(tabsEl.children, function(b){ b.classList.toggle('active', b.dataset.key===activeCat); });
+    document.getElementById('filterLabel').textContent = activeCat==='all' ? 'All cards' : catInfo(activeCat).label;
+    pos = 0; flipped=false;
+    renderCard();
+  });
+}
+
+function renderCard(){
+  var idxs = currentIndices();
+  if(idxs.length===0) return;
+  if(pos>=idxs.length) pos=0;
+  var card = CARDS[idxs[pos]];
+  var info = catInfo(card.cat);
+
+  document.getElementById('flashcard').classList.remove('flipped');
+  flipped=false;
+
+  document.getElementById('catTagFront').textContent = info.label;
+  document.getElementById('catTagFront').style.background = info.color;
+  document.getElementById('catTagFront').style.color = '#fff';
+  document.getElementById('catTagBack').textContent = info.label;
+  document.getElementById('catTagBack').style.background = info.color;
+  document.getElementById('catTagBack').style.color = '#fff';
+
+  document.getElementById('termText').textContent = card.term;
+  document.getElementById('defText').textContent = card.def;
+  document.getElementById('extraText').textContent = card.extra || '';
+
+  var dWrap = document.getElementById('diagramWrap');
+  if(card.diagram){
+    dWrap.style.display='block';
+    dWrap.innerHTML = card.diagram();
+  } else {
+    dWrap.style.display='none';
+    dWrap.innerHTML='';
+  }
+
+  document.getElementById('cardNum').textContent = pos+1;
+  document.getElementById('cardTotal').textContent = idxs.length;
+  document.getElementById('progressFill').style.width = Math.round(((pos+1)/idxs.length)*100)+'%';
+
+  document.getElementById('rateRow').style.visibility='hidden';
+  updateTally();
+}
+
+function updateTally(){
+  var t = document.getElementById('tally');
+  if(goodCount+badCount===0){ t.textContent=''; return; }
+  t.innerHTML = '<b class="good">'+goodCount+'</b> got it &middot; <b class="bad">'+badCount+'</b> still learning';
+}
+
+function nextCard(){ var idxs=currentIndices(); pos=(pos+1)%idxs.length; renderCard(); }
+function prevCard(){ var idxs=currentIndices(); pos=(pos-1+idxs.length)%idxs.length; renderCard(); }
+function shuffleDeck(){
+  for(var i=order.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=order[i]; order[i]=order[j]; order[j]=t; }
+  pos=0; goodCount=0; badCount=0; seenRated={}; renderCard();
+}
+
+document.getElementById('flashcard').addEventListener('click', function(){
+  flipped=!flipped;
+  this.classList.toggle('flipped', flipped);
+  document.getElementById('rateRow').style.visibility = flipped ? 'visible' : 'hidden';
+});
+document.getElementById('btnNext').addEventListener('click', function(e){ e.stopPropagation(); nextCard(); });
+document.getElementById('btnPrev').addEventListener('click', function(e){ e.stopPropagation(); prevCard(); });
+document.getElementById('btnShuffle').addEventListener('click', function(e){ e.stopPropagation(); shuffleDeck(); });
+document.getElementById('btnGood').addEventListener('click', function(e){
+  e.stopPropagation();
+  var idxs=currentIndices(); var key=idxs[pos];
+  if(seenRated[key]==='bad') badCount--; if(seenRated[key]!=='good'){ goodCount++; seenRated[key]='good'; }
+  updateTally(); nextCard();
+});
+document.getElementById('btnBad').addEventListener('click', function(e){
+  e.stopPropagation();
+  var idxs=currentIndices(); var key=idxs[pos];
+  if(seenRated[key]==='good') goodCount--; if(seenRated[key]!=='bad'){ badCount++; seenRated[key]='bad'; }
+  updateTally(); nextCard();
+});
+
+buildTabs();
+renderCard();
+</script>
+</body>
+</html>

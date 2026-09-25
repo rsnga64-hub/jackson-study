@@ -24,6 +24,8 @@ A static study site: study guide + flashcards + self-graded quiz per unit, organ
 
 **Group by unit, never by lesson (site owner's rule).** Every lesson numbered N.x belongs in Unit N's guide/flashcards/quiz, as a tab in the guide and a category or section in the flashcards and quiz. Never give a single lesson its own section or files. Group by the lesson number even when the source file is filed in a different unit's folder (e.g. Geometry 2.13 was filed under Unit 3 but lives in Unit 2). Long unit quizzes should offer a per-lesson picker (see `bio_unit2_quiz.html`).
 
+**Exception: Biology prefix/suffix vocabulary.** The class word-part list (`Biology/Prefix Suffix Words.pdf`, 12 groups) has its own section on `biology.html`, separate from the units: `bio_prefix_suffix_flashcards.html` and `bio_prefix_suffix_quiz.html`. Never mix it into unit flashcards. Jackson is responsible for **groups 1–6 only**; add later groups only when the site owner says so. Keep each word part and meaning exactly as the list writes it (e.g. it shows Algia-, Cide-, Emia- with a trailing hyphen even though they're usually word endings).
+
 ## Design system — copy verbatim, do not reinvent
 
 - Fonts: Google Fonts **Space Grotesk** (headings) + **Inter** (body) via `<link>` tag in `<head>`.
@@ -74,5 +76,6 @@ The Geometry teacher approved the content going back up (site owner confirmed, S
 
 - **Unit 1** (Bonding & Water, Macromolecules, Enzymes): guide with 4 tabs, 22 flashcards, 21-question quiz.
 - **Unit 2** (Cells, the Membrane & Transport, 2.1–2.12): guide with 9 tabs (2.1 ×2, 2.2, 2.3 ×2, 2.7, 2.7–2.8, 2.10, 2.11–2.12), 63 flashcards in 6 categories, 75-question quiz with a per-lesson picker. No materials exist for 2.4, 2.5, 2.9; 2.6 is the same membrane content as 2.3.
+- **Prefix & Suffix Vocabulary** (own section, groups 1–6): 60 flashcards in 6 group tabs, 60-question quiz with a group picker. Wrong answers never include a look-alike meaning (Two / Two, twice; the two "Same" and two "Blood" entries).
 - **Source conflicts flagged on the pages:** peripheral proteins (2.3 lecture vs. 2.6 worksheet key); origin of the cotransport gradient (2.11 slide vs. 2.12 worksheet key).
 - **Third-party handouts in Unit 2 (scope only, never copied):** Bethany Lau worksheets (2.6, 2.7, 2.11/2.12 keys), NCCSTS "Osmosis Is Serious Business!" case (2.8), 3D Molecular Designs modeling kit (2.12).

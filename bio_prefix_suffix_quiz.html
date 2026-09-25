@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biology Prefix &amp; Suffix Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FBFAF7;
+    --grid-line: rgba(28,43,74,0.055);
+    --ink: #1C2B4A;
+    --text: #2B3648;
+    --text-soft: #64707F;
+    --blue: #2E86AB;
+    --blue-soft: #E9F3F8;
+    --amber: #D98A2B;
+    --amber-soft: #FCF1DE;
+    --coral: #D65A5A;
+    --coral-soft: #FBEBEB;
+    --teal: #2C9C82;
+    --teal-soft: #E6F5F0;
+    --violet: #7C5CBF;
+    --violet-soft: #EFE9F8;
+    --card-bg: #FFFFFF;
+    --border: #E4E0D4;
+    --gray: #94A0AD;
+    --gray-line: #CBD3DC;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; color: var(--ink); }
+  .wrap { max-width: 680px; margin: 0 auto; padding: 32px 20px 80px; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--text-soft); text-decoration: none; font-size: 0.88rem; font-weight: 600; margin-bottom: 18px; }
+  .back-link:hover { color: var(--blue); }
+
+  .hero { background: var(--ink); border-radius: 18px; padding: 26px 28px; color: #fff; margin-bottom: 22px; }
+  .hero h1 { color: #fff; font-size: 1.7rem; margin: 0 0 6px; }
+  .hero p { margin: 0; color: #C8D3E0; font-size: 0.96rem; max-width: 52ch; }
+
+  .statline { display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text-soft); margin-bottom: 8px; }
+  .statline b { color: var(--ink); }
+  .progress-track { height: 6px; background: var(--border); border-radius: 999px; overflow: hidden; margin-bottom: 20px; }
+  .progress-fill { height: 100%; background: var(--blue); border-radius: 999px; transition: width 0.25s ease; }
+
+  .qcard {
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px;
+    padding: 26px 28px; box-shadow: 0 4px 18px rgba(28,43,74,0.06);
+  }
+  .qkicker { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.72rem; letter-spacing: 0.03em; text-transform: uppercase; color: var(--blue); margin: 0 0 8px; }
+  .qtext { font-size: 1.1rem; font-weight: 700; color: var(--ink); line-height: 1.35; margin: 0 0 16px; }
+  .diagram-wrap { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 6px; margin-bottom: 18px; }
+  .diagram-wrap svg { display: block; width: 100%; height: auto; }
+
+  .opt {
+    display: flex; align-items: center; gap: 10px;
+    width: 100%; text-align: left; font-family: 'Inter', sans-serif; font-size: 0.96rem; font-weight: 600;
+    color: var(--ink); background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 12px;
+    padding: 12px 16px; margin-bottom: 10px; cursor: pointer; transition: all 0.15s ease;
+  }
+  .opt:hover:not(.locked) { border-color: var(--blue); background: var(--blue-soft); }
+  .opt .letter {
+    flex-shrink: 0; width: 24px; height: 24px; border-radius: 999px; border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 700; color: var(--text-soft);
+  }
+  .opt.correct { border-color: var(--teal); background: var(--teal-soft); }
+  .opt.correct .letter { background: var(--teal); border-color: var(--teal); color: #fff; }
+  .opt.incorrect { border-color: var(--coral); background: var(--coral-soft); }
+  .opt.incorrect .letter { background: var(--coral); border-color: var(--coral); color: #fff; }
+  .opt.locked { cursor: default; }
+  .opt.dim { opacity: 0.55; }
+
+  .explain {
+    display: none; margin-top: 14px; padding: 12px 14px; border-radius: 10px;
+    background: var(--blue-soft); color: var(--ink); font-size: 0.9rem; line-height: 1.45;
+  }
+  .explain.show { display: block; }
+  .explain b { color: var(--blue); }
+
+  .qcontrols { display: flex; justify-content: flex-end; margin-top: 18px; }
+  .btn {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.92rem;
+    border: 1px solid var(--ink); background: var(--ink); color: #fff;
+    border-radius: 10px; padding: 11px 20px; cursor: pointer; transition: opacity 0.15s ease;
+  }
+  .btn:hover { opacity: 0.88; }
+  .btn:disabled { opacity: 0.35; cursor: default; }
+  .btn.ghost { background: var(--card-bg); color: var(--ink); }
+
+  /* results screen */
+  .results { text-align: center; }
+  .score-big { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 3rem; color: var(--ink); margin: 6px 0; }
+  .score-msg { font-size: 1rem; color: var(--text-soft); margin-bottom: 22px; }
+  .missed-list { text-align: left; margin: 20px 0; padding: 0; list-style: none; }
+  .missed-list li { padding: 10px 0; border-top: 1px solid var(--border); font-size: 0.88rem; color: var(--text-soft); }
+  .missed-list li b { color: var(--ink); display: block; margin-bottom: 2px; }
+
+  @media (max-width: 480px) {
+    .qtext { font-size: 1.02rem; }
+  }
+  .sec-picker{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 16px}
+  .sec-picker button{font:600 0.8rem Inter,sans-serif;border:1.5px solid var(--border);background:var(--card-bg);color:var(--text-soft);padding:7px 11px;border-radius:999px;cursor:pointer}
+  .sec-picker button.active{background:var(--ink);border-color:var(--ink);color:#fff}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="biology.html">&larr; Back to Biology</a>
+  <div class="hero">
+    <h1>Prefix &amp; Suffix Quiz</h1>
+    <p id="heroSub"></p>
+  </div>
+
+  <div class="sec-picker" id="secPicker"></div>
+
+  <div id="quizArea">
+    <div class="statline">
+      <span>Question <b id="qNum">1</b> of <b id="qTotal">20</b></span>
+      <span id="scoreLive">Score: 0</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+    <div class="qcard">
+      <p class="qkicker" id="qKicker"></p>
+      <p class="qtext" id="qText"></p>
+      <div class="diagram-wrap" id="diagramWrap" style="display:none;"></div>
+      <div id="optsWrap"></div>
+      <div class="explain" id="explain"></div>
+      <div class="qcontrols">
+        <button class="btn" id="btnNext" disabled>Next Question &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="resultsArea" style="display:none;">
+    <div class="qcard results">
+      <p class="qkicker">Quiz complete</p>
+      <div class="score-big" id="finalScore">0 / 20</div>
+      <p class="score-msg" id="finalMsg"></p>
+      <ul class="missed-list" id="missedList"></ul>
+      <button class="btn" id="btnRetake">Retake Quiz</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function diagramFor(key){ return ''; }
+
+var ALLQ = [
+  {sec:'g1', kicker:'Group 1', text:'What does "A-, an-" mean?', opts:['Without, not','Away from','Both','Water'], correct:0, explain:'A-, an- means "Without, not."'},
+  {sec:'g1', kicker:'Group 1', text:'What does "Ab-" mean?', opts:['Air','Water','Away from','White'], correct:2, explain:'Ab- means "Away from."'},
+  {sec:'g1', kicker:'Group 1', text:'What does "Ad-, af-" mean?', opts:['Near, toward','Against','Pain','Without, not'], correct:0, explain:'Ad-, af- means "Near, toward."'},
+  {sec:'g1', kicker:'Group 1', text:'What does "Aero-" mean?', opts:['Away from','Air','Against','Without, not'], correct:1, explain:'Aero- means "Air."'},
+  {sec:'g1', kicker:'Group 1', text:'What does "Alb-" mean?', opts:['Water','Pain','Air','White'], correct:3, explain:'Alb- means "White."'},
+  {sec:'g1', kicker:'Group 1', text:'What does "Algia-" mean?', opts:['Near, toward','Pain','Air','Against'], correct:1, explain:'Algia- means "Pain."'},
+  {sec:'g1', kicker:'Group 1', text:'What does "Amphi-" mean?', opts:['Both','Water','Without, not','Against'], correct:0, explain:'Amphi- means "Both."'},
+  {sec:'g1', kicker:'Group 1', text:'What does "Anti-" mean?', opts:['Pain','Near, toward','Away from','Against'], correct:3, explain:'Anti- means "Against."'},
+  {sec:'g1', kicker:'Group 1', text:'What does "Aqua-" mean?', opts:['Both','Without, not','Water','Pain'], correct:2, explain:'Aqua- means "Water."'},
+  {sec:'g1', kicker:'Group 1', text:'What does "Archae-" mean?', opts:['Air','Ancient','Against','Pain'], correct:1, explain:'Archae- means "Ancient."'},
+  {sec:'g2', kicker:'Group 2', text:'What does "Arthr-" mean?', opts:['Heart','Flesh','Life','Joint'], correct:3, explain:'Arthr- means "Joint."'},
+  {sec:'g2', kicker:'Group 2', text:'What does "-ase" mean?', opts:['Joint','State of, condition','Heart','Enzyme'], correct:3, explain:'-ase means "Enzyme."'},
+  {sec:'g2', kicker:'Group 2', text:'What does "-asis" mean?', opts:['Life','Flesh','Self','State of, condition'], correct:3, explain:'-asis means "State of, condition."'},
+  {sec:'g2', kicker:'Group 2', text:'What does "Auto-" mean?', opts:['Enzyme','Flesh','Self','Joint'], correct:2, explain:'Auto- means "Self."'},
+  {sec:'g2', kicker:'Group 2', text:'What does "Bi-" mean?', opts:['Two, twice','Flesh','State of, condition','Joint'], correct:0, explain:'Bi- means "Two, twice."'},
+  {sec:'g2', kicker:'Group 2', text:'What does "Bio-" mean?', opts:['Heart','Life','Self','Flesh'], correct:1, explain:'Bio- means "Life."'},
+  {sec:'g2', kicker:'Group 2', text:'What does "Blast-" mean?', opts:['To germinate','Flesh','State of, condition','Arm'], correct:0, explain:'Blast- means "To germinate."'},
+  {sec:'g2', kicker:'Group 2', text:'What does "Brachi-" mean?', opts:['Arm','Life','Heart','Enzyme'], correct:0, explain:'Brachi- means "Arm."'},
+  {sec:'g2', kicker:'Group 2', text:'What does "Card-" mean?', opts:['State of, condition','Heart','Arm','Life'], correct:1, explain:'Card- means "Heart."'},
+  {sec:'g2', kicker:'Group 2', text:'What does "Carn-" mean?', opts:['Joint','Enzyme','Heart','Flesh'], correct:3, explain:'Carn- means "Flesh."'},
+  {sec:'g3', kicker:'Group 3', text:'What does "Cephalo-" mean?', opts:['Kill','Head','Rib','Green'], correct:1, explain:'Cephalo- means "Head."'},
+  {sec:'g3', kicker:'Group 3', text:'What does "Chloro-" mean?', opts:['Capsule','Cartilage','Green','Head'], correct:2, explain:'Chloro- means "Green."'},
+  {sec:'g3', kicker:'Group 3', text:'What does "Chondro-" mean?', opts:['Cartilage','Capsule','Head','Rib'], correct:0, explain:'Chondro- means "Cartilage."'},
+  {sec:'g3', kicker:'Group 3', text:'What does "Chromo-" mean?', opts:['Color','Capsule','With','Cavity'], correct:0, explain:'Chromo- means "Color."'},
+  {sec:'g3', kicker:'Group 3', text:'What does "Cide-" mean?', opts:['Rib','Kill','With','Color'], correct:1, explain:'Cide- means "Kill."'},
+  {sec:'g3', kicker:'Group 3', text:'What does "Co-" mean?', opts:['Capsule','Cartilage','Color','Together'], correct:3, explain:'Co- means "Together."'},
+  {sec:'g3', kicker:'Group 3', text:'What does "Coel-" mean?', opts:['Rib','Kill','Head','Cavity'], correct:3, explain:'Coel- means "Cavity."'},
+  {sec:'g3', kicker:'Group 3', text:'What does "Con-" mean?', opts:['With','Capsule','Cavity','Rib'], correct:0, explain:'Con- means "With."'},
+  {sec:'g3', kicker:'Group 3', text:'What does "Costa-" mean?', opts:['Capsule','Rib','Cavity','Kill'], correct:1, explain:'Costa- means "Rib."'},
+  {sec:'g3', kicker:'Group 3', text:'What does "Cyst-" mean?', opts:['Color','Together','Head','Capsule'], correct:3, explain:'Cyst- means "Capsule."'},
+  {sec:'g4', kicker:'Group 4', text:'What does "-cyto, cyte" mean?', opts:['Skin','To cut off','Blood','Cell'], correct:3, explain:'-cyto, cyte means "Cell."'},
+  {sec:'g4', kicker:'Group 4', text:'What does "Decid-" mean?', opts:['Two','To cut off','Outer','Ill, bad'], correct:1, explain:'Decid- means "To cut off."'},
+  {sec:'g4', kicker:'Group 4', text:'What does "Dendr-" mean?', opts:['Skin','Tree','To cut off','Ill, bad'], correct:1, explain:'Dendr- means "Tree."'},
+  {sec:'g4', kicker:'Group 4', text:'What does "Dent-, dont-" mean?', opts:['Ill, bad','Removal','Tooth','Skin'], correct:2, explain:'Dent-, dont- means "Tooth."'},
+  {sec:'g4', kicker:'Group 4', text:'What does "Derm-" mean?', opts:['Skin','Removal','To cut off','Cell'], correct:0, explain:'Derm- means "Skin."'},
+  {sec:'g4', kicker:'Group 4', text:'What does "Di-" mean?', opts:['Two','Skin','Tooth','To cut off'], correct:0, explain:'Di- means "Two."'},
+  {sec:'g4', kicker:'Group 4', text:'What does "Dis-, dys-" mean?', opts:['Tree','Cell','Removal','Ill, bad'], correct:3, explain:'Dis-, dys- means "Ill, bad."'},
+  {sec:'g4', kicker:'Group 4', text:'What does "Ecto-" mean?', opts:['Outer','To cut off','Cell','Blood'], correct:0, explain:'Ecto- means "Outer."'},
+  {sec:'g4', kicker:'Group 4', text:'What does "-ectomy" mean?', opts:['Ill, bad','Removal','Outer','Skin'], correct:1, explain:'-ectomy means "Removal."'},
+  {sec:'g4', kicker:'Group 4', text:'What does "Emia-" mean?', opts:['Tree','Blood','Skin','Tooth'], correct:1, explain:'Emia- means "Blood."'},
+  {sec:'g5', kicker:'Group 5', text:'What does "Endo-" mean?', opts:['Inner','Intestine','Non-woody','Producing'], correct:0, explain:'Endo- means "Inner."'},
+  {sec:'g5', kicker:'Group 5', text:'What does "Enter-" mean?', opts:['Blood','Intestine','Earth','True'], correct:1, explain:'Enter- means "Intestine."'},
+  {sec:'g5', kicker:'Group 5', text:'What does "Erythro-" mean?', opts:['Earth','Inner','Red','Non-woody'], correct:2, explain:'Erythro- means "Red."'},
+  {sec:'g5', kicker:'Group 5', text:'What does "Eu-" mean?', opts:['Non-woody','True','Earth','Naked'], correct:1, explain:'Eu- means "True."'},
+  {sec:'g5', kicker:'Group 5', text:'What does "Gastro-" mean?', opts:['Red','Producing','Stomach','Naked'], correct:2, explain:'Gastro- means "Stomach."'},
+  {sec:'g5', kicker:'Group 5', text:'What does "Geo-" mean?', opts:['Earth','Red','True','Naked'], correct:0, explain:'Geo- means "Earth."'},
+  {sec:'g5', kicker:'Group 5', text:'What does "-gen" mean?', opts:['Intestine','Red','Producing','Blood'], correct:2, explain:'-gen means "Producing."'},
+  {sec:'g5', kicker:'Group 5', text:'What does "Gymno-" mean?', opts:['Blood','Non-woody','Naked','Producing'], correct:2, explain:'Gymno- means "Naked."'},
+  {sec:'g5', kicker:'Group 5', text:'What does "Hemo-" mean?', opts:['Stomach','Blood','True','Producing'], correct:1, explain:'Hemo- means "Blood."'},
+  {sec:'g5', kicker:'Group 5', text:'What does "Herb-" mean?', opts:['Non-woody','Red','Inner','True'], correct:0, explain:'Herb- means "Non-woody."'},
+  {sec:'g6', kicker:'Group 6', text:'What does "Hepato-" mean?', opts:['Below, under','Inflammation','Liver','Other'], correct:2, explain:'Hepato- means "Liver."'},
+  {sec:'g6', kicker:'Group 6', text:'What does "Hetero-" mean?', opts:['Same','Other','Liver','Without, not'], correct:1, explain:'Hetero- means "Other."'},
+  {sec:'g6', kicker:'Group 6', text:'What does "Homo-, homeo-" mean?', opts:['Nucleus','Inflammation','Same','Between'], correct:2, explain:'Homo-, homeo- means "Same."'},
+  {sec:'g6', kicker:'Group 6', text:'What does "Hyper-" mean?', opts:['Same','Other','Within','Above, over'], correct:3, explain:'Hyper- means "Above, over."'},
+  {sec:'g6', kicker:'Group 6', text:'What does "Hypo-" mean?', opts:['Nucleus','Below, under','Same','Inflammation'], correct:1, explain:'Hypo- means "Below, under."'},
+  {sec:'g6', kicker:'Group 6', text:'What does "Inter-" mean?', opts:['Liver','Inflammation','Between','Below, under'], correct:2, explain:'Inter- means "Between."'},
+  {sec:'g6', kicker:'Group 6', text:'What does "Intra-" mean?', opts:['Same','Nucleus','Within','Other'], correct:2, explain:'Intra- means "Within."'},
+  {sec:'g6', kicker:'Group 6', text:'What does "Iso-" mean?', opts:['Between','Within','Below, under','Same'], correct:3, explain:'Iso- means "Same."'},
+  {sec:'g6', kicker:'Group 6', text:'What does "-itis" mean?', opts:['Liver','Inflammation','Below, under','Nucleus'], correct:1, explain:'-itis means "Inflammation."'},
+  {sec:'g6', kicker:'Group 6', text:'What does "Karyo-" mean?', opts:['Liver','Within','Below, under','Nucleus'], correct:3, explain:'Karyo- means "Nucleus."'}
+];
+var Q = ALLQ.slice();
+
+var idx = 0, score = 0, answered = false, missed = [];
+
+function render(){
+  var q = Q[idx];
+  document.getElementById('qNum').textContent = idx+1;
+  document.getElementById('qTotal').textContent = Q.length;
+  document.getElementById('scoreLive').textContent = 'Score: '+score;
+  document.getElementById('progressFill').style.width = Math.round((idx/Q.length)*100)+'%';
+  document.getElementById('qKicker').textContent = q.kicker;
+  document.getElementById('qText').textContent = q.text;
+
+  var dWrap = document.getElementById('diagramWrap');
+  if(q.diagram){ dWrap.style.display='block'; dWrap.innerHTML = diagramFor(q.diagram); }
+  else { dWrap.style.display='none'; dWrap.innerHTML=''; }
+
+  var optsWrap = document.getElementById('optsWrap');
+  optsWrap.innerHTML='';
+  var letters=['A','B','C','D'];
+  q.opts.forEach(function(optText, i){
+    var b = document.createElement('button');
+    b.className='opt';
+    b.innerHTML = '<span class="letter">'+letters[i]+'</span><span>'+optText+'</span>';
+    b.addEventListener('click', function(){ selectAnswer(i); });
+    optsWrap.appendChild(b);
+  });
+
+  document.getElementById('explain').classList.remove('show');
+  document.getElementById('explain').textContent='';
+  document.getElementById('btnNext').disabled = true;
+  answered = false;
+}
+
+function selectAnswer(i){
+  if(answered) return;
+  answered = true;
+  var q = Q[idx];
+  var opts = document.querySelectorAll('.opt');
+  opts.forEach(function(el,i2){
+    el.classList.add('locked');
+    if(i2===q.correct) el.classList.add('correct');
+    else if(i2===i) el.classList.add('incorrect');
+    else el.classList.add('dim');
+  });
+  if(i===q.correct){ score++; }
+  else { missed.push(q); }
+  document.getElementById('scoreLive').textContent = 'Score: '+score;
+  var ex = document.getElementById('explain');
+  ex.innerHTML = '<b>'+(i===q.correct?'Correct. ':'Not quite. ')+'</b>'+q.explain;
+  ex.classList.add('show');
+  document.getElementById('btnNext').disabled = false;
+}
+
+function nextQuestion(){
+  if(idx < Q.length-1){ idx++; render(); }
+  else { showResults(); }
+}
+
+function showResults(){
+  document.getElementById('quizArea').style.display='none';
+  document.getElementById('resultsArea').style.display='block';
+  document.getElementById('finalScore').textContent = score+' / '+Q.length;
+  var pct = Math.round((score/Q.length)*100);
+  var msg;
+  if(pct===100) msg = 'Perfect score — locked in.';
+  else if(pct>=80) msg = 'Strong work. Review the missed ones below and you\'ve got it.';
+  else if(pct>=60) msg = 'Good start — a few gaps to close. Check the missed questions below.';
+  else msg = 'Worth another pass through the flashcards before the next round.';
+  document.getElementById('finalMsg').textContent = msg+' ('+pct+'%)';
+
+  var list = document.getElementById('missedList');
+  list.innerHTML='';
+  if(missed.length===0){
+    var li=document.createElement('li'); li.textContent='No missed questions — nice.'; list.appendChild(li);
+  } else {
+    missed.forEach(function(q){
+      var li=document.createElement('li');
+      li.innerHTML = '<b>'+q.text+'</b>Correct answer: '+q.opts[q.correct];
+      list.appendChild(li);
+    });
+  }
+}
+
+document.getElementById('btnNext').addEventListener('click', nextQuestion);
+document.getElementById('btnRetake').addEventListener('click', function(){
+  idx=0; score=0; missed=[]; answered=false;
+  document.getElementById('resultsArea').style.display='none';
+  document.getElementById('quizArea').style.display='block';
+  render();
+});
+
+var SECS=[['all','All of Groups 1–6'],['g1','Group 1'],['g2','Group 2'],['g3','Group 3'],['g4','Group 4'],['g5','Group 5'],['g6','Group 6']];
+function startSec(k){
+  Q = k==='all' ? ALLQ.slice() : ALLQ.filter(function(x){return x.sec===k;});
+  idx=0; score=0; missed=[]; answered=false;
+  document.getElementById('resultsArea').style.display='none';
+  document.getElementById('quizArea').style.display='block';
+  var label=SECS.filter(function(s){return s[0]===k;})[0][1];
+  document.getElementById('heroSub').textContent = Q.length+' questions · '+label+'. Pick a group below or take all six.';
+  Array.prototype.forEach.call(document.getElementById('secPicker').children,function(b){b.classList.toggle('active',b.dataset.k===k);});
+  render();
+}
+(function(){ var p=document.getElementById('secPicker');
+  SECS.forEach(function(s){ var b=document.createElement('button'); b.textContent=s[1]; b.dataset.k=s[0]; b.onclick=function(){startSec(s[0]);}; p.appendChild(b); });
+})();
+startSec('all');
+</script>
+</body>
+</html>
