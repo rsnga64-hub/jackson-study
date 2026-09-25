@@ -108,6 +108,9 @@
   @media (max-width: 480px) {
     .qtext { font-size: 1.02rem; }
   }
+  .sec-picker{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 16px}
+  .sec-picker button{font:600 0.8rem Inter,sans-serif;border:1.5px solid var(--border);background:var(--card-bg);color:var(--text-soft);padding:7px 11px;border-radius:999px;cursor:pointer}
+  .sec-picker button.active{background:var(--ink);border-color:var(--ink);color:#fff}
 </style>
 </head>
 <body>
@@ -115,8 +118,10 @@
   <a class="back-link" href="biology.html">&larr; Back to Biology</a>
   <div class="hero">
     <h1>Unit 2 Quiz</h1>
-    <p id="heroSub">Cell theory &amp; scientists, prokaryotes vs. eukaryotes, organelles, and Cell Clinic scenarios.</p>
+    <p id="heroSub"></p>
   </div>
+
+  <div class="sec-picker" id="secPicker"></div>
 
   <div id="quizArea">
     <div class="statline">
@@ -247,7 +252,178 @@ function diagPlantVsAnimal(){
   return svg(inner,'0 0 350 202',175);
 }
 
+
+/* ============ 2.3 Cell Membrane diagrams (original, same helper library) ============ */
+function diagPhospholipid(){
+  var inner =
+      circleEl(80,50,30,'var(--blue-soft)','var(--blue)',2.5)
+    + txt(80,46,'phosphate','var(--blue)',9,700)
+    + txt(80,58,'+ glycerol','var(--blue)',9,700)
+    + lineEl(68,80,68,178,'var(--ink)',3)
+    + pathEl('M92,80 L92,118 L106,132 L106,178','var(--ink)',3)
+    + txt(215,44,'Polar head','var(--blue)',12,700,'start') + txt(215,60,'hydrophilic (water-loving)','var(--text-soft)',10,600,'start')
+    + lineEl(112,50,208,50,'var(--blue)',1.5,true)
+    + txt(215,126,'Nonpolar tails','var(--ink)',12,700,'start') + txt(215,142,'2 fatty acids — hydrophobic','var(--text-soft)',10,600,'start')
+    + lineEl(112,132,208,132,'var(--ink)',1.5,true)
+    + txt(50,196,'saturated','var(--text-soft)',9,600) + txt(116,196,'unsaturated (kink)','var(--text-soft)',9,600);
+  return svg(inner,'0 0 400 206',200);
+}
+
+function diagPhospholipidBilayer(){
+  var xs=[30,72,114,156,198,240,282];
+  var inner='';
+  inner += rectEl(0,40,312,100,0,'var(--amber-soft)','none',0);
+  for(var i=0;i<xs.length;i++){
+    var x=xs[i];
+    inner += circleEl(x,26,11,'var(--blue-soft)','var(--blue)',2);
+    inner += lineEl(x-4,37,x-4,72,'var(--ink)',2.2) + lineEl(x+4,37,x+4,72,'var(--ink)',2.2);
+    inner += lineEl(x-4,108,x-4,143,'var(--ink)',2.2) + lineEl(x+4,108,x+4,143,'var(--ink)',2.2);
+    inner += circleEl(x,154,11,'var(--blue-soft)','var(--blue)',2);
+  }
+  inner += txt(156,10,'OUTSIDE (extracellular) — watery','var(--blue)',9.5,700);
+  inner += txt(156,94,'hydrophobic core: tails face inward','var(--amber)',9.5,700);
+  inner += txt(156,182,'INSIDE (cytoplasm) — watery','var(--blue)',9.5,700);
+  return svg(inner,'0 0 312 190',170);
+}
+
+function diagMembraneParts(){
+  var inner='', xs=[];
+  for(var x=20;x<=400;x+=22) xs.push(x);
+  inner += rectEl(0,70,420,60,0,'var(--amber-soft)','none',0);
+  for(var i=0;i<xs.length;i++){
+    var x=xs[i];
+    if((x>100&&x<170)||(x>250&&x<300)) continue;
+    inner += circleEl(x,62,8,'var(--blue-soft)','var(--blue)',1.6) + circleEl(x,138,8,'var(--blue-soft)','var(--blue)',1.6);
+  }
+  // integral, spans membrane
+  inner += rectEl(106,36,58,128,22,'var(--coral-soft)','var(--coral)',2.5);
+  inner += txt(135,186,'integral (spans)','var(--coral)',9.5,700);
+  // integral, partway
+  inner += rectEl(252,42,46,62,18,'var(--coral-soft)','var(--coral)',2.5);
+  inner += txt(275,186,'integral (partway)','var(--coral)',9.5,700);
+  // peripheral
+  inner += ellipseEl(350,160,26,12,'var(--violet-soft)','var(--violet)',2.2);
+  inner += txt(350,186,'peripheral','var(--violet)',9.5,700);
+  // glycoprotein chain
+  inner += pathEl('M135,36 L135,22 L125,12 M135,22 L147,12 M147,12 L155,4','var(--teal)',2.5);
+  inner += txt(186,14,'carbohydrate chain','var(--teal)',9,700,'start');
+  // cholesterol
+  inner += rectEl(206,88,18,24,4,'var(--amber)','var(--amber)',1.5);
+  inner += txt(215,160,'cholesterol','var(--amber)',9,700);
+  inner += lineEl(215,114,215,150,'var(--amber)',1.2,true);
+  inner += txt(30,20,'outside','var(--text-soft)',9,600,'start');
+  return svg(inner,'0 0 420 196',190);
+}
+
+function diagPermeability(){
+  var inner =
+      rectEl(0,70,420,50,0,'var(--amber-soft)','none',0)
+    + lineEl(0,70,420,70,'var(--blue)',3) + lineEl(0,120,420,120,'var(--blue)',3)
+    + txt(12,98,'bilayer','var(--amber)',9,700,'start')
+    // gas passes
+    + circleEl(95,40,7,'var(--teal-soft)','var(--teal)',2) + lineEl(95,50,95,150,'var(--teal)',2.5) + poly('89,146 95,158 101,146','var(--teal)',2,'var(--teal)')
+    + txt(95,20,'O₂, CO₂','var(--teal)',10,700) + txt(95,176,'passes easily','var(--teal)',9,600)
+    // water slow
+    + circleEl(200,40,8,'var(--blue-soft)','var(--blue)',2) + lineEl(200,50,200,150,'var(--blue)',2.5,true) + poly('194,146 200,158 206,146','var(--blue)',2,'var(--blue)')
+    + txt(200,20,'water','var(--blue)',10,700) + txt(200,176,'a little, slowly','var(--blue)',9,600)
+    // large & charged blocked
+    + circleEl(300,38,16,'var(--coral-soft)','var(--coral)',2) + txt(300,42,'glucose','var(--coral)',7.5,700)
+    + circleEl(370,40,9,'var(--coral-soft)','var(--coral)',2) + txt(370,44,'+','var(--coral)',12,700)
+    + lineEl(300,58,300,66,'var(--coral)',2.5) + lineEl(290,66,310,66,'var(--coral)',3)
+    + lineEl(370,52,370,66,'var(--coral)',2.5) + lineEl(360,66,380,66,'var(--coral)',3)
+    + txt(335,176,'large or charged: blocked','var(--coral)',9,700);
+  return svg(inner,'0 0 420 186',185);
+}
+
+function diagChannelCarrier(){
+  var inner =
+      rectEl(0,60,420,70,0,'var(--amber-soft)','none',0)
+    + lineEl(0,60,420,60,'var(--blue)',3) + lineEl(0,130,420,130,'var(--blue)',3)
+    // channel
+    + rectEl(70,40,28,110,8,'var(--coral-soft)','var(--coral)',2.5) + rectEl(122,40,28,110,8,'var(--coral-soft)','var(--coral)',2.5)
+    + dot(110,30,'var(--blue)',4) + dot(110,80,'var(--blue)',4) + dot(110,110,'var(--blue)',4) + dot(110,162,'var(--blue)',4)
+    + txt(110,184,'Channel protein','var(--coral)',11,700) + txt(110,198,'open tunnel (aquaporin = water)','var(--text-soft)',9,600)
+    // carrier state 1
+    + pathEl('M255,40 L255,150 L300,150 L300,95 L285,80 L300,65 L300,40 Z','var(--violet)',2.5,'var(--violet-soft)')
+    + circleEl(275,28,9,'var(--teal-soft)','var(--teal)',2)
+    + lineEl(318,95,346,95,'var(--ink)',2.2) + poly('346,89 358,95 346,101','var(--ink)',2,'var(--ink)')
+    // carrier state 2
+    + pathEl('M368,40 L368,150 L413,150 L413,125 L398,110 L413,95 L413,40 Z','var(--violet)',2.5,'var(--violet-soft)')
+    + circleEl(390,165,9,'var(--teal-soft)','var(--teal)',2)
+    + txt(335,184,'Carrier protein','var(--violet)',11,700) + txt(335,198,'binds, changes shape, shuttles','var(--text-soft)',9,600);
+  return svg(inner,'0 0 420 206',205);
+}
+
+/* ============ 2.7–2.12 transport diagrams (original) ============ */
+function diagTonicity(){
+  function cell(cx,label,sub,rx,ry,arrowsIn,color){
+    var s = rectEl(cx-62,30,124,120,10,'var(--blue-soft)','var(--blue)',1.5)
+      + ellipseEl(cx,90,rx,ry,'var(--coral-soft)','var(--coral)',2.5)
+      + txt(cx,20,label,color,11,700) + txt(cx,168,sub,'var(--text-soft)',8.5,600);
+    if(arrowsIn===1){ s += lineEl(cx-58,90,cx-rx-6,90,'var(--blue)',2) + poly((cx-rx-6)+',85 '+(cx-rx+4)+',90 '+(cx-rx-6)+',95','var(--blue)',1.5,'var(--blue)')
+                        + lineEl(cx+58,90,cx+rx+6,90,'var(--blue)',2) + poly((cx+rx+6)+',85 '+(cx+rx-4)+',90 '+(cx+rx+6)+',95','var(--blue)',1.5,'var(--blue)'); }
+    if(arrowsIn===-1){ s += lineEl(cx-rx+2,90,cx-52,90,'var(--blue)',2) + poly((cx-52)+',85 '+(cx-60)+',90 '+(cx-52)+',95','var(--blue)',1.5,'var(--blue)')
+                         + lineEl(cx+rx-2,90,cx+52,90,'var(--blue)',2) + poly((cx+52)+',85 '+(cx+60)+',90 '+(cx+52)+',95','var(--blue)',1.5,'var(--blue)'); }
+    if(arrowsIn===0){ s += txt(cx,94,'⇄','var(--blue)',16,700); }
+    return s;
+  }
+  var inner = cell(75,'Isotonic','no net water movement',32,30,0,'var(--teal)')
+    + cell(215,'Hypertonic','water leaves → cell shrinks',20,18,-1,'var(--coral)')
+    + cell(355,'Hypotonic','water enters → swells, may burst',44,40,1,'var(--violet)');
+  return svg(inner,'0 0 430 176',180);
+}
+
+function diagCubes(){
+  var inner =
+      rectEl(20,110,30,30,2,'var(--teal-soft)','var(--teal)',2)
+    + txt(35,160,'1 cm','var(--ink)',10,700) + txt(35,176,'SA:V = 6:1','var(--teal)',9.5,700)
+    + rectEl(110,80,60,60,2,'var(--blue-soft)','var(--blue)',2)
+    + txt(140,160,'2 cm','var(--ink)',10,700) + txt(140,176,'SA:V = 3:1','var(--blue)',9.5,700)
+    + rectEl(230,50,90,90,2,'var(--violet-soft)','var(--violet)',2)
+    + txt(275,160,'3 cm','var(--ink)',10,700) + txt(275,176,'SA:V = 2:1','var(--violet)',9.5,700)
+    + lineEl(340,95,395,95,'var(--coral)',2.5) + poly('395,89 407,95 395,101','var(--coral)',2,'var(--coral)')
+    + txt(372,80,'bigger cell','var(--coral)',9,700) + txt(372,116,'smaller ratio','var(--coral)',9,700);
+  return svg(inner,'0 0 420 186',180);
+}
+
+function diagNaKPump(){
+  var inner =
+      rectEl(0,70,420,60,0,'var(--amber-soft)','none',0)
+    + lineEl(0,70,420,70,'var(--blue)',3) + lineEl(0,130,420,130,'var(--blue)',3)
+    + pathEl('M175,50 L175,150 L245,150 L245,50 Z','var(--violet)',2.5,'var(--violet-soft)')
+    + txt(210,104,'pump','var(--violet)',11,700)
+    + txt(40,40,'OUTSIDE','var(--text-soft)',9,700,'start') + txt(40,168,'INSIDE','var(--text-soft)',9,700,'start')
+    + circleEl(110,40,10,'var(--coral-soft)','var(--coral)',2) + txt(110,44,'Na⁺','var(--coral)',8,700)
+    + circleEl(135,22,10,'var(--coral-soft)','var(--coral)',2) + txt(135,26,'Na⁺','var(--coral)',8,700)
+    + circleEl(150,48,10,'var(--coral-soft)','var(--coral)',2) + txt(150,52,'Na⁺','var(--coral)',8,700)
+    + pathEl('M185,150 C185,175 150,175 150,60','var(--coral)',2,undefined,true)
+    + txt(95,78,'3 Na⁺ out','var(--coral)',10,700)
+    + circleEl(290,160,10,'var(--teal-soft)','var(--teal)',2) + txt(290,164,'K⁺','var(--teal)',8,700)
+    + circleEl(315,176,10,'var(--teal-soft)','var(--teal)',2) + txt(315,180,'K⁺','var(--teal)',8,700)
+    + pathEl('M235,50 C235,25 275,25 290,148','var(--teal)',2,undefined,true)
+    + txt(335,150,'2 K⁺ in','var(--teal)',10,700,'start')
+    + rectEl(236,158,40,18,9,'var(--amber)','var(--amber)',1) + txt(256,171,'ATP','#fff',9,700)
+    + txt(210,196,'Primary active transport: ATP powers movement against the gradient','var(--text-soft)',9,600);
+  return svg(inner,'0 0 420 204',200);
+}
+
+function diagBulk(){
+  var inner =
+      pathEl('M20,30 L200,30','var(--blue)',3)
+    + circleEl(110,75,20,'var(--teal-soft)','var(--teal)',2.2) + dot(110,75,'var(--teal)',5)
+    + pathEl('M110,52 L110,38','var(--ink)',2) + poly('104,42 110,32 116,42','var(--ink)',1.5,'var(--ink)')
+    + txt(110,122,'Exocytosis','var(--teal)',11,700) + txt(110,138,'vesicle fuses, contents leave','var(--text-soft)',8.5,600)
+    + pathEl('M230,30 L290,30 Q320,30 320,60 Q320,90 350,90 Q380,90 380,60 Q380,30 410,30','var(--blue)',3)
+    + dot(350,70,'var(--coral)',6)
+    + txt(330,122,'Endocytosis','var(--coral)',11,700) + txt(330,138,'membrane folds in, forms a vesicle','var(--text-soft)',8.5,600)
+    + txt(20,20,'outside','var(--text-soft)',8.5,600,'start');
+  return svg(inner,'0 0 430 150',160);
+}
+
+
 function diagramFor(key){
+  var X={phospholipid:diagPhospholipid,bilayer:diagPhospholipidBilayer,parts:diagMembraneParts,permeability:diagPermeability,channelCarrier:diagChannelCarrier,tonicity:diagTonicity,cubes:diagCubes,nakpump:diagNaKPump,bulk:diagBulk};
+  if(X[key]) return X[key]();
   if(key==='prokaryotic') return diagProkaryoticCell();
   if(key==='endosymbiosis') return diagEndosymbiosis();
   if(key==='golgi') return diagGolgi();
@@ -257,119 +433,263 @@ function diagramFor(key){
 }
 
 /* ---- question bank ---- */
-var Q = [
-  {kicker:'2.1 Cell Theory', text:'According to your Lecture Notes, which best completes Cell Theory tenet #2?', opts:[
-    'Cells are the basic units of structure and function of living things.','Cells are the basic units of structure and organization of living things.','Cells are made only of DNA and protein.','Cells only exist in multicellular organisms.'
-  ], correct:0, explain:'Your Lecture Notes say "structure and function." (The assigned video phrases it slightly differently, as "structure and organization" — good to recognize both, but the Lecture Notes version is primary.)'},
+var ALLQ = [
+  {sec:'2.1–2.2', kicker:'2.1 Cell Theory', text:'According to your Lecture Notes, which best completes Cell Theory tenet #2?', opts:[
+    'Cells are the basic units of structure and organization of living things.','Cells are the basic units of structure and function of living things.','Cells only exist in multicellular organisms.','Cells are made only of DNA and protein.'
+  ], correct:1, explain:'Your Lecture Notes say "structure and function." (The assigned video phrases it slightly differently, as "structure and organization" — good to recognize both, but the Lecture Notes version is primary.)'},
 
-  {kicker:'2.1 Cell Theory', text:'Which of these is Cell Theory tenet #3?', opts:[
-    'New cells are produced from existing cells.','All cells are identical in shape and size.','Cells can form from non-living matter.','Only animals are made of cells.'
-  ], correct:0, explain:'"New cells are produced from existing cells" is the tenet credited to Rudolf Virchow.'},
+  {sec:'2.1–2.2', kicker:'2.1 Cell Theory', text:'Which of these is Cell Theory tenet #3?', opts:[
+    'Only animals are made of cells.','Cells can form from non-living matter.','All cells are identical in shape and size.','New cells are produced from existing cells.'
+  ], correct:3, explain:'"New cells are produced from existing cells" is the tenet credited to Rudolf Virchow.'},
 
-  {kicker:'2.1 Scientists', text:'Which scientist used an early microscope to examine cork and named the tiny chambers he saw "cells"?', opts:[
-    'Anton van Leeuwenhoek','Robert Hooke','Matthias Schleiden','Rudolf Virchow'
-  ], correct:1, explain:'Robert Hooke, 1665 — the cork\'s tiny chambers reminded him of small rooms, so he called them "cells."'},
+  {sec:'2.1–2.2', kicker:'2.1 Scientists', text:'Which scientist used an early microscope to examine cork and named the tiny chambers he saw "cells"?', opts:[
+    'Anton van Leeuwenhoek','Matthias Schleiden','Rudolf Virchow','Robert Hooke'
+  ], correct:3, explain:'Robert Hooke, 1665 — the cork\'s tiny chambers reminded him of small rooms, so he called them "cells."'},
 
-  {kicker:'2.1 Scientists', text:'Anton van Leeuwenhoek is known for:', opts:[
-    'Naming cells after looking at cork','Concluding all animals are made of cells','Being the first to observe microscopic living organisms ("animalcules") in pond water','Concluding all cells come from preexisting cells'
-  ], correct:2, explain:'He observed pond water and dental scrapings and called the tiny living things he saw "animalcules."'},
+  {sec:'2.1–2.2', kicker:'2.1 Scientists', text:'Anton van Leeuwenhoek is known for:', opts:[
+    'Being the first to observe microscopic living organisms ("animalcules") in pond water','Naming cells after looking at cork','Concluding all cells come from preexisting cells','Concluding all animals are made of cells'
+  ], correct:0, explain:'He observed pond water and dental scrapings and called the tiny living things he saw "animalcules."'},
 
-  {kicker:'2.1 Scientists', text:'Which scientist concluded "all plants are made of cells"?', opts:[
-    'Theodor Schwann','Matthias Schleiden','Robert Hooke','Rudolf Virchow'
-  ], correct:1, explain:'Schleiden — plants. (Schwann is the "all animals" one — easy to mix up since they\'re often mentioned together.)'},
+  {sec:'2.1–2.2', kicker:'2.1 Scientists', text:'Which scientist concluded "all plants are made of cells"?', opts:[
+    'Theodor Schwann','Rudolf Virchow','Robert Hooke','Matthias Schleiden'
+  ], correct:3, explain:'Schleiden — plants. (Schwann is the "all animals" one — easy to mix up since they\'re often mentioned together.)'},
 
-  {kicker:'2.1 Scientists', text:'Which scientist concluded that all cells come from preexisting cells?', opts:[
-    'Rudolf Virchow','Theodor Schwann','Anton van Leeuwenhoek','Matthias Schleiden'
-  ], correct:0, explain:'Rudolf Virchow — this idea became Cell Theory tenet #3.'},
+  {sec:'2.1–2.2', kicker:'2.1 Scientists', text:'Which scientist concluded that all cells come from preexisting cells?', opts:[
+    'Anton van Leeuwenhoek','Rudolf Virchow','Matthias Schleiden','Theodor Schwann'
+  ], correct:1, explain:'Rudolf Virchow — this idea became Cell Theory tenet #3.'},
 
-  {kicker:'2.1 Prokaryote vs. Eukaryote', text:'Which of these is true of a prokaryotic cell?', opts:[
-    'No nucleus and no membrane-bound organelles','Has a nucleus but no ribosomes','Has membrane-bound organelles but no cell membrane','Is always multicellular'
-  ], correct:0, explain:'Prokaryotic cells have no nucleus and no membrane-bound organelles — but they DO have ribosomes, a cell membrane, cytoplasm, and DNA.'},
+  {sec:'2.1–2.2', kicker:'2.1 Prokaryote vs. Eukaryote', text:'Which of these is true of a prokaryotic cell?', opts:[
+    'Has membrane-bound organelles but no cell membrane','Is always multicellular','No nucleus and no membrane-bound organelles','Has a nucleus but no ribosomes'
+  ], correct:2, explain:'Prokaryotic cells have no nucleus and no membrane-bound organelles — but they DO have ribosomes, a cell membrane, cytoplasm, and DNA.'},
 
-  {kicker:'2.1 Prokaryote vs. Eukaryote — Diagram', text:'This cell has no nucleus, a single loop of DNA, and scattered ribosomes. What kind of cell is it?', diagram:'prokaryotic', opts:[
-    'Eukaryotic','Prokaryotic','A plant cell only','A cell with membrane-bound organelles'
+  {sec:'2.1–2.2', kicker:'2.1 Prokaryote vs. Eukaryote — Diagram', text:'This cell has no nucleus, a single loop of DNA, and scattered ribosomes. What kind of cell is it?', diagram:'prokaryotic', opts:[
+    'A cell with membrane-bound organelles','Prokaryotic','A plant cell only','Eukaryotic'
   ], correct:1, explain:'No nucleus plus a single loop of DNA (the nucleoid) is the signature of a prokaryotic cell.'},
 
-  {kicker:'2.1 Prokaryote vs. Eukaryote', text:'Which of these were the first cells on Earth, and changed Earth\'s atmosphere?', opts:[
-    'Eukaryotic cells','Cyanobacteria (a prokaryote)','Fungi','Protists'
-  ], correct:1, explain:'Cyanobacteria — a type of prokaryote — were among the first cells on Earth and changed the atmosphere.'},
+  {sec:'2.1–2.2', kicker:'2.1 Prokaryote vs. Eukaryote', text:'Which of these were the first cells on Earth, and changed Earth\'s atmosphere?', opts:[
+    'Cyanobacteria (a prokaryote)','Protists','Eukaryotic cells','Fungi'
+  ], correct:0, explain:'Cyanobacteria — a type of prokaryote — were among the first cells on Earth and changed the atmosphere.'},
 
-  {kicker:'2.1 Endosymbiosis', text:'In the two-event version of Endosymbiosis Theory, what does the host cell engulf to eventually form the mitochondrion?', opts:[
-    'A cyanobacterium','An α-proteobacterium','Another eukaryotic cell','A virus'
-  ], correct:1, explain:'Host cell engulfs an α-proteobacterium → becomes the mitochondrion. (A separate, later engulfment of a cyanobacterium becomes the chloroplast.)'},
+  {sec:'2.1–2.2', kicker:'2.1 Endosymbiosis', text:'In the two-event version of Endosymbiosis Theory, what does the host cell engulf to eventually form the mitochondrion?', opts:[
+    'A cyanobacterium','Another eukaryotic cell','A virus','An α-proteobacterium'
+  ], correct:3, explain:'Host cell engulfs an α-proteobacterium → becomes the mitochondrion. (A separate, later engulfment of a cyanobacterium becomes the chloroplast.)'},
 
-  {kicker:'2.1 Endosymbiosis — Diagram', text:'This diagram shows a cell engulfing smaller cells in two steps. What does Endosymbiosis Theory say happens to those engulfed cells?', diagram:'endosymbiosis', opts:[
-    'They are digested immediately for energy and destroyed','They become permanent, beneficial residents of the host cell — the mitochondrion and chloroplast','They escape the host cell right away','They turn into ribosomes'
+  {sec:'2.1–2.2', kicker:'2.1 Endosymbiosis — Diagram', text:'This diagram shows a cell engulfing smaller cells in two steps. What does Endosymbiosis Theory say happens to those engulfed cells?', diagram:'endosymbiosis', opts:[
+    'They escape the host cell right away','They become permanent, beneficial residents of the host cell — the mitochondrion and chloroplast','They are digested immediately for energy and destroyed','They turn into ribosomes'
   ], correct:1, explain:'Endosymbiosis Theory: the engulfed prokaryotes end up living inside the host, both benefit, and this is passed on to future generations — becoming mitochondria and chloroplasts.'},
 
-  {kicker:'2.2 Organelles', text:'Which organelle is surrounded by a double nuclear membrane and is also responsible for synthesizing ribosomal RNA (rRNA)?', opts:[
-    'Nucleus','Nucleolus','Golgi Apparatus','Rough ER'
-  ], correct:0, explain:'The Nucleus — double nuclear membrane, houses/protects DNA, and synthesizes rRNA.'},
+  {sec:'2.1–2.2', kicker:'2.2 Organelles', text:'Which organelle is surrounded by a double nuclear membrane and is also responsible for synthesizing ribosomal RNA (rRNA)?', opts:[
+    'Golgi Apparatus','Rough ER','Nucleus','Nucleolus'
+  ], correct:2, explain:'The Nucleus — double nuclear membrane, houses/protects DNA, and synthesizes rRNA.'},
 
-  {kicker:'2.2 Organelles', text:'What is the Nucleolus responsible for?', opts:[
-    'Site of ribosome synthesis in the cell','Detoxifying cell wastes','Packaging and shipping proteins','Breaking down hydrogen peroxide'
-  ], correct:0, explain:'The Nucleolus is the site of ribosome synthesis in the cell.'},
+  {sec:'2.1–2.2', kicker:'2.2 Organelles', text:'What is the Nucleolus responsible for?', opts:[
+    'Packaging and shipping proteins','Site of ribosome synthesis in the cell','Breaking down hydrogen peroxide','Detoxifying cell wastes'
+  ], correct:1, explain:'The Nucleolus is the site of ribosome synthesis in the cell.'},
 
-  {kicker:'2.2 Organelles', text:'Which organelle is contiguous with the nucleus, has ribosomes attached, and sends proteins on to the Golgi Apparatus?', opts:[
+  {sec:'2.1–2.2', kicker:'2.2 Organelles', text:'Which organelle is contiguous with the nucleus, has ribosomes attached, and sends proteins on to the Golgi Apparatus?', opts:[
     'Smooth ER','Rough ER','Lysosome','Peroxisome'
   ], correct:1, explain:'Rough ER — "rough" because of the attached ribosomes; it transports proteins onward to the Golgi.'},
 
-  {kicker:'2.2 Organelles — Diagram', text:'This organelle is a stack of curved plates with a receiving (cis) side and a shipping (trans) side. What is it?', diagram:'golgi', opts:[
-    'Golgi Apparatus','Rough ER','Mitochondrion','Nucleolus'
-  ], correct:0, explain:'The Golgi Apparatus — cis face receives from the ER, trans face ships materials out. (Think: Amazon warehouse.)'},
+  {sec:'2.1–2.2', kicker:'2.2 Organelles — Diagram', text:'This organelle is a stack of curved plates with a receiving (cis) side and a shipping (trans) side. What is it?', diagram:'golgi', opts:[
+    'Nucleolus','Mitochondrion','Rough ER','Golgi Apparatus'
+  ], correct:3, explain:'The Golgi Apparatus — cis face receives from the ER, trans face ships materials out. (Think: Amazon warehouse.)'},
 
-  {kicker:'2.2 Organelles', text:'Which organelle breaks down cell waste and denatured proteins with hydrolytic enzymes, and is also involved in apoptosis (programmed cell death)?', opts:[
-    'Lysosome','Peroxisome','Ribosome','Vacuole'
-  ], correct:0, explain:'Lysosome — hydrolytic enzymes break waste into monomers; it\'s also involved in apoptosis.'},
+  {sec:'2.1–2.2', kicker:'2.2 Organelles', text:'Which organelle breaks down cell waste and denatured proteins with hydrolytic enzymes, and is also involved in apoptosis (programmed cell death)?', opts:[
+    'Vacuole','Lysosome','Peroxisome','Ribosome'
+  ], correct:1, explain:'Lysosome — hydrolytic enzymes break waste into monomers; it\'s also involved in apoptosis.'},
 
-  {kicker:'2.2 Organelles', text:'Which organelle uses catalase to break down hydrogen peroxide?', opts:[
-    'Peroxisome','Lysosome','Mitochondrion','Golgi Apparatus'
-  ], correct:0, explain:'Peroxisome — catalase breaks down toxic hydrogen peroxide, alongside lipid hydrolysis.'},
+  {sec:'2.1–2.2', kicker:'2.2 Organelles', text:'Which organelle uses catalase to break down hydrogen peroxide?', opts:[
+    'Golgi Apparatus','Peroxisome','Lysosome','Mitochondrion'
+  ], correct:1, explain:'Peroxisome — catalase breaks down toxic hydrogen peroxide, alongside lipid hydrolysis.'},
 
-  {kicker:'2.2 Organelles', text:'What is the Mitochondrion responsible for?', opts:[
-    'Some of the processes that synthesize ATP','Breaking down hydrogen peroxide','Storing water for the cell','Making ribosomal RNA'
+  {sec:'2.1–2.2', kicker:'2.2 Organelles', text:'What is the Mitochondrion responsible for?', opts:[
+    'Some of the processes that synthesize ATP','Breaking down hydrogen peroxide','Making ribosomal RNA','Storing water for the cell'
   ], correct:0, explain:'The Mitochondrion is responsible for some of the processes that synthesize ATP — the Citric Acid Cycle in the matrix, and oxidative phosphorylation on the inner membrane.'},
 
-  {kicker:'2.2 Organelles', text:'The chloroplast\'s internal anatomy is arranged in stacks of thylakoid membranes. What are those stacks called, and why do they matter?', opts:[
-    'Grana — they increase surface area so more chemical reactions can occur','Cristae — they store DNA','Vesicles — they transport waste out of the cell','Nucleoids — they hold genetic material'
-  ], correct:0, explain:'Grana — stacks of thylakoid membranes; more thylakoids means more surface area for chemical reactions to occur.'},
+  {sec:'2.1–2.2', kicker:'2.2 Organelles', text:'The chloroplast\'s internal anatomy is arranged in stacks of thylakoid membranes. What are those stacks called, and why do they matter?', opts:[
+    'Cristae — they store DNA','Grana — they increase surface area so more chemical reactions can occur','Vesicles — they transport waste out of the cell','Nucleoids — they hold genetic material'
+  ], correct:1, explain:'Grana — stacks of thylakoid membranes; more thylakoids means more surface area for chemical reactions to occur.'},
 
-  {kicker:'2.2 Organelles', text:'Per your teacher\'s notes, which category is the Cell Membrane grouped under?', opts:[
-    'Membrane Bound Organelles','Non-Membrane Bound Organelles','It isn\'t classified as an organelle','Cytoskeleton'
-  ], correct:1, explain:'Unusual but true, per the slides: Cell Membrane is grouped under Non-Membrane Bound Organelles, alongside cell wall, ribosomes, cytoplasm, cytoskeleton, centriole/spindle fibers, and flagella/cilia.'},
+  {sec:'2.1–2.2', kicker:'2.2 Organelles', text:'Per your teacher\'s notes, which category is the Cell Membrane grouped under?', opts:[
+    'Non-Membrane Bound Organelles','It isn\'t classified as an organelle','Membrane Bound Organelles','Cytoskeleton'
+  ], correct:0, explain:'Unusual but true, per the slides: Cell Membrane is grouped under Non-Membrane Bound Organelles, alongside cell wall, ribosomes, cytoplasm, cytoskeleton, centriole/spindle fibers, and flagella/cilia.'},
 
-  {kicker:'2.2 Organelles', text:'Per your teacher\'s notes, what makes up the Cytoskeleton?', opts:[
-    'Actin, Microtubules, Intermediate filaments','Actin, Microtubules, Actin filaments','Microtubules, Ribosomes, Centrioles','Actin, Cilia, Flagella'
+  {sec:'2.1–2.2', kicker:'2.2 Organelles', text:'Per your teacher\'s notes, what makes up the Cytoskeleton?', opts:[
+    'Actin, Cilia, Flagella','Actin, Microtubules, Actin filaments','Actin, Microtubules, Intermediate filaments','Microtubules, Ribosomes, Centrioles'
   ], correct:1, explain:'Your teacher\'s own notes list "Actin, Microtubules, Actin filaments" (actin appears twice — likely a slide typo, but that\'s what\'s written, not the standard textbook "intermediate filaments").'},
 
-  {kicker:'2.2 Ribosomes — Diagram', text:'This structure has a large and small subunit with a strand threading through the middle. What is it, and what is it doing?', diagram:'ribosome', opts:[
-    'Ribosome, making a protein','Golgi Apparatus, shipping a protein','Nucleus, storing DNA','Mitochondrion, making ATP'
-  ], correct:0, explain:'A ribosome — made of a large and small subunit — with mRNA threading through as it builds a protein.'},
+  {sec:'2.1–2.2', kicker:'2.2 Ribosomes — Diagram', text:'This structure has a large and small subunit with a strand threading through the middle. What is it, and what is it doing?', diagram:'ribosome', opts:[
+    'Mitochondrion, making ATP','Nucleus, storing DNA','Golgi Apparatus, shipping a protein','Ribosome, making a protein'
+  ], correct:3, explain:'A ribosome — made of a large and small subunit — with mRNA threading through as it builds a protein.'},
 
-  {kicker:'2.2 Plant vs. Animal — Diagram', text:'This diagram highlights parts found ONLY in the plant cell. Which set is correct?', diagram:'plantAnimal', opts:[
-    'Nucleus, Ribosomes, Mitochondrion','Cell Wall, Chloroplast, Large Central Vacuole','Cell Membrane, Cytoplasm, Golgi Apparatus','Lysosome, Peroxisome, Centriole'
+  {sec:'2.1–2.2', kicker:'2.2 Plant vs. Animal — Diagram', text:'This diagram highlights parts found ONLY in the plant cell. Which set is correct?', diagram:'plantAnimal', opts:[
+    'Nucleus, Ribosomes, Mitochondrion','Cell Wall, Chloroplast, Large Central Vacuole','Lysosome, Peroxisome, Centriole','Cell Membrane, Cytoplasm, Golgi Apparatus'
   ], correct:1, explain:'Cell wall, chloroplast, and a large central vacuole are the classic plant-only features versus an animal cell.'},
 
-  {kicker:'2.2 Cell Clinic — Room 1', text:'Room 1: A patient reports constant fatigue with no other symptoms. Which organelle is most likely involved?', opts:[
-    'Mitochondrion','Golgi Apparatus','Nucleus','Ribosome'
+  {sec:'2.1–2.2', kicker:'2.2 Cell Clinic — Room 1', text:'Room 1: A patient reports constant fatigue with no other symptoms. Which organelle is most likely involved?', opts:[
+    'Mitochondrion','Ribosome','Nucleus','Golgi Apparatus'
   ], correct:0, explain:'Fatigue points to the Mitochondrion — it\'s responsible for some of the processes that synthesize ATP.'},
 
-  {kicker:'2.2 Cell Clinic — Room 3', text:'Room 3: A disorder is passed down from parent to child. Which organelle is most likely involved?', opts:[
-    'Nucleus','Lysosome','Cell Membrane','Golgi Apparatus'
-  ], correct:0, explain:'Inherited disorders trace back to the Nucleus, which houses and protects the DNA.'},
+  {sec:'2.1–2.2', kicker:'2.2 Cell Clinic — Room 3', text:'Room 3: A disorder is passed down from parent to child. Which organelle is most likely involved?', opts:[
+    'Golgi Apparatus','Lysosome','Nucleus','Cell Membrane'
+  ], correct:2, explain:'Inherited disorders trace back to the Nucleus, which houses and protects the DNA.'},
 
-  {kicker:'2.2 Cell Clinic — Room 4', text:'Room 4: A cell needs to build and ship out an antibody (a protein). What is the correct order it travels through the cell?', opts:[
-    'Ribosome → Rough ER → Golgi Apparatus → vesicle','Nucleus → Mitochondrion → Golgi Apparatus','Golgi Apparatus → Ribosome → Rough ER','Rough ER → Ribosome → Lysosome'
-  ], correct:0, explain:'Proteins like antibodies follow: made at the Ribosome → processed by the Rough ER → packaged/shipped by the Golgi Apparatus → sent out in a vesicle.'},
+  {sec:'2.1–2.2', kicker:'2.2 Cell Clinic — Room 4', text:'Room 4: A cell needs to build and ship out an antibody (a protein). What is the correct order it travels through the cell?', opts:[
+    'Nucleus → Mitochondrion → Golgi Apparatus','Golgi Apparatus → Ribosome → Rough ER','Rough ER → Ribosome → Lysosome','Ribosome → Rough ER → Golgi Apparatus → vesicle'
+  ], correct:3, explain:'Proteins like antibodies follow: made at the Ribosome → processed by the Rough ER → packaged/shipped by the Golgi Apparatus → sent out in a vesicle.'},
 
-  {kicker:'2.2 Cell Clinic — Room 5', text:'Room 5: A cell is experiencing water intoxication — too much water is moving in or out. Which organelle/structure is involved?', opts:[
+  {sec:'2.1–2.2', kicker:'2.2 Cell Clinic — Room 5', text:'Room 5: A cell is experiencing water intoxication — too much water is moving in or out. Which organelle/structure is involved?', opts:[
     'Cell Membrane','Nucleolus','Peroxisome','Vacuole'
   ], correct:0, explain:'The Cell Membrane is the permeability barrier that controls what moves into and out of the cell.'},
 
-  {kicker:'2.2 Cell Clinic — Rooms 6 & 7', text:'Room 6 involves a bacterial infection where enzymes are released to destroy it; Room 7 involves a cell that can\'t package its enzymes and bile. In order (Room 6, then Room 7), which organelles are involved?', opts:[
-    'Lysosome, then Golgi Apparatus','Golgi Apparatus, then Lysosome','Mitochondrion, then Nucleus','Ribosome, then Peroxisome'
-  ], correct:0, explain:'Room 6 = Lysosome (hydrolytic enzymes break things down). Room 7 = Golgi Apparatus (packages and ships enzymes/bile onward).'}
+  {sec:'2.1–2.2', kicker:'2.2 Cell Clinic — Rooms 6 & 7', text:'Room 6 involves a bacterial infection where enzymes are released to destroy it; Room 7 involves a cell that can\'t package its enzymes and bile. In order (Room 6, then Room 7), which organelles are involved?', opts:[
+    'Ribosome, then Peroxisome','Golgi Apparatus, then Lysosome','Lysosome, then Golgi Apparatus','Mitochondrion, then Nucleus'
+  ], correct:2, explain:'Room 6 = Lysosome (hydrolytic enzymes break things down). Room 7 = Golgi Apparatus (packages and ships enzymes/bile onward).'},
+
+  {sec:'2.3', kicker:'2.3 Job of the membrane', text:'What does "selectively permeable" mean?', opts:[
+    'The membrane lets nothing in or out.','The membrane only lets water through.','The membrane chooses what can enter and exit the cell.','The membrane lets everything pass freely.'
+  ], correct:2, explain:'Selective = it discriminates. Some things pass easily, some need help, and some can\'t pass at all.'},
+  {sec:'2.3', kicker:'2.3 Fluid mosaic model', text:'In the "fluid mosaic" model, what does "mosaic" refer to?', opts:[
+    'Carbohydrates form colorful patterns.','The membrane has two layers.','The membrane is made of many different macromolecules.','Proteins and lipids move sideways.'
+  ], correct:2, explain:'Mosaic = made of many different pieces. "Fluid" is the part about lipids and proteins shifting sideways.'},
+  {sec:'2.3', kicker:'2.3 Fluid mosaic model', text:'Which part of the membrane moves faster sideways, and why?', opts:[
+    'Lipids, because they are smaller than proteins.','Nothing moves; the membrane is rigid.','Carbohydrates, because they are on the outside.','Proteins, because they are larger than lipids.'
+  ], correct:0, explain:'Both lipids and proteins shift laterally, but the smaller lipids move faster.'},
+  {sec:'2.3', kicker:'2.3 Membrane components', text:'Which macromolecule is NOT part of the cell membrane?', opts:[
+    'Nucleic acids','Proteins','Carbohydrates','Lipids'
+  ], correct:0, explain:'The membrane has lipids, proteins, and carbohydrates. Nucleic acids are the one left out.'},
+  {sec:'2.3', kicker:'2.3 Phospholipid — Diagram', text:'On this phospholipid, which part is hydrophilic?', diagram:'phospholipid', opts:[
+    'The head (phosphate group + glycerol)','The unsaturated tail','The saturated tail','Both fatty acid tails'
+  ], correct:0, explain:'The head is polar, so it interacts well with water (also polar). The fatty acid tails are nonpolar and hydrophobic.'},
+  {sec:'2.3', kicker:'2.3 Phospholipid', text:'The two tails of a phospholipid are best described as:', opts:[
+    'Fatty acids, one saturated and one unsaturated, both nonpolar','Two phosphate groups, both polar','Carbohydrate chains used as ID tags','Glycerol chains that attract water'
+  ], correct:0, explain:'The tails are fatty acids (one saturated, one unsaturated). They are nonpolar, so they are hydrophobic.'},
+  {sec:'2.3', kicker:'2.3 Bilayer — Diagram', text:'Why do the tails in this bilayer point toward each other in the middle?', diagram:'bilayer', opts:[
+    'They are hydrophilic and are attracted to each other.','Cholesterol pulls them together.','They are charged and repel the heads.','They are hydrophobic, so they fold inward away from the water on both sides.'
+  ], correct:3, explain:'Both sides of the membrane are watery (cytoplasm inside, interstitial fluid outside), so the hydrophobic tails tuck into the middle.'},
+  {sec:'2.3', kicker:'2.3 Bilayer', text:'The fluid between cells, such as blood and lymph, is called:', opts:[
+    'Interstitial fluid','Cytosolic fluid','Glycerol','Cytoplasm'
+  ], correct:0, explain:'Interstitial fluid is outside the cells (extracellular). Cytoplasm/cytosolic fluid is inside. Both are mostly water.'},
+  {sec:'2.3', kicker:'2.3 Cholesterol', text:'What is cholesterol\'s job in the cell membrane?', opts:[
+    'It forms the phospholipid heads.','It keeps fluidity balanced: not too much movement, and no solidifying in the cold.','It transports glucose into the cell.','It acts as an ID tag for cell recognition.'
+  ], correct:1, explain:'Cholesterol stops phospholipids from moving too freely and stops them from packing too closely at low temperatures.'},
+  {sec:'2.3', kicker:'2.3 Cholesterol', text:'Where is cholesterol found in the membrane?', opts:[
+    'Only on peripheral proteins','In the hydrophobic middle, among the fatty acid tails','Attached to carbohydrates on the outside','Floating in the cytoplasm'
+  ], correct:1, explain:'Cholesterol is a lipid and is hydrophobic, so it sits in the hydrophobic region.'},
+  {sec:'2.3', kicker:'2.3 Membrane proteins — Diagram', text:'According to the lecture, what makes a protein "integral"?', diagram:'parts', opts:[
+    'It is built into the hydrophobic middle, either all the way across or partway.','It only touches the phosphate heads.','It has a carbohydrate attached.','It is found only inside the cell.'
+  ], correct:0, explain:'Integral proteins are integrated into the hydrophobic region. Peripheral proteins sit loosely on the surface.'},
+  {sec:'2.3', kicker:'2.3 Membrane proteins', text:'According to the lecture and slides, a peripheral protein is:', opts:[
+    'Spanning the membrane from inside to outside','A lipid with a sugar attached','Not embedded; loosely bound to the membrane surface or to other proteins','Always a transport protein'
+  ], correct:2, explain:'"Peripheral" = on the edge. (The 2.6 worksheet uses different categories, so ask which version the test uses.)'},
+  {sec:'2.3', kicker:'2.3 Membrane proteins', text:'Which membrane protein function is the main focus of this unit?', opts:[
+    'Transport','Signal transduction','Intercellular joining','Attachment to the cytoskeleton'
+  ], correct:0, explain:'Transport is this unit\'s focus. Enzymatic activity comes back in Unit 3.'},
+  {sec:'2.3', kicker:'2.3 Carbohydrates', text:'A carbohydrate chain attached to a protein is called a:', opts:[
+    'Aquaporin','Phospholipid','Glycoprotein','Glycolipid'
+  ], correct:2, explain:'"Glyco" = carbohydrate. Attached to a protein = glycoprotein; attached to a lipid = glycolipid.'},
+  {sec:'2.3', kicker:'2.3 Carbohydrates', text:'What is the main job of carbohydrates on the membrane?', opts:[
+    'Cell-to-cell recognition (ID tags)','Storing genetic information','Moving water into the cell','Keeping the membrane from freezing'
+  ], correct:0, explain:'Carbohydrate chains, mostly on the outside, help cells recognize each other.'},
+  {sec:'2.3', kicker:'2.3 Selective permeability — Diagram', text:'Which of these crosses the phospholipid bilayer most easily on its own?', diagram:'permeability', opts:[
+    'A large protein','A charged ion','Oxygen gas','Glucose'
+  ], correct:2, explain:'Gases are small and nonpolar, so they pass easily. Glucose is large, ions are charged, and proteins are large.'},
+  {sec:'2.3', kicker:'2.3 Selective permeability', text:'How does water move across the phospholipid bilayer on its own?', opts:[
+    'Only by attaching to cholesterol.','It crosses faster than any other molecule.','It can\'t cross at all.','Some gets through, but slowly and not in large amounts.'
+  ], correct:3, explain:'Water is small but polar, so it crosses the bilayer poorly. Aquaporins let large amounts through.'},
+  {sec:'2.3', kicker:'2.3 Selective permeability', text:'"Large and in charge" is a hint for remembering which molecules:', opts:[
+    'Cross the bilayer the fastest','Act as ID tags','Make up the phospholipid heads','Cannot cross the bilayer on their own'
+  ], correct:3, explain:'Large polar molecules and charged particles are blocked by the hydrophobic middle and need a transport protein.'},
+  {sec:'2.3', kicker:'2.3 Transport proteins', text:'Cells need glucose, but it can\'t pass between phospholipids. How does it get in?', opts:[
+    'It dissolves in the fatty acid tails','It attaches to a glycolipid','Cholesterol carries it','Through a transport protein'
+  ], correct:3, explain:'Glucose is too large for the bilayer, so it needs a transport protein.'},
+  {sec:'2.3', kicker:'2.3 Transport proteins — Diagram', text:'In this diagram, how is the carrier protein (right) different from the channel protein (left)?', diagram:'channelCarrier', opts:[
+    'The carrier moves only water.','The carrier is peripheral; the channel is integral.','The carrier binds the material and changes shape; the channel stays open like a tunnel.','There is no difference.'
+  ], correct:2, explain:'Channels are open hydrophilic tunnels. Carriers bind a specific material, then change shape to shuttle it across.'},
+  {sec:'2.3', kicker:'2.3 Transport proteins', text:'An aquaporin is:', opts:[
+    'A carrier protein for glucose','A glycoprotein ID tag','A type of cholesterol','A channel protein that lets large amounts of water in and out'
+  ], correct:3, explain:'Aquaporins are water channels. Water can cross the bilayer on its own, but only slowly.'},
+  {sec:'2.3', kicker:'2.3 Transport proteins', text:'Which statement about transport proteins is true?', opts:[
+    'Any transport protein can move any molecule.','They are integral, transmembrane proteins, and each is specific to what it transports.','They are peripheral proteins on the outer surface.','They are made of phospholipids.'
+  ], correct:1, explain:'Transport proteins span the whole membrane, and each one only moves certain materials.'},
+
+  {sec:'2.7', kicker:'2.7 Passive Transport', text:'Which statement is true of ALL passive transport?', opts:[
+    'It always uses a transport protein.','It only moves water.','It needs no energy from the cell.','It moves materials from low to high concentration.'
+  ], correct:2, explain:'Passive transport never uses the cell\'s energy. Only facilitated diffusion uses a protein, and all passive transport goes high → low.'},
+  {sec:'2.7', kicker:'2.7 Simple Diffusion', text:'A drop of food coloring spreads through a glass of still water until the color is even. What is the even state called?', opts:[
+    'Equilibrium','Active transport','Concentration gradient','Cytolysis'
+  ], correct:0, explain:'Once molecules are evenly spread, the system is at equilibrium. They still move, but with no net change.'},
+  {sec:'2.7', kicker:'2.7 Simple Diffusion', text:'In simple diffusion, molecules move:', opts:[
+    'From low concentration to high concentration','Only through channel proteins','Only when ATP is present','From high concentration to low concentration'
+  ], correct:3, explain:'Diffusion runs down the concentration gradient, high → low, with no energy.'},
+  {sec:'2.7', kicker:'2.7 Facilitated Diffusion', text:'Glucose enters a cell through a carrier protein, moving from high to low concentration. What kind of transport is this?', opts:[
+    'Facilitated diffusion (passive)','Endocytosis','Primary active transport','Simple diffusion'
+  ], correct:0, explain:'A protein is helping, but it\'s high → low with no energy, so it\'s facilitated diffusion, which is passive.'},
+  {sec:'2.7', kicker:'2.7 Facilitated Diffusion', text:'An ion channel is closed. There is much more of the ion outside the cell than inside. What happens?', opts:[
+    'Ions flow out.','The cell uses ATP to force it open.','Ions flow in anyway.','No ions flow through that channel until it opens.'
+  ], correct:3, explain:'Gated channels can open and close. A closed channel lets nothing through, even with a gradient.'},
+  {sec:'2.8', kicker:'2.7–2.8 Osmosis', text:'Osmosis is best described as:', opts:[
+    'Movement of solutes from low to high concentration','Movement of water from where there\'s more water to where there\'s less water','Movement of water using ATP','A cell engulfing a large particle'
+  ], correct:1, explain:'Osmosis is diffusion of water: more water → less water, no energy.'},
+  {sec:'2.8', kicker:'2.8 Tonicity — Diagram', text:'In the middle panel, water leaves the cell and it shrinks. The solution around it is:', diagram:'tonicity', opts:[
+    'Equilibrium','Isotonic','Hypertonic','Hypotonic'
+  ], correct:2, explain:'Hyper = more solute outside, so water moves out toward the solute and the cell shrinks.'},
+  {sec:'2.8', kicker:'2.8 Tonicity', text:'A cell\'s inside is 1% salt. It is placed in a 4% salt solution. Which way does water move? (original numbers)', opts:[
+    'Water can\'t cross the membrane','Out of the cell','No net movement','Into the cell'
+  ], correct:1, explain:'The solution has more solute, so it\'s hypertonic. Water moves toward the solute, out of the cell.'},
+  {sec:'2.8', kicker:'2.8 Tonicity', text:'The same 1%-salt cell is placed in a 0.2% salt solution. What happens to an animal cell?', opts:[
+    'It undergoes plasmolysis.','Water moves out; it shrivels.','Nothing changes.','Water moves in; it swells and may burst (cytolysis).'
+  ], correct:3, explain:'Less solute outside = hypotonic. Water rushes in, and with no cell wall an animal cell can burst.'},
+  {sec:'2.8', kicker:'2.8 Tonicity', text:'A plant cell in a hypotonic solution becomes:', opts:[
+    'Shriveled','Turgid (firm against its cell wall)','Plasmolyzed','Burst (cytolysis)'
+  ], correct:1, explain:'Water rushes in, but the cell wall stops it from bursting. The cell presses firmly against the wall, which is healthy for a plant.'},
+  {sec:'2.8', kicker:'2.8 Tonicity', text:'A wilting plant cell\'s membrane has pulled away from its cell wall. This is:', opts:[
+    'Turgor, caused by an isotonic environment','Endocytosis','Plasmolysis, caused by a hypertonic environment','Cytolysis, caused by a hypotonic environment'
+  ], correct:2, explain:'In a hypertonic solution water leaves, and the membrane shrinks away from the wall. That\'s plasmolysis.'},
+  {sec:'2.8', kicker:'2.8 Tonicity', text:'"Isotonic" means:', opts:[
+    'Equal solute concentrations, so no net water movement','The cell has a cell wall','Less solute outside the cell','More solute outside the cell'
+  ], correct:0, explain:'Iso = same. Water still moves both ways, but there\'s no net change and the cell stays the same size.'},
+  {sec:'2.10', kicker:'2.10 SA:V — Diagram', text:'What is the surface area to volume ratio of a 4 cm cube? (SA = l × w × 6, V = l × w × h)', diagram:'cubes', opts:[
+    '1:1','3:2','6:1','2:1'
+  ], correct:1, explain:'SA = 4×4×6 = 96. V = 4×4×4 = 64. 96:64 simplifies to 3:2.'},
+  {sec:'2.10', kicker:'2.10 SA:V', text:'As a cube (or cell) gets larger, its surface area to volume ratio:', opts:[
+    'Becomes zero','Stays the same','Increases, because surface area grows faster','Decreases, because volume grows faster than surface area'
+  ], correct:3, explain:'Both grow, but volume grows faster, so there\'s less membrane per amount of cell.'},
+  {sec:'2.10', kicker:'2.10 SA:V', text:'Which cell can get rid of its wastes by diffusion most efficiently?', opts:[
+    'A small cell, because it has a larger SA:V ratio','A large cell, because it has more surface area in total','They are all equally efficient','A large cell, because it has more volume'
+  ], correct:0, explain:'More membrane relative to its inside means materials reach and leave the whole cell faster.'},
+  {sec:'2.10', kicker:'2.10 Agar Cubes', text:'In the agar cube experiment, pink agar turns clear as acid diffuses in. After the same amount of time, which cube still has the most pink in its center?', opts:[
+    'All cubes are equally pink','The smallest cube','The largest cube','None, since all cubes turn clear instantly'
+  ], correct:2, explain:'Diffusion can\'t reach the center of a big cube as quickly. That\'s why cells stay small.'},
+  {sec:'2.11', kicker:'2.11 Active Transport', text:'Which is a defining feature of active transport?', opts:[
+    'It happens only through open channels.','It only moves water.','It moves substances from high to low with no energy.','It moves substances against the concentration gradient using ATP.'
+  ], correct:3, explain:'Active = low → high (against the gradient), powered by ATP, usually by a carrier protein or pump.'},
+  {sec:'2.11', kicker:'2.11 Symport & Antiport', text:'A transport protein moves one molecule into the cell while moving a different one out. It is a:', opts:[
+    'Antiport','Vesicle','Symport','Channel protein'
+  ], correct:0, explain:'Anti = opposite directions. Symport moves both the same way.'},
+  {sec:'2.11', kicker:'2.11 Na⁺/K⁺ Pump — Diagram', text:'Each cycle, the Na⁺/K⁺ pump moves:', diagram:'nakpump', opts:[
+    '3 Na⁺ out and 2 K⁺ in','2 Na⁺ out and 3 K⁺ in','3 Na⁺ in and 2 K⁺ out','1 Na⁺ out and 1 K⁺ in'
+  ], correct:0, explain:'3 sodium out, 2 potassium in, using ATP. More positive charge goes out than in, so it\'s an electrogenic pump.'},
+  {sec:'2.11', kicker:'2.11 Types of Active Transport', text:'The Na⁺/K⁺ pump is an example of:', opts:[
+    'Facilitated diffusion','Primary active transport','Secondary active transport','Osmosis'
+  ], correct:1, explain:'It uses ATP directly, which is what makes it primary.'},
+  {sec:'2.11', kicker:'2.11 Types of Active Transport', text:'Which describes secondary active transport (cotransport)?', opts:[
+    'It uses an existing electrochemical gradient, not ATP directly, to move a molecule against its gradient.','It moves molecules only from high to low.','It uses ATP directly to pump ions.','It moves water through aquaporins.'
+  ], correct:0, explain:'Cotransport rides on a gradient (like sodium\'s) instead of spending ATP directly.'},
+  {sec:'2.11', kicker:'2.11 Cotransport', text:'Why does a drink with salt AND glucose help patients losing fluids from severe diarrhea?', opts:[
+    'Salt kills the bacteria causing it.','Glucose blocks the Na⁺/K⁺ pump.','It makes the gut hypertonic so water leaves the body.','Sodium–glucose cotransporters pull both in together, helping the gut absorb them (and water follows).'
+  ], correct:3, explain:'The sodium–glucose symport moves both into intestine cells together. This is the medical use mentioned in the lecture.'},
+  {sec:'2.11', kicker:'2.11 Bulk Transport — Diagram', text:'A cell releases proteins by fusing a vesicle from the Golgi with its membrane. This is:', diagram:'bulk', opts:[
+    'Endocytosis','Facilitated diffusion','Osmosis','Exocytosis'
+  ], correct:3, explain:'Exo = out. The vesicle fuses and releases its contents. Bulk transport requires energy.'},
+  {sec:'2.11', kicker:'2.11 Bulk Transport', text:'Which is NOT one of the three types of endocytosis from the notes?', opts:[
+    'Pinocytosis','Receptor-mediated endocytosis','Phagocytosis','Exocytosis'
+  ], correct:3, explain:'Exocytosis is the opposite process (secreting). The three types of endocytosis are phagocytosis, pinocytosis, and receptor-mediated endocytosis.'},
+  {sec:'2.11', kicker:'2.11–2.12 Bulk Transport', text:'After a cell takes in a large molecule by endocytosis, which organelle breaks it down?', opts:[
+    'Cell wall','Nucleus','Lysosome','Ribosome'
+  ], correct:2, explain:'Lysosomes break down large molecules using enzymes (from 2.2).'}
 ];
+var Q = ALLQ.slice();
 
 var idx = 0, score = 0, answered = false, missed = [];
 
@@ -434,8 +754,8 @@ function showResults(){
   document.getElementById('finalScore').textContent = score+' / '+Q.length;
   var pct = Math.round((score/Q.length)*100);
   var msg;
-  if(pct===100) msg = 'Perfect score — Unit 2 is locked in.';
-  else if(pct>=80) msg = 'Strong work. Review the missed ones below and you\'ve got this unit.';
+  if(pct===100) msg = 'Perfect score — locked in.';
+  else if(pct>=80) msg = 'Strong work. Review the missed ones below and you\'ve got it.';
   else if(pct>=60) msg = 'Good start — a few gaps to close. Check the missed questions below.';
   else msg = 'Worth another pass through the flashcards before the next round.';
   document.getElementById('finalMsg').textContent = msg+' ('+pct+'%)';
@@ -461,8 +781,21 @@ document.getElementById('btnRetake').addEventListener('click', function(){
   render();
 });
 
-document.getElementById('heroSub').textContent = Q.length+' questions covering cell theory & scientists, prokaryotes vs. eukaryotes, organelles, and Cell Clinic scenarios.';
-render();
+var SECS=[['all','All of Unit 2'],['2.1–2.2','2.1–2.2 Cells & Organelles'],['2.3','2.3 Cell Membrane'],['2.7','2.7 Passive Transport'],['2.8','2.8 Osmosis & Tonicity'],['2.10','2.10 Surface Area : Volume'],['2.11','2.11–2.12 Active Transport']];
+function startSec(k){
+  Q = k==='all' ? ALLQ.slice() : ALLQ.filter(function(x){return x.sec===k;});
+  idx=0; score=0; missed=[]; answered=false;
+  document.getElementById('resultsArea').style.display='none';
+  document.getElementById('quizArea').style.display='block';
+  var label=SECS.filter(function(s){return s[0]===k;})[0][1];
+  document.getElementById('heroSub').textContent = Q.length+' questions · '+label+'. Pick a lesson below or take the whole unit.';
+  Array.prototype.forEach.call(document.getElementById('secPicker').children,function(b){b.classList.toggle('active',b.dataset.k===k);});
+  render();
+}
+(function(){ var p=document.getElementById('secPicker');
+  SECS.forEach(function(s){ var b=document.createElement('button'); b.textContent=s[1]; b.dataset.k=s[0]; b.onclick=function(){startSec(s[0]);}; p.appendChild(b); });
+})();
+startSec('all');
 </script>
 </body>
 </html>

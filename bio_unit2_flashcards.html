@@ -150,7 +150,7 @@
   <a class="back-link" href="biology.html">&larr; Back to Biology</a>
   <div class="hero">
     <h1>Unit 2 Flashcards</h1>
-    <p>Cell theory &amp; scientists, prokaryotes vs. eukaryotes, and all the organelles &mdash; tap a card to flip it.</p>
+    <p>Cell theory, organelles, the cell membrane, passive and active transport. Tap a card to flip it.</p>
   </div>
 
   <div class="tabs" id="tabs"></div>
@@ -294,23 +294,6 @@ function diagEndosymbiosis(){
 }
 
 /* --- Phospholipid bilayer cross-section --- */
-function diagPhospholipidBilayer(){
-  var xs=[30,72,114,156,198,240,282];
-  var inner='';
-  for(var i=0;i<xs.length;i++){
-    var x=xs[i];
-    inner += circleEl(x,26,11,'var(--blue-soft)','var(--blue)',2);
-    inner += lineEl(x,37,x,72,'var(--ink)',2.2);
-    inner += lineEl(x,108,x,143,'var(--ink)',2.2);
-    inner += circleEl(x,154,11,'var(--blue-soft)','var(--blue)',2);
-  }
-  inner += txt(156,12,'hydrophilic heads','var(--blue)',9.5,700);
-  inner += txt(156,92,'hydrophobic tails','var(--text-soft)',9,600);
-  inner += txt(156,177,'hydrophilic heads','var(--blue)',9.5,700);
-  return svg(inner,'0 0 312 186',160);
-}
-
-/* --- Golgi apparatus: stacked plates, cis/trans faces --- */
 function diagGolgi(){
   var inner =
       pathEl('M50,178 Q130,163 210,178','var(--teal)',3)
@@ -362,10 +345,182 @@ function diagPlantVsAnimal(){
 }
 
 /* ============ Card data ============ */
+
+/* ============ 2.3 Cell Membrane diagrams (original, same helper library) ============ */
+function diagPhospholipid(){
+  var inner =
+      circleEl(80,50,30,'var(--blue-soft)','var(--blue)',2.5)
+    + txt(80,46,'phosphate','var(--blue)',9,700)
+    + txt(80,58,'+ glycerol','var(--blue)',9,700)
+    + lineEl(68,80,68,178,'var(--ink)',3)
+    + pathEl('M92,80 L92,118 L106,132 L106,178','var(--ink)',3)
+    + txt(215,44,'Polar head','var(--blue)',12,700,'start') + txt(215,60,'hydrophilic (water-loving)','var(--text-soft)',10,600,'start')
+    + lineEl(112,50,208,50,'var(--blue)',1.5,true)
+    + txt(215,126,'Nonpolar tails','var(--ink)',12,700,'start') + txt(215,142,'2 fatty acids — hydrophobic','var(--text-soft)',10,600,'start')
+    + lineEl(112,132,208,132,'var(--ink)',1.5,true)
+    + txt(50,196,'saturated','var(--text-soft)',9,600) + txt(116,196,'unsaturated (kink)','var(--text-soft)',9,600);
+  return svg(inner,'0 0 400 206',200);
+}
+
+function diagPhospholipidBilayer(){
+  var xs=[30,72,114,156,198,240,282];
+  var inner='';
+  inner += rectEl(0,40,312,100,0,'var(--amber-soft)','none',0);
+  for(var i=0;i<xs.length;i++){
+    var x=xs[i];
+    inner += circleEl(x,26,11,'var(--blue-soft)','var(--blue)',2);
+    inner += lineEl(x-4,37,x-4,72,'var(--ink)',2.2) + lineEl(x+4,37,x+4,72,'var(--ink)',2.2);
+    inner += lineEl(x-4,108,x-4,143,'var(--ink)',2.2) + lineEl(x+4,108,x+4,143,'var(--ink)',2.2);
+    inner += circleEl(x,154,11,'var(--blue-soft)','var(--blue)',2);
+  }
+  inner += txt(156,10,'OUTSIDE (extracellular) — watery','var(--blue)',9.5,700);
+  inner += txt(156,94,'hydrophobic core: tails face inward','var(--amber)',9.5,700);
+  inner += txt(156,182,'INSIDE (cytoplasm) — watery','var(--blue)',9.5,700);
+  return svg(inner,'0 0 312 190',170);
+}
+
+function diagMembraneParts(){
+  var inner='', xs=[];
+  for(var x=20;x<=400;x+=22) xs.push(x);
+  inner += rectEl(0,70,420,60,0,'var(--amber-soft)','none',0);
+  for(var i=0;i<xs.length;i++){
+    var x=xs[i];
+    if((x>100&&x<170)||(x>250&&x<300)) continue;
+    inner += circleEl(x,62,8,'var(--blue-soft)','var(--blue)',1.6) + circleEl(x,138,8,'var(--blue-soft)','var(--blue)',1.6);
+  }
+  // integral, spans membrane
+  inner += rectEl(106,36,58,128,22,'var(--coral-soft)','var(--coral)',2.5);
+  inner += txt(135,186,'integral (spans)','var(--coral)',9.5,700);
+  // integral, partway
+  inner += rectEl(252,42,46,62,18,'var(--coral-soft)','var(--coral)',2.5);
+  inner += txt(275,186,'integral (partway)','var(--coral)',9.5,700);
+  // peripheral
+  inner += ellipseEl(350,160,26,12,'var(--violet-soft)','var(--violet)',2.2);
+  inner += txt(350,186,'peripheral','var(--violet)',9.5,700);
+  // glycoprotein chain
+  inner += pathEl('M135,36 L135,22 L125,12 M135,22 L147,12 M147,12 L155,4','var(--teal)',2.5);
+  inner += txt(186,14,'carbohydrate chain','var(--teal)',9,700,'start');
+  // cholesterol
+  inner += rectEl(206,88,18,24,4,'var(--amber)','var(--amber)',1.5);
+  inner += txt(215,160,'cholesterol','var(--amber)',9,700);
+  inner += lineEl(215,114,215,150,'var(--amber)',1.2,true);
+  inner += txt(30,20,'outside','var(--text-soft)',9,600,'start');
+  return svg(inner,'0 0 420 196',190);
+}
+
+function diagPermeability(){
+  var inner =
+      rectEl(0,70,420,50,0,'var(--amber-soft)','none',0)
+    + lineEl(0,70,420,70,'var(--blue)',3) + lineEl(0,120,420,120,'var(--blue)',3)
+    + txt(12,98,'bilayer','var(--amber)',9,700,'start')
+    // gas passes
+    + circleEl(95,40,7,'var(--teal-soft)','var(--teal)',2) + lineEl(95,50,95,150,'var(--teal)',2.5) + poly('89,146 95,158 101,146','var(--teal)',2,'var(--teal)')
+    + txt(95,20,'O₂, CO₂','var(--teal)',10,700) + txt(95,176,'passes easily','var(--teal)',9,600)
+    // water slow
+    + circleEl(200,40,8,'var(--blue-soft)','var(--blue)',2) + lineEl(200,50,200,150,'var(--blue)',2.5,true) + poly('194,146 200,158 206,146','var(--blue)',2,'var(--blue)')
+    + txt(200,20,'water','var(--blue)',10,700) + txt(200,176,'a little, slowly','var(--blue)',9,600)
+    // large & charged blocked
+    + circleEl(300,38,16,'var(--coral-soft)','var(--coral)',2) + txt(300,42,'glucose','var(--coral)',7.5,700)
+    + circleEl(370,40,9,'var(--coral-soft)','var(--coral)',2) + txt(370,44,'+','var(--coral)',12,700)
+    + lineEl(300,58,300,66,'var(--coral)',2.5) + lineEl(290,66,310,66,'var(--coral)',3)
+    + lineEl(370,52,370,66,'var(--coral)',2.5) + lineEl(360,66,380,66,'var(--coral)',3)
+    + txt(335,176,'large or charged: blocked','var(--coral)',9,700);
+  return svg(inner,'0 0 420 186',185);
+}
+
+function diagChannelCarrier(){
+  var inner =
+      rectEl(0,60,420,70,0,'var(--amber-soft)','none',0)
+    + lineEl(0,60,420,60,'var(--blue)',3) + lineEl(0,130,420,130,'var(--blue)',3)
+    // channel
+    + rectEl(70,40,28,110,8,'var(--coral-soft)','var(--coral)',2.5) + rectEl(122,40,28,110,8,'var(--coral-soft)','var(--coral)',2.5)
+    + dot(110,30,'var(--blue)',4) + dot(110,80,'var(--blue)',4) + dot(110,110,'var(--blue)',4) + dot(110,162,'var(--blue)',4)
+    + txt(110,184,'Channel protein','var(--coral)',11,700) + txt(110,198,'open tunnel (aquaporin = water)','var(--text-soft)',9,600)
+    // carrier state 1
+    + pathEl('M255,40 L255,150 L300,150 L300,95 L285,80 L300,65 L300,40 Z','var(--violet)',2.5,'var(--violet-soft)')
+    + circleEl(275,28,9,'var(--teal-soft)','var(--teal)',2)
+    + lineEl(318,95,346,95,'var(--ink)',2.2) + poly('346,89 358,95 346,101','var(--ink)',2,'var(--ink)')
+    // carrier state 2
+    + pathEl('M368,40 L368,150 L413,150 L413,125 L398,110 L413,95 L413,40 Z','var(--violet)',2.5,'var(--violet-soft)')
+    + circleEl(390,165,9,'var(--teal-soft)','var(--teal)',2)
+    + txt(335,184,'Carrier protein','var(--violet)',11,700) + txt(335,198,'binds, changes shape, shuttles','var(--text-soft)',9,600);
+  return svg(inner,'0 0 420 206',205);
+}
+
+/* ============ 2.7–2.12 transport diagrams (original) ============ */
+function diagTonicity(){
+  function cell(cx,label,sub,rx,ry,arrowsIn,color){
+    var s = rectEl(cx-62,30,124,120,10,'var(--blue-soft)','var(--blue)',1.5)
+      + ellipseEl(cx,90,rx,ry,'var(--coral-soft)','var(--coral)',2.5)
+      + txt(cx,20,label,color,11,700) + txt(cx,168,sub,'var(--text-soft)',8.5,600);
+    if(arrowsIn===1){ s += lineEl(cx-58,90,cx-rx-6,90,'var(--blue)',2) + poly((cx-rx-6)+',85 '+(cx-rx+4)+',90 '+(cx-rx-6)+',95','var(--blue)',1.5,'var(--blue)')
+                        + lineEl(cx+58,90,cx+rx+6,90,'var(--blue)',2) + poly((cx+rx+6)+',85 '+(cx+rx-4)+',90 '+(cx+rx+6)+',95','var(--blue)',1.5,'var(--blue)'); }
+    if(arrowsIn===-1){ s += lineEl(cx-rx+2,90,cx-52,90,'var(--blue)',2) + poly((cx-52)+',85 '+(cx-60)+',90 '+(cx-52)+',95','var(--blue)',1.5,'var(--blue)')
+                         + lineEl(cx+rx-2,90,cx+52,90,'var(--blue)',2) + poly((cx+52)+',85 '+(cx+60)+',90 '+(cx+52)+',95','var(--blue)',1.5,'var(--blue)'); }
+    if(arrowsIn===0){ s += txt(cx,94,'⇄','var(--blue)',16,700); }
+    return s;
+  }
+  var inner = cell(75,'Isotonic','no net water movement',32,30,0,'var(--teal)')
+    + cell(215,'Hypertonic','water leaves → cell shrinks',20,18,-1,'var(--coral)')
+    + cell(355,'Hypotonic','water enters → swells, may burst',44,40,1,'var(--violet)');
+  return svg(inner,'0 0 430 176',180);
+}
+
+function diagCubes(){
+  var inner =
+      rectEl(20,110,30,30,2,'var(--teal-soft)','var(--teal)',2)
+    + txt(35,160,'1 cm','var(--ink)',10,700) + txt(35,176,'SA:V = 6:1','var(--teal)',9.5,700)
+    + rectEl(110,80,60,60,2,'var(--blue-soft)','var(--blue)',2)
+    + txt(140,160,'2 cm','var(--ink)',10,700) + txt(140,176,'SA:V = 3:1','var(--blue)',9.5,700)
+    + rectEl(230,50,90,90,2,'var(--violet-soft)','var(--violet)',2)
+    + txt(275,160,'3 cm','var(--ink)',10,700) + txt(275,176,'SA:V = 2:1','var(--violet)',9.5,700)
+    + lineEl(340,95,395,95,'var(--coral)',2.5) + poly('395,89 407,95 395,101','var(--coral)',2,'var(--coral)')
+    + txt(372,80,'bigger cell','var(--coral)',9,700) + txt(372,116,'smaller ratio','var(--coral)',9,700);
+  return svg(inner,'0 0 420 186',180);
+}
+
+function diagNaKPump(){
+  var inner =
+      rectEl(0,70,420,60,0,'var(--amber-soft)','none',0)
+    + lineEl(0,70,420,70,'var(--blue)',3) + lineEl(0,130,420,130,'var(--blue)',3)
+    + pathEl('M175,50 L175,150 L245,150 L245,50 Z','var(--violet)',2.5,'var(--violet-soft)')
+    + txt(210,104,'pump','var(--violet)',11,700)
+    + txt(40,40,'OUTSIDE','var(--text-soft)',9,700,'start') + txt(40,168,'INSIDE','var(--text-soft)',9,700,'start')
+    + circleEl(110,40,10,'var(--coral-soft)','var(--coral)',2) + txt(110,44,'Na⁺','var(--coral)',8,700)
+    + circleEl(135,22,10,'var(--coral-soft)','var(--coral)',2) + txt(135,26,'Na⁺','var(--coral)',8,700)
+    + circleEl(150,48,10,'var(--coral-soft)','var(--coral)',2) + txt(150,52,'Na⁺','var(--coral)',8,700)
+    + pathEl('M185,150 C185,175 150,175 150,60','var(--coral)',2,undefined,true)
+    + txt(95,78,'3 Na⁺ out','var(--coral)',10,700)
+    + circleEl(290,160,10,'var(--teal-soft)','var(--teal)',2) + txt(290,164,'K⁺','var(--teal)',8,700)
+    + circleEl(315,176,10,'var(--teal-soft)','var(--teal)',2) + txt(315,180,'K⁺','var(--teal)',8,700)
+    + pathEl('M235,50 C235,25 275,25 290,148','var(--teal)',2,undefined,true)
+    + txt(335,150,'2 K⁺ in','var(--teal)',10,700,'start')
+    + rectEl(236,158,40,18,9,'var(--amber)','var(--amber)',1) + txt(256,171,'ATP','#fff',9,700)
+    + txt(210,196,'Primary active transport: ATP powers movement against the gradient','var(--text-soft)',9,600);
+  return svg(inner,'0 0 420 204',200);
+}
+
+function diagBulk(){
+  var inner =
+      pathEl('M20,30 L200,30','var(--blue)',3)
+    + circleEl(110,75,20,'var(--teal-soft)','var(--teal)',2.2) + dot(110,75,'var(--teal)',5)
+    + pathEl('M110,52 L110,38','var(--ink)',2) + poly('104,42 110,32 116,42','var(--ink)',1.5,'var(--ink)')
+    + txt(110,122,'Exocytosis','var(--teal)',11,700) + txt(110,138,'vesicle fuses, contents leave','var(--text-soft)',8.5,600)
+    + pathEl('M230,30 L290,30 Q320,30 320,60 Q320,90 350,90 Q380,90 380,60 Q380,30 410,30','var(--blue)',3)
+    + dot(350,70,'var(--coral)',6)
+    + txt(330,122,'Endocytosis','var(--coral)',11,700) + txt(330,138,'membrane folds in, forms a vesicle','var(--text-soft)',8.5,600)
+    + txt(20,20,'outside','var(--text-soft)',8.5,600,'start');
+  return svg(inner,'0 0 430 150',160);
+}
+
+
 var CATS = [
   {key:'theory', label:'Cell Theory', color:'var(--blue)'},
   {key:'organelles', label:'Organelles', color:'var(--teal)'},
-  {key:'casestudy', label:'Cell Clinic', color:'var(--coral)'}
+  {key:'casestudy', label:'Cell Clinic', color:'var(--coral)'},
+  {key:'membrane', label:'Cell Membrane', color:'var(--violet)'},
+  {key:'transport', label:'Passive & Osmosis', color:'var(--amber)'},
+  {key:'active', label:'Active Transport', color:'var(--coral)'}
 ];
 function catInfo(key){ for(var i=0;i<CATS.length;i++) if(CATS[i].key===key) return CATS[i]; return CATS[0]; }
 
@@ -395,7 +550,46 @@ var CARDS = [
   {cat:'casestudy', term:'Cell Clinic — Room 3 (Genetic Disorder)', def:'Organelle involved: Nucleus.', extra:'An inherited disorder traces back to the organelle that houses and protects the DNA.', diagram:null},
   {cat:'casestudy', term:'Cell Clinic — Room 4 (Antibodies)', def:'Correct order: Ribosome → Rough ER → Golgi Apparatus → vesicle.', extra:'Antibodies are proteins, so they follow the normal protein pathway: made at the ribosome, processed through the rough ER, packaged/shipped by the Golgi, then sent out in a vesicle.', diagram:null},
   {cat:'casestudy', term:'Cell Clinic — Room 5 (Water Intoxication)', def:'Organelle/structure involved: Cell Membrane.', extra:'Water intoxication is about too much water moving into or out of the cell — that\'s the cell membrane\'s job as a permeability barrier.', diagram:null},
-  {cat:'casestudy', term:'Cell Clinic — Rooms 6 & 7 (Enzymes)', def:'Room 6 (bacterial infection, enzymes released): Lysosome. Room 7 (can\'t package enzymes/bile): Golgi Apparatus.', extra:'Lysosome = breaks things down with hydrolytic enzymes. Golgi = packages and ships enzymes/proteins onward.', diagram:null}
+  {cat:'casestudy', term:'Cell Clinic — Rooms 6 & 7 (Enzymes)', def:'Room 6 (bacterial infection, enzymes released): Lysosome. Room 7 (can\'t package enzymes/bile): Golgi Apparatus.', extra:'Lysosome = breaks things down with hydrolytic enzymes. Golgi = packages and ships enzymes/proteins onward.', diagram:null},
+  {cat:'membrane', term:'Selectively permeable', def:'The membrane chooses what can enter and exit the cell: some things pass easily, some need help, some can\'t pass.', extra:'It\'s selective because of its complex structure, built from many different macromolecules.', diagram:null},
+  {cat:'membrane', term:'Fluid mosaic model', def:'Mosaic = the membrane is made of many different macromolecules. Fluid = proteins and lipids can shift sideways (laterally) past each other.', extra:'Lipids are smaller, so they move faster than proteins.', diagram:diagMembraneParts},
+  {cat:'membrane', term:'3 macromolecules in the membrane', def:'Lipids, proteins, and carbohydrates.', extra:'Nucleic acids are the only macromolecule not part of the membrane.', diagram:null},
+  {cat:'membrane', term:'Phospholipid', def:'The main structural building block of the membrane: a polar head (phosphate group + glycerol) and two nonpolar fatty acid tails (one saturated, one unsaturated).', extra:'Be ready to draw and label one.', diagram:diagPhospholipid},
+  {cat:'membrane', term:'Hydrophilic', def:'"Water-loving." Polar parts that interact well with water, like the phospholipid head.', extra:null, diagram:null},
+  {cat:'membrane', term:'Hydrophobic', def:'"Water-fearing." Nonpolar parts that don\'t interact well with water, like the fatty acid tails.', extra:null, diagram:null},
+  {cat:'membrane', term:'Phospholipid bilayer', def:'Two layers of phospholipids with the tails folded inward (away from water) and the heads facing out on both sides.', extra:'Both sides are watery: cytoplasm inside, interstitial fluid (like blood and lymph) outside. The middle is hydrophobic.', diagram:diagPhospholipidBilayer},
+  {cat:'membrane', term:'Cholesterol', def:'A lipid in the hydrophobic middle of the bilayer that keeps membrane fluidity balanced.', extra:'Stops phospholipids from moving too freely, and stops them from packing too closely (solidifying) in the cold.', diagram:null},
+  {cat:'membrane', term:'Integral protein', def:'A protein built into the hydrophobic middle of the membrane. It can span the whole membrane or go only partway in.', extra:'Transport proteins are integral and span the whole membrane (transmembrane).', diagram:diagMembraneParts},
+  {cat:'membrane', term:'Peripheral protein', def:'A protein that is not embedded. It is loosely bound to the surface of the membrane (the heads) or to other proteins.', extra:'This is the lecture\'s definition. The 2.6 worksheet splits this into "peripheral" and "surface," so check which version the test uses.', diagram:null},
+  {cat:'membrane', term:'6 functions of membrane proteins', def:'Transport, enzymatic activity, signal transduction, cell-cell recognition, intercellular joining, and attachment to the cytoskeleton and ECM.', extra:'Transport is this unit\'s focus; enzymes return in Unit 3.', diagram:null},
+  {cat:'membrane', term:'Membrane carbohydrates', def:'Short, branched sugar chains that act as ID tags for cell-to-cell recognition.', extra:'Attached to lipids or proteins, mostly on the outside of the cell.', diagram:null},
+  {cat:'membrane', term:'Glycoprotein', def:'A carbohydrate chain attached to a protein.', extra:'"Glyco" = carbohydrate.', diagram:null},
+  {cat:'membrane', term:'Glycolipid', def:'A carbohydrate chain attached to a lipid.', extra:null, diagram:null},
+  {cat:'membrane', term:'What crosses the bilayer easily?', def:'Gases (small and nonpolar) and hydrophobic molecules.', extra:'They mix well with the hydrophobic middle of the membrane.', diagram:diagPermeability},
+  {cat:'membrane', term:'How does water cross?', def:'A little crosses the bilayer on its own, but slowly. Large amounts move through aquaporins.', extra:'Water is small but polar.', diagram:null},
+  {cat:'membrane', term:'"Large and in charge"', def:'Large polar molecules and charged particles can\'t cross the bilayer on their own.', extra:'Example: glucose is too large, so cells need a transport protein to bring it in.', diagram:null},
+  {cat:'membrane', term:'Channel protein', def:'A transport protein that forms an open hydrophilic channel for materials to flow through.', extra:'Aquaporins are channel proteins for water.', diagram:diagChannelCarrier},
+  {cat:'membrane', term:'Aquaporin', def:'A channel protein specifically for water, allowing large amounts of water in and out of the cell.', extra:null, diagram:null},
+  {cat:'membrane', term:'Carrier protein', def:'A transport protein that binds a specific material, changes shape, and shuttles it across the membrane.', extra:'Transport proteins are specific: each one only moves certain materials.', diagram:diagChannelCarrier},
+  {cat:'transport', term:'Passive transport', def:'Diffusion of a substance across the cell membrane. No energy needed.', extra:'Three kinds: simple diffusion, osmosis, facilitated diffusion.', diagram:null},
+  {cat:'transport', term:'Simple diffusion', def:'Movement from high concentration to low concentration, straight through the bilayer. Spontaneous (no energy); continues until equilibrium.', extra:'Works for nonpolar and small polar molecules.', diagram:null},
+  {cat:'transport', term:'Concentration gradient', def:'A difference in concentration between two areas.', extra:'Diffusion moves "down" the gradient: high to low.', diagram:null},
+  {cat:'transport', term:'Equilibrium', def:'Molecules are evenly spread out. They keep moving, but there\'s no net change.', extra:null, diagram:null},
+  {cat:'transport', term:'Facilitated diffusion', def:'Diffusion through a transport protein (channel or carrier), still high to low with no energy.', extra:'Used by large polar molecules and ions. Some channels are gated and can open or close.', diagram:diagChannelCarrier},
+  {cat:'transport', term:'Osmosis', def:'Movement of free water from where there\'s more water to where there\'s less water. No energy needed.', extra:'Shortcut: water moves toward the side with more solute.', diagram:null},
+  {cat:'transport', term:'Tonicity', def:'The concentration of solutes that can\'t cross the membrane in the solution, compared with inside the cell.', extra:'Always describes the solution around the cell.', diagram:diagTonicity},
+  {cat:'transport', term:'Isotonic', def:'Equal solute concentrations inside and out. No net water movement; cell size stays the same.', extra:'Iso = same.', diagram:null},
+  {cat:'transport', term:'Hypertonic', def:'More solutes outside the cell. Water moves out; the cell shrinks.', extra:'Animal cell shrivels; plant cell undergoes plasmolysis.', diagram:null},
+  {cat:'transport', term:'Hypotonic', def:'Fewer solutes outside the cell. Water moves in; the cell swells.', extra:'Animal cell may burst (cytolysis); plant cell becomes turgid.', diagram:null},
+  {cat:'transport', term:'Cytolysis vs. plasmolysis', def:'Cytolysis: an animal cell bursts from too much water coming in. Plasmolysis: a plant cell\'s membrane pulls away from its wall as water leaves.', extra:'Turgid = a plant cell pressed firmly against its wall (healthy).', diagram:null},
+  {cat:'transport', term:'Why cells stay small', def:'Everything a cell exchanges must pass through its membrane. Smaller cells have a larger surface area to volume ratio, so exchange keeps up.', extra:'SA of a cube = length × width × 6; V = length × width × height.', diagram:diagCubes},
+  {cat:'active', term:'Active transport', def:'Moves substances from low to high concentration (against the gradient), using energy from ATP.', extra:'Usually done by a carrier protein or protein pump.', diagram:null},
+  {cat:'active', term:'Symport vs. antiport', def:'Symport: two things move in the same direction. Antiport: things move in opposite directions.', extra:null, diagram:null},
+  {cat:'active', term:'Primary active transport', def:'Uses ATP directly to move molecules against their gradient.', extra:'Example: the Na⁺/K⁺ pump.', diagram:null},
+  {cat:'active', term:'Na⁺/K⁺ pump', def:'Pumps 3 Na⁺ out and 2 K⁺ in per cycle using ATP. Keeps Na⁺ and K⁺ at the right concentrations.', extra:'It\'s an electrogenic pump: it helps create a voltage across the membrane.', diagram:diagNaKPump},
+  {cat:'active', term:'Secondary active transport', def:'Also called cotransport. Uses an existing electrochemical gradient to move another molecule against its gradient; doesn\'t directly use ATP.', extra:'Example: sodium–glucose symport in the intestine.', diagram:null},
+  {cat:'active', term:'Exocytosis', def:'The cell secretes molecules by fusing a vesicle (often from the Golgi) with the membrane.', extra:'Bulk transport; requires energy.', diagram:diagBulk},
+  {cat:'active', term:'Endocytosis', def:'The cell takes in molecules or particles by forming new vesicles from its membrane.', extra:'Three types: phagocytosis, pinocytosis, receptor-mediated endocytosis. Requires energy.', diagram:null}
 ];
 
 /* ============ Deck state & rendering ============ */
