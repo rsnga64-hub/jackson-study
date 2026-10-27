@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 3 Flashcards: Cell Energy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FBFAF7;
+    --grid-line: rgba(28,43,74,0.055);
+    --ink: #1C2B4A;
+    --text: #2B3648;
+    --text-soft: #64707F;
+    --blue: #2E86AB;
+    --blue-soft: #E9F3F8;
+    --amber: #D98A2B;
+    --amber-soft: #FCF1DE;
+    --coral: #D65A5A;
+    --coral-soft: #FBEBEB;
+    --teal: #2C9C82;
+    --teal-soft: #E6F5F0;
+    --violet: #7C5CBF;
+    --violet-soft: #EFE9F8;
+    --card-bg: #FFFFFF;
+    --border: #E4E0D4;
+    --gray: #94A0AD;
+    --gray-line: #CBD3DC;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  h1, h2, h3, .display { font-family: 'Space Grotesk', sans-serif; color: var(--ink); }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 32px 20px 80px; }
+  a { color: inherit; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--text-soft); text-decoration: none; font-size: 0.88rem; font-weight: 600; margin-bottom: 18px; }
+  .back-link:hover { color: var(--blue); }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    background: var(--ink);
+    border-radius: 18px;
+    padding: 26px 28px;
+    color: #fff;
+    margin-bottom: 22px;
+  }
+  .hero h1 { color: #fff; font-size: 1.7rem; margin: 0 0 6px; line-height: 1.15; }
+  .hero p { margin: 0; color: #C8D3E0; font-size: 0.96rem; max-width: 52ch; }
+
+  /* ---------- Category tabs ---------- */
+  .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 20px; }
+  .tab-btn {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.84rem;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text-soft);
+    border-radius: 999px;
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .tab-btn:hover { border-color: var(--ink); color: var(--ink); }
+  .tab-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  /* ---------- Progress / stats ---------- */
+  .statline {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.82rem; color: var(--text-soft); margin-bottom: 10px; flex-wrap: wrap; gap: 6px;
+  }
+  .statline b { color: var(--ink); }
+  .progress-track { height: 6px; background: var(--border); border-radius: 999px; overflow: hidden; margin-bottom: 18px; }
+  .progress-fill { height: 100%; background: var(--blue); border-radius: 999px; transition: width 0.2s ease; }
+
+  /* ---------- Flashcard ---------- */
+  .stage { perspective: 1600px; margin-bottom: 18px; }
+  .flashcard {
+    position: relative;
+    min-height: 420px;
+    border-radius: 18px;
+    cursor: pointer;
+    transition: transform 0.5s cubic-bezier(.4,.2,.2,1);
+    transform-style: preserve-3d;
+  }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .face {
+    position: absolute; inset: 0;
+    -webkit-backface-visibility: hidden; backface-visibility: hidden;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    box-shadow: 0 4px 18px rgba(28,43,74,0.07);
+    padding: 26px 28px;
+    display: flex; flex-direction: column;
+  }
+  .face.back { transform: rotateY(180deg); overflow-y: auto; }
+  .cat-tag {
+    display: inline-flex; align-self: flex-start;
+    font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.72rem;
+    letter-spacing: 0.02em; text-transform: uppercase;
+    padding: 4px 11px; border-radius: 999px; margin-bottom: 14px;
+  }
+  .face.front { align-items: center; text-align: center; justify-content: center; }
+  .term { font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: var(--ink); font-size: 1.45rem; line-height: 1.25; margin: 0; }
+  .flip-hint { margin-top: 18px; font-size: 0.8rem; color: var(--gray); }
+  .def { font-size: 0.98rem; font-weight: 600; color: var(--ink); line-height: 1.42; margin: 0 0 10px; }
+  .extra { font-size: 0.86rem; color: var(--text-soft); line-height: 1.45; margin: 0 0 14px; }
+  .diagram-wrap { margin-top: auto; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 6px; }
+  .diagram-wrap svg { display: block; width: 100%; height: auto; max-height: 190px; }
+
+  /* ---------- Controls ---------- */
+  .controls { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  .btn {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.88rem;
+    border: 1px solid var(--border); background: var(--card-bg); color: var(--ink);
+    border-radius: 10px; padding: 10px 16px; cursor: pointer; transition: all 0.15s ease;
+  }
+  .btn:hover { border-color: var(--ink); }
+  .btn:disabled { opacity: 0.4; cursor: default; }
+  .btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .btn.primary:hover { opacity: 0.9; }
+  .rate-row { display: flex; gap: 10px; justify-content: center; margin-bottom: 6px; }
+  .btn.rate-bad { border-color: var(--coral); color: var(--coral); }
+  .btn.rate-bad:hover { background: var(--coral-soft); }
+  .btn.rate-good { border-color: var(--teal); color: var(--teal); }
+  .btn.rate-good:hover { background: var(--teal-soft); }
+
+  .tally { text-align: center; font-size: 0.82rem; color: var(--text-soft); margin-top: 4px; }
+  .tally b.good { color: var(--teal); }
+  .tally b.bad { color: var(--coral); }
+
+  @media (max-width: 480px) {
+    .flashcard { min-height: 460px; }
+    .term { font-size: 1.2rem; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="biology.html">&larr; Back to Biology</a>
+  <div class="hero">
+    <h1>Unit 3 Flashcards</h1>
+    <p>Lessons 3.1&ndash;3.4: energy and ATP, photosynthesis, cellular respiration, and fermentation. Tap a card to flip it.</p>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="statline">
+    <span>Card <b id="cardNum">1</b> of <b id="cardTotal">14</b></span>
+    <span id="filterLabel">All cards</span>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+  <div class="stage">
+    <div class="flashcard" id="flashcard">
+      <div class="face front">
+        <span class="cat-tag" id="catTagFront"></span>
+        <p class="term" id="termText"></p>
+        <p class="flip-hint">Tap the card to see the definition</p>
+      </div>
+      <div class="face back">
+        <span class="cat-tag" id="catTagBack"></span>
+        <p class="def" id="defText"></p>
+        <p class="extra" id="extraText"></p>
+        <div class="diagram-wrap" id="diagramWrap" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rate-row" id="rateRow" style="visibility:hidden;">
+    <button class="btn rate-bad" id="btnBad">Still learning</button>
+    <button class="btn rate-good" id="btnGood">Got it</button>
+  </div>
+
+  <div class="controls">
+    <button class="btn" id="btnPrev">&larr; Prev</button>
+    <button class="btn primary" id="btnShuffle">Shuffle</button>
+    <button class="btn" id="btnNext">Next &rarr;</button>
+  </div>
+
+  <p class="tally" id="tally"></p>
+</div>
+
+<script>
+function svg(inner, vb, h) { return '<svg viewBox="'+vb+'" width="100%" height="'+(h||180)+'" xmlns="http://www.w3.org/2000/svg">'+inner+'</svg>'; }
+function lineEl(x1,y1,x2,y2,color,w,dash){ return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round"'+(dash?' stroke-dasharray="5 4"':'')+'/>'; }
+function dot(x,y,color,r){ return '<circle cx="'+x+'" cy="'+y+'" r="'+(r||3.2)+'" fill="'+(color||'var(--ink)')+'"/>'; }
+function txt(x,y,s,color,size,weight,anchor){ return '<text x="'+x+'" y="'+y+'" fill="'+(color||'var(--ink)')+'" font-family="Space Grotesk, sans-serif" font-size="'+(size||13)+'" font-weight="'+(weight||700)+'" text-anchor="'+(anchor||'middle')+'">'+s+'</text>'; }
+function poly(pts,color,w,fill){ return '<polygon points="'+pts+'" fill="'+(fill||'none')+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linejoin="round"/>'; }
+function ellipseEl(cx,cy,rx,ry,fill,stroke,w){ return '<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rx+'" ry="'+ry+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(w||2.5)+'"/>'; }
+function circleEl(cx,cy,r,fill,stroke,w){ return '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(w||2.5)+'"/>'; }
+function rectEl(x,y,w,h,rx,fill,stroke,sw){ return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+(rx||0)+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(sw||2.5)+'"/>'; }
+function pathEl(d,stroke,w,fill,dash){ return '<path d="'+d+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round"'+(dash?' stroke-dasharray="4 3"':'')+'/>'; }
+function wavy(x1,y1,x2,y2,amp,cycles,color,w){
+  var n=28, pts=[];
+  var dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy)||1;
+  var ux=dx/len, uy=dy/len, px=-uy, py=ux;
+  for(var i=0;i<=n;i++){
+    var t=i/n;
+    var bx=x1+dx*t, by=y1+dy*t;
+    var off=Math.sin(t*Math.PI*2*cycles)*amp;
+    pts.push((bx+px*off).toFixed(1)+','+(by+py*off).toFixed(1));
+  }
+  return '<polyline points="'+pts.join(' ')+'" fill="none" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.2)+'" stroke-linecap="round"/>';
+}
+/* ---- Coordinate grid with several figures (original helper for Unit 4) ----
+   opts: {min,max,h, shapes:[{pts,labels,color,dash}], lines:[{a:[x,y],b:[x,y],color,label}], points:[{p,label,color}]} */
+function gridPlot(opts){
+  var min=(opts.min!==undefined)?opts.min:-7, max=(opts.max!==undefined)?opts.max:7;
+  var u=16, pad=16, n=max-min, size=n*u+pad*2;
+  function X(x){ return pad+(x-min)*u; } function Y(y){ return pad+(max-y)*u; }
+  var s='';
+  for(var i=min;i<=max;i++){
+    s+='<line x1="'+X(i)+'" y1="'+Y(min)+'" x2="'+X(i)+'" y2="'+Y(max)+'" stroke="var(--gray-line, #CBD3DC)" stroke-width="0.7"/>';
+    s+='<line x1="'+X(min)+'" y1="'+Y(i)+'" x2="'+X(max)+'" y2="'+Y(i)+'" stroke="var(--gray-line, #CBD3DC)" stroke-width="0.7"/>';
+  }
+  if(min<0&&max>0){
+    s+='<line x1="'+X(0)+'" y1="'+Y(min)+'" x2="'+X(0)+'" y2="'+Y(max)+'" stroke="var(--gray, #94A0AD)" stroke-width="1.6"/>';
+    s+='<line x1="'+X(min)+'" y1="'+Y(0)+'" x2="'+X(max)+'" y2="'+Y(0)+'" stroke="var(--gray, #94A0AD)" stroke-width="1.6"/>';
+  }
+  (opts.lines||[]).forEach(function(L){
+    s+='<line x1="'+X(L.a[0])+'" y1="'+Y(L.a[1])+'" x2="'+X(L.b[0])+'" y2="'+Y(L.b[1])+'" stroke="'+(L.color||'var(--violet)')+'" stroke-width="2" stroke-dasharray="6 4"/>';
+    if(L.label) s+='<text x="'+(X(L.b[0])+(L.dx||-4))+'" y="'+(Y(L.b[1])+(L.dy||12))+'" fill="'+(L.color||'var(--violet)')+'" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="700" text-anchor="end">'+L.label+'</text>';
+  });
+  (opts.shapes||[]).forEach(function(sh){
+    var col=sh.color||'var(--blue)';
+    var ptsStr=sh.pts.map(function(p){return X(p[0])+','+Y(p[1]);}).join(' ');
+    s+=(sh.pts.length>2?'<polygon points="'+ptsStr+'" fill="'+(sh.fill||'none')+'" fill-opacity="0.18"':'<polyline points="'+ptsStr+'" fill="none"')+' stroke="'+col+'" stroke-width="2.6" stroke-linejoin="round"'+(sh.dash?' stroke-dasharray="6 4"':'')+'/>';
+    var cx=0,cy=0; sh.pts.forEach(function(p){cx+=p[0];cy+=p[1];}); cx/=sh.pts.length; cy/=sh.pts.length;
+    sh.pts.forEach(function(p,i){
+      s+='<circle cx="'+X(p[0])+'" cy="'+Y(p[1])+'" r="3.4" fill="'+col+'"/>';
+      if(sh.labels&&sh.labels[i]){
+        var dx=p[0]-cx, dy=p[1]-cy, L=Math.sqrt(dx*dx+dy*dy)||1;
+        s+='<text x="'+(X(p[0])+dx/L*13)+'" y="'+(Y(p[1])-dy/L*13+5)+'" fill="'+col+'" font-family="Space Grotesk, sans-serif" font-size="12.5" font-weight="700" text-anchor="middle">'+sh.labels[i]+'</text>';
+      }
+    });
+  });
+  (opts.points||[]).forEach(function(P){
+    s+='<circle cx="'+X(P.p[0])+'" cy="'+Y(P.p[1])+'" r="4" fill="'+(P.color||'var(--ink)')+'"/>';
+    if(P.label) s+='<text x="'+(X(P.p[0])+8)+'" y="'+(Y(P.p[1])-7)+'" fill="'+(P.color||'var(--ink)')+'" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="700">'+P.label+'</text>';
+  });
+  return '<svg viewBox="0 0 '+size+' '+size+'" width="100%" height="'+(opts.h||230)+'" xmlns="http://www.w3.org/2000/svg">'+s+'</svg>';
+}
+
+/* ============ Unit 3 diagrams (original, same helper library) ============ */
+function arrowTo(x1,y1,x2,y2,color,w){
+  var dx=x2-x1, dy=y2-y1, L=Math.sqrt(dx*dx+dy*dy)||1, ux=dx/L, uy=dy/L, px=-uy, py=ux, h=9;
+  var bx=x2-ux*h, by=y2-uy*h;
+  return lineEl(x1,y1,bx,by,color,w||2.5) + poly(x2+','+y2+' '+(bx+px*5)+','+(by+py*5)+' '+(bx-px*5)+','+(by-py*5),color,1.5,color);
+}
+function hexagon(cx,cy,r,fill,stroke){
+  var p=[]; for(var i=0;i<6;i++){ var a=Math.PI/3*i+Math.PI/6; p.push((cx+r*Math.cos(a)).toFixed(1)+','+(cy+r*Math.sin(a)).toFixed(1)); }
+  return poly(p.join(' '),stroke,2.2,fill);
+}
+function pentagon(cx,cy,r,fill,stroke){
+  var p=[]; for(var i=0;i<5;i++){ var a=-Math.PI/2+2*Math.PI/5*i; p.push((cx+r*Math.cos(a)).toFixed(1)+','+(cy+r*Math.sin(a)).toFixed(1)); }
+  return poly(p.join(' '),stroke,2.2,fill);
+}
+function phos(x,y){ return circleEl(x,y,13,'var(--amber-soft)','var(--amber)',2.2) + txt(x,y+4,'P','var(--amber)',11,700); }
+function carbons(x,y,n,color){ var s=''; for(var i=0;i<n;i++) s+=circleEl(x+i*13,y,5.5,'var(--card-bg)',color||'var(--ink)',1.6); return s; }
+
+/* ATP structure */
+function diagATP(){
+  var inner = hexagon(60,58,26,'var(--teal-soft)','var(--teal)') + txt(60,62,'adenine','var(--teal)',9,700)
+    + lineEl(78,78,98,98,'var(--ink)',3)
+    + pentagon(118,112,26,'var(--blue-soft)','var(--blue)') + txt(118,117,'ribose','var(--blue)',9,700)
+    + lineEl(144,112,176,112,'var(--ink)',3) + phos(190,112)
+    + lineEl(203,112,224,112,'var(--ink)',3) + phos(238,112)
+    + lineEl(251,112,272,112,'var(--coral)',3,true) + phos(286,112)
+    + txt(238,150,'3 phosphate groups','var(--amber)',10,700)
+    + txt(262,86,'unstable bond','var(--coral)',9.5,700) + arrowTo(262,92,262,104,'var(--coral)',1.5)
+    + txt(170,24,'ATP = adenosine triphosphate','var(--ink)',11,700);
+  return svg(inner,'0 0 330 160',165);
+}
+
+/* ATP-ADP cycle */
+function diagATPCycle(){
+  var inner = rectEl(20,24,110,44,12,'var(--amber-soft)','var(--amber)',2.2) + txt(75,44,'ATP','var(--amber)',14,700) + txt(75,60,'3 phosphates','var(--text-soft)',9,600)
+    + rectEl(290,24,110,44,12,'var(--blue-soft)','var(--blue)',2.2) + txt(345,44,'ADP + P','var(--blue)',14,700) + txt(345,60,'2 phosphates','var(--text-soft)',9,600)
+    + pathEl('M135,36 C190,6 230,6 285,36','var(--coral)',2.5) + poly('277,28 289,38 275,42','var(--coral)',1.5,'var(--coral)')
+    + txt(210,-12,'phosphate breaks off (water helps)','var(--coral)',9.5,700)
+    + txt(210,2,'→ energy RELEASED for the cell','var(--coral)',9.5,700)
+    + pathEl('M285,58 C230,92 190,92 135,58','var(--teal)',2.5) + poly('143,52 131,58 143,66','var(--teal)',1.5,'var(--teal)')
+    + txt(210,104,'phosphate added back','var(--teal)',9.5,700)
+    + txt(210,118,'← energy from food (or sunlight in plants)','var(--teal)',9.5,700);
+  return svg(inner,'0 -24 420 150',150);
+}
+
+/* Energy flow: sun -> plant -> consumer */
+function diagEnergyFlow(){
+  var inner = circleEl(40,60,22,'var(--amber-soft)','var(--amber)',2.5) + txt(40,64,'sun','var(--amber)',10,700)
+    + arrowTo(66,60,112,60,'var(--amber)')
+    + rectEl(118,36,92,48,10,'var(--teal-soft)','var(--teal)',2.2) + txt(164,56,'plant','var(--teal)',11,700) + txt(164,72,'makes sugar','var(--text-soft)',9,600)
+    + arrowTo(214,60,260,60,'var(--teal)')
+    + rectEl(266,36,92,48,10,'var(--coral-soft)','var(--coral)',2.2) + txt(312,56,'consumer','var(--coral)',11,700) + txt(312,72,'eats the plant','var(--text-soft)',9,600)
+    + txt(89,50,'light','var(--amber)',9,600) + txt(237,50,'food chain','var(--teal)',9,600)
+    + txt(210,112,'Both plant and animal cells break sugar down to make ATP','var(--ink)',9.5,700);
+  return svg(inner,'0 0 400 124',125);
+}
+
+/* Chloroplast structure */
+function diagChloroplast(){
+  var inner = ellipseEl(200,92,180,76,'var(--teal-soft)','var(--teal)',3) + ellipseEl(200,92,168,66,'none','var(--teal)',1.8);
+  var stacks=[90,170,250,320];
+  stacks.forEach(function(x){ for(var k=0;k<5;k++){ inner += ellipseEl(x,72+k*12,22,6,'#3E9B5F','#1F6B3A',1.5); } });
+  inner += lineEl(112,96,148,96,'#1F6B3A',2) + lineEl(192,96,228,96,'#1F6B3A',2) + lineEl(272,96,298,96,'#1F6B3A',2);
+  inner += txt(200,178,'stroma = the fluid around the grana','var(--blue)',10,700);
+  inner += txt(90,52,'granum','var(--ink)',10,700) + txt(90,63,'(stack of thylakoids)','var(--text-soft)',8.5,600);
+  inner += txt(210,114,'lamella','var(--ink)',9,700) + lineEl(210,106,210,99,'var(--ink)',1);
+  inner += txt(340,16,'double membrane','var(--teal)',10,700) + lineEl(340,20,330,28,'var(--teal)',1.5);
+  inner += txt(250,142,'thylakoid (contains chlorophyll)','#1F6B3A',9,700);
+  return svg(inner,'0 0 400 188',185);
+}
+
+/* Overview: two stages in a chloroplast */
+function diagOverview(){
+  var inner = rectEl(10,30,400,150,30,'var(--teal-soft)','var(--teal)',2.5)
+    + rectEl(40,70,120,70,12,'#DDEFE3','#1F6B3A',2) + txt(100,98,'Light-dependent','#1F6B3A',10,700) + txt(100,112,'reactions','#1F6B3A',10,700) + txt(100,128,'(thylakoids)','var(--text-soft)',8.5,600)
+    + circleEl(320,105,44,'var(--card-bg)','var(--violet)',2.5) + txt(320,102,'Calvin','var(--violet)',11,700) + txt(320,116,'cycle (stroma)','var(--violet)',8.5,700)
+    + arrowTo(166,94,270,94,'var(--amber)') + txt(218,88,'ATP + NADPH','var(--amber)',9.5,700)
+    + arrowTo(270,126,166,126,'var(--blue)') + txt(218,140,'ADP + P, NADP⁺','var(--blue)',9.5,700)
+    + arrowTo(70,12,82,66,'var(--amber)') + txt(46,14,'light','var(--amber)',10,700)
+    + arrowTo(120,12,112,66,'var(--blue)') + txt(140,14,'H₂O','var(--blue)',10,700)
+    + arrowTo(320,10,320,58,'var(--ink)') + txt(344,14,'CO₂','var(--ink)',10,700)
+    + arrowTo(100,144,100,196,'var(--coral)') + txt(124,196,'O₂','var(--coral)',10,700)
+    + arrowTo(320,152,320,196,'var(--teal)') + txt(358,196,'glucose','var(--teal)',10,700);
+  return svg(inner,'0 0 420 204',200);
+}
+
+/* Light-dependent reactions on the thylakoid membrane */
+function diagLightRxn(){
+  var inner = rectEl(0,70,440,46,0,'var(--amber-soft)','none',0) + lineEl(0,70,440,70,'var(--teal)',3) + lineEl(0,116,440,116,'var(--teal)',3);
+  inner += txt(96,30,'STROMA','var(--text-soft)',9,700,'start') + txt(8,158,'INSIDE THYLAKOID (lumen): H⁺ builds up','var(--coral)',9,700,'start');
+  inner += ellipseEl(60,93,22,34,'#DDEFE3','#1F6B3A',2.2) + txt(60,97,'PSII','#1F6B3A',9,700);
+  inner += ellipseEl(130,93,16,30,'var(--blue-soft)','var(--blue)',2.2) + txt(130,97,'ETC','var(--blue)',8,700);
+  inner += ellipseEl(205,93,22,34,'#DDEFE3','#1F6B3A',2.2) + txt(205,97,'PSI','#1F6B3A',9,700);
+  inner += circleEl(258,62,12,'var(--violet-soft)','var(--violet)',2);
+  inner += txt(258,40,'NADP⁺ → NADPH','var(--violet)',9,700);
+  inner += rectEl(340,72,30,52,6,'var(--coral-soft)','var(--coral)',2.2) + ellipseEl(355,52,26,18,'var(--coral-soft)','var(--coral)',2.2) + txt(355,56,'ATP','var(--coral)',9,700);
+  inner += txt(355,22,'ATP synthase spins:','var(--coral)',9,700) + txt(355,34,'ADP + P → ATP','var(--coral)',9,700);
+  inner += arrowTo(355,140,355,82,'var(--coral)',2);
+  inner += pathEl('M30,6 L44,18 L36,22 L52,40','var(--amber)',2.5) + pathEl('M180,6 L194,18 L186,22 L200,40','var(--amber)',2.5);
+  inner += pathEl('M74,78 C95,60 110,60 122,72','var(--teal)',2) + pathEl('M142,78 C160,60 180,60 192,72','var(--teal)',2) + pathEl('M220,70 C232,58 240,58 248,60','var(--teal)',2);
+  inner += txt(98,56,'e⁻ path','var(--teal)',9,700);
+  inner += txt(60,136,'H₂O → O₂ + H⁺ + e⁻','var(--blue)',9,700,'middle');
+  inner += arrowTo(163,58,163,108,'var(--coral)',1.8) + txt(163,54,'H⁺','var(--coral)',9,700);
+  return svg(inner,'0 0 440 166',168);
+}
+
+/* Calvin cycle */
+function diagCalvin(){
+  var inner = circleEl(210,100,62,'none','var(--violet)',3);
+  inner += arrowTo(262,64,268,76,'var(--violet)',2) + arrowTo(240,156,226,161,'var(--violet)',2) + arrowTo(150,118,147,104,'var(--violet)',2);
+  inner += txt(210,22,'3 CO₂ in','var(--ink)',10,700) + arrowTo(210,28,210,36,'var(--ink)',2);
+  inner += txt(300,52,'1 Carbon fixation','var(--teal)',10,700,'start') + txt(300,66,'rubisco joins CO₂ + RuBP','var(--text-soft)',8.5,600,'start') + txt(300,78,'→ unstable 6-C → BPG','var(--text-soft)',8.5,600,'start');
+  inner += txt(300,128,'2 Reduction','var(--amber)',10,700,'start') + txt(300,142,'6 ATP + 6 NADPH used','var(--text-soft)',8.5,600,'start') + txt(300,154,'BPG → 6 G3P','var(--text-soft)',8.5,600,'start');
+  inner += txt(120,180,'1 G3P leaves → toward glucose','var(--coral)',9.5,700) + arrowTo(186,152,160,168,'var(--coral)',2);
+  inner += txt(20,70,'3 Regeneration','var(--blue)',10,700,'start') + txt(20,84,'3 ATP used','var(--text-soft)',8.5,600,'start') + txt(20,96,'5 G3P → 3 RuBP','var(--text-soft)',8.5,600,'start');
+  inner += txt(210,104,'stroma','var(--violet)',11,700);
+  return svg(inner,'0 0 430 192',190);
+}
+
+/* Absorption graph (stylized) */
+function diagSpectrum(){
+  var x0=40, x1=400, y0=150;
+  function X(nm){ return x0+(nm-400)*(x1-x0)/300; }
+  function curve(peaks,color){
+    var pts=[]; for(var nm=400;nm<=700;nm+=5){ var v=0; peaks.forEach(function(p){ v+=p[1]*Math.exp(-Math.pow((nm-p[0])/p[2],2)); }); pts.push(X(nm).toFixed(1)+','+(y0-v*110).toFixed(1)); }
+    return '<polyline points="'+pts.join(' ')+'" fill="none" stroke="'+color+'" stroke-width="2.6"/>';
+  }
+  var inner = '';
+  var bands=[[400,'#6A4BC4'],[450,'#2E6FD1'],[500,'#2CA08A'],[550,'#5DB54A'],[600,'#E2B33A'],[650,'#E06A2B']];
+  bands.forEach(function(b){ inner += '<rect x="'+X(b[0])+'" y="'+(y0+4)+'" width="'+(X(b[0]+50)-X(b[0]))+'" height="10" fill="'+b[1]+'"/>'; });
+  inner += lineEl(x0,y0,x1,y0,'var(--ink)',1.5) + lineEl(x0,y0,x0,20,'var(--ink)',1.5);
+  inner += curve([[430,0.95,18],[662,0.75,14]],'#1F6B3A') + curve([[455,0.9,18],[642,0.45,14]],'var(--teal)') + curve([[450,0.6,25],[485,0.55,18]],'var(--amber)');
+  inner += txt(110,26,'chlorophyll a','#1F6B3A',9.5,700) + txt(200,40,'chlorophyll b','var(--teal)',9.5,700) + txt(260,92,'carotenoids','var(--amber)',9.5,700);
+  inner += txt(220,184,'wavelength of light: violet/blue → green → red','var(--text-soft)',9,600);
+  inner += txt(228,130,'little green absorbed','var(--coral)',9,700);
+  inner += '<text x="14" y="90" fill="var(--text-soft)" font-family="Space Grotesk, sans-serif" font-size="9" font-weight="600" transform="rotate(-90 14 90)" text-anchor="middle">light absorbed</text>';
+  return svg(inner,'0 0 420 192',185);
+}
+
+/* ---------- 3.3 Cellular respiration ---------- */
+function diagMito(){
+  var inner = ellipseEl(200,92,180,72,'var(--coral-soft)','var(--coral)',3);
+  inner += pathEl('M40,92 C55,40 70,40 80,92 C90,144 105,144 115,92 C125,40 140,40 150,92 C160,144 175,144 185,92 C195,40 210,40 220,92 C230,144 245,144 255,92 C265,40 280,40 290,92 C300,144 315,144 325,92 C335,50 350,50 360,92','#B4483F',2.4,'none');
+  inner += txt(200,192,'matrix = the fluid inside the inner membrane (Krebs cycle)','var(--blue)',9.5,700);
+  inner += txt(340,12,'outer membrane','var(--coral)',9.5,700) + lineEl(340,16,328,26,'var(--coral)',1.4);
+  inner += txt(70,12,'inner membrane folds = cristae (ETC)','#B4483F',9.5,700,'start') + lineEl(110,16,112,46,'#B4483F',1.4);
+  inner += txt(4,176,'intermembrane space','var(--violet)',9,700,'start') + lineEl(40,168,52,140,'var(--violet)',1.2);
+  return svg(inner,'0 0 400 198',192);
+}
+
+function diagRespOverview(){
+  var inner = rectEl(4,20,120,150,12,'var(--blue-soft)','var(--blue)',2) + txt(64,38,'CYTOPLASM','var(--blue)',9,700);
+  inner += rectEl(140,20,290,150,40,'var(--coral-soft)','var(--coral)',2.2) + txt(285,38,'MITOCHONDRION','var(--coral)',9,700);
+  inner += rectEl(16,70,96,40,10,'var(--card-bg)','var(--blue)',2) + txt(64,88,'1 Glycolysis','var(--blue)',10,700) + txt(64,102,'glucose → 2 pyruvate','var(--text-soft)',8,600);
+  inner += arrowTo(114,90,160,90,'var(--ink)',2);
+  inner += rectEl(162,56,80,30,8,'var(--card-bg)','var(--amber)',2) + txt(202,75,'pre-Krebs','var(--amber)',9.5,700);
+  inner += circleEl(202,128,28,'var(--card-bg)','var(--violet)',2.2) + txt(202,125,'2 Krebs','var(--violet)',9.5,700) + txt(202,138,'(matrix)','var(--text-soft)',8,600);
+  inner += arrowTo(202,88,202,98,'var(--ink)',2);
+  inner += rectEl(290,70,124,46,10,'var(--card-bg)','var(--teal)',2) + txt(352,88,'3 Electron transport','var(--teal)',9.5,700) + txt(352,102,'chain (cristae)','var(--teal)',9,700);
+  inner += arrowTo(232,120,288,100,'var(--ink)',2) + txt(262,128,'NADH, FADH₂','var(--text-soft)',8,600);
+  inner += txt(64,186,'2 ATP','var(--amber)',10,700) + txt(202,186,'2 ATP','var(--amber)',10,700) + txt(352,186,'about 32–34 ATP','var(--amber)',10,700);
+  inner += txt(352,140,'O₂ in → H₂O out','var(--blue)',9,700);
+  inner += txt(202,168,'CO₂ out','var(--ink)',9,700);
+  return svg(inner,'0 0 436 196',195);
+}
+
+function diagGlycolysis(){
+  var inner = carbons(20,40,6,'var(--ink)') + txt(52,22,'glucose (6-C)','var(--ink)',9.5,700);
+  inner += arrowTo(100,40,170,40,'var(--ink)',2) + txt(135,22,'2 ATP used','var(--coral)',9,700);
+  inner += carbons(186,30,3,'var(--teal)') + carbons(186,52,3,'var(--teal)') + txt(200,76,'2 G3P','var(--teal)',9,700);
+  inner += arrowTo(236,40,306,40,'var(--ink)',2) + txt(271,22,'4 ATP made','var(--teal)',9,700) + txt(271,62,'2 NAD⁺ → 2 NADH','var(--violet)',9,700);
+  inner += carbons(322,30,3,'var(--amber)') + carbons(322,52,3,'var(--amber)') + txt(336,76,'2 pyruvate (3-C)','var(--amber)',9,700);
+  inner += rectEl(60,96,300,40,10,'var(--amber-soft)','var(--amber)',1.6) + txt(210,114,'NET: 2 pyruvate · 2 ATP · 2 NADH','var(--ink)',10.5,700) + txt(210,128,'(4 ATP made − 2 ATP used = 2)','var(--text-soft)',8.5,600);
+  return svg(inner,'0 0 400 144',145);
+}
+
+function diagKrebs(){
+  var inner = carbons(14,30,3,'var(--amber)') + txt(28,16,'pyruvate','var(--amber)',9,700);
+  inner += arrowTo(56,30,96,30,'var(--ink)',2) + txt(76,52,'CO₂ + NADH','var(--text-soft)',8,600);
+  inner += carbons(104,30,2,'var(--teal)') + txt(150,34,'+ CoA','var(--violet)',9,700) + txt(116,16,'acetyl-CoA','var(--teal)',9,700);
+  inner += circleEl(270,98,60,'none','var(--violet)',3);
+  inner += arrowTo(170,40,220,58,'var(--ink)',2);
+  inner += txt(270,94,'Krebs cycle','var(--violet)',11,700) + txt(270,108,'(citric acid cycle, matrix)','var(--text-soft)',8,600);
+  inner += txt(270,30,'2-C + 4-C → citric acid (6-C)','var(--ink)',8.5,700);
+  inner += txt(346,70,'6-C → 5-C','var(--ink)',8.5,700,'start') + txt(346,82,'CO₂ + NADH','var(--text-soft)',8,600,'start');
+  inner += txt(346,128,'5-C → 4-C','var(--ink)',8.5,700,'start') + txt(346,140,'CO₂ + NADH + ATP','var(--text-soft)',8,600,'start');
+  inner += txt(196,170,'4-C rearranged: NADH + FADH₂','var(--ink)',8.5,700);
+  inner += rectEl(8,88,140,62,10,'var(--amber-soft)','var(--amber)',1.6) + txt(78,104,'Pre-Krebs + Krebs,','var(--ink)',9,700) + txt(78,118,'×2 per glucose:','var(--ink)',9,700) + txt(78,134,'6 CO₂ · 8 NADH','var(--ink)',9,700) + txt(78,146,'2 FADH₂ · 2 ATP','var(--ink)',9,700);
+  return svg(inner,'0 0 430 178',178);
+}
+
+function diagMitoETC(){
+  var inner = rectEl(0,70,440,46,0,'var(--amber-soft)','none',0) + lineEl(0,70,440,70,'var(--coral)',3) + lineEl(0,116,440,116,'var(--coral)',3);
+  inner += txt(8,26,'INTERMEMBRANE SPACE: H⁺ builds up','var(--coral)',9,700,'start') + txt(8,158,'MATRIX','var(--text-soft)',9,700,'start');
+  [70,140,210].forEach(function(x){ inner += ellipseEl(x,93,18,32,'var(--blue-soft)','var(--blue)',2.2) + arrowTo(x,110,x,46,'var(--coral)',1.6); });
+  inner += txt(140,62,'','var(--coral)',8,700);
+  inner += txt(40,140,'NADH → NAD⁺ + H⁺ + e⁻','var(--violet)',8.5,700,'start');
+  inner += txt(150,152,'FADH₂ → FAD + H⁺ + e⁻','var(--violet)',8.5,700,'start');
+  inner += pathEl('M84,104 C100,124 116,124 128,108 M154,104 C170,124 186,124 198,108','var(--teal)',2);
+  inner += txt(262,140,'O₂ + e⁻ + H⁺ → H₂O','var(--blue)',9,700);
+  inner += arrowTo(226,108,250,128,'var(--teal)',1.6);
+  inner += rectEl(340,72,30,52,6,'var(--coral-soft)','var(--coral)',2.2) + ellipseEl(355,138,26,16,'var(--coral-soft)','var(--coral)',2.2) + txt(355,142,'ATP','var(--coral)',9,700);
+  inner += arrowTo(355,40,355,128,'var(--coral)',2);
+  inner += txt(355,22,'ATP synthase spins:','var(--coral)',9,700) + txt(355,34,'ADP + P → ATP','var(--coral)',9,700);
+  inner += txt(140,46,'H⁺ pumps','var(--coral)',8.5,700);
+  return svg(inner,'0 0 440 166',168);
+}
+
+function diagFerment(){
+  var inner = rectEl(10,60,70,34,8,'var(--card-bg)','var(--ink)',2) + txt(45,81,'glucose','var(--ink)',10,700);
+  inner += arrowTo(82,77,140,77,'var(--ink)',2) + txt(111,66,'glycolysis','var(--blue)',8.5,700) + txt(111,94,'2 ATP','var(--amber)',8.5,700);
+  inner += rectEl(142,60,70,34,8,'var(--card-bg)','var(--amber)',2) + txt(177,81,'pyruvate','var(--amber)',10,700);
+  inner += arrowTo(214,70,262,30,'var(--teal)',2) + txt(240,28,'O₂','var(--teal)',9,700,'end');
+  inner += rectEl(264,10,150,34,8,'var(--teal-soft)','var(--teal)',2) + txt(339,27,'Krebs + ETC','var(--teal)',9.5,700) + txt(339,39,'(≈36 ATP total)','var(--text-soft)',8,600);
+  inner += arrowTo(214,84,262,110,'var(--coral)',2) + txt(232,118,'no O₂','var(--coral)',9,700,'end');
+  inner += rectEl(264,74,150,34,8,'var(--coral-soft)','var(--coral)',2) + txt(339,91,'alcoholic fermentation','var(--coral)',9,700) + txt(339,103,'→ ethyl alcohol + CO₂','var(--text-soft)',8,600);
+  inner += rectEl(264,116,150,34,8,'var(--violet-soft)','var(--violet)',2) + txt(339,133,'lactic acid fermentation','var(--violet)',9,700) + txt(339,145,'→ lactic acid','var(--text-soft)',8,600);
+  inner += txt(150,146,'both turn NADH back into NAD⁺','var(--ink)',9,700) + txt(150,160,'so glycolysis can keep going','var(--text-soft)',8.5,600);
+  return svg(inner,'0 0 420 168',170);
+}
+
+function diagEnergyCycle(){
+  var inner = rectEl(20,40,140,60,14,'var(--teal-soft)','var(--teal)',2.2) + txt(90,64,'Photosynthesis','var(--teal)',11,700) + txt(90,80,'chloroplast','var(--text-soft)',9,600);
+  inner += rectEl(260,40,140,60,14,'var(--coral-soft)','var(--coral)',2.2) + txt(330,64,'Cellular respiration','var(--coral)',10.5,700) + txt(330,80,'mitochondria','var(--text-soft)',9,600);
+  inner += pathEl('M160,52 C200,20 220,20 258,52','var(--teal)',2.5) + poly('250,46 262,56 248,58','var(--teal)',1.5,'var(--teal)') + txt(210,20,'glucose + O₂','var(--teal)',10,700);
+  inner += pathEl('M258,90 C220,122 200,122 162,90','var(--coral)',2.5) + poly('170,96 158,86 172,84','var(--coral)',1.5,'var(--coral)') + txt(210,130,'CO₂ + H₂O','var(--coral)',10,700);
+  inner += txt(90,16,'light energy in','var(--amber)',9.5,700) + arrowTo(90,20,90,38,'var(--amber)',2);
+  inner += txt(330,126,'ATP (energy) out','var(--amber)',9.5,700) + arrowTo(330,102,330,114,'var(--amber)',2);
+  return svg(inner,'0 0 420 138',140);
+}
+
+var CATS = [
+  {key:'atp', label:'Energy & ATP', color:'var(--amber)'},
+  {key:'chloro', label:'Photosynthesis & Chloroplast', color:'var(--teal)'},
+  {key:'light', label:'Light Reactions', color:'var(--blue)'},
+  {key:'calvin', label:'Calvin Cycle & Pigments', color:'var(--violet)'},
+  {key:'resp', label:'Cellular Respiration', color:'var(--coral)'},
+  {key:'ferm', label:'Fermentation & Review', color:'var(--ink)'}
+];
+function catInfo(key){ for(var i=0;i<CATS.length;i++) if(CATS[i].key===key) return CATS[i]; return CATS[0]; }
+
+var CARDS = [
+  {cat:'atp', term:'First law of thermodynamics', def:'Energy can be transformed from one form to another.', extra:'Living things take energy from their environment and transform it into a form they can use.', diagram:diagEnergyFlow},
+  {cat:'atp', term:'ATP', def:'Adenosine triphosphate: the molecule that carries usable energy to cell processes.', extra:'Made of adenine, ribose, and 3 phosphate groups.', diagram:diagATP},
+  {cat:'atp', term:'ADP', def:'Adenosine diphosphate: ATP after it has lost one phosphate. A lower-energy molecule.', extra:'Adding a phosphate back turns it into ATP again.', diagram:null},
+  {cat:'atp', term:'How ATP releases energy', def:'The unstable bond to the third phosphate breaks (water helps), releasing energy. ATP → ADP + P.', extra:null, diagram:diagATPCycle},
+  {cat:'atp', term:'ATP–ADP cycle', def:'ATP is spent (becomes ADP + P) and then recharged (phosphate added back), over and over.', extra:'That\'s why ATP is called renewable.', diagram:diagATPCycle},
+  {cat:'atp', term:'What cells use ATP for', def:'Building molecules and moving materials by active transport.', extra:null, diagram:null},
+  {cat:'atp', term:'Most common fuel for ATP', def:'Carbohydrates. One glucose yields about 36 ATP.', extra:'Carbohydrates are broken down into glucose for cellular respiration.', diagram:null},
+  {cat:'atp', term:'Most stored energy', def:'Lipids (fats): about 80% of the body\'s stored energy, and the most ATP (about 146 from one triglyceride).', extra:'Proteins are less likely to be used for ATP; cells need them to build new proteins.', diagram:null},
+  {cat:'chloro', term:'Photosynthesis equation', def:'6CO₂ + 6H₂O + light → C₆H₁₂O₆ + 6O₂', extra:'Turns light energy into chemical energy. Main product: glucose. By-product: oxygen.', diagram:null},
+  {cat:'chloro', term:'Autotroph', def:'An organism that makes its own food, such as a plant using sunlight.', extra:null, diagram:null},
+  {cat:'chloro', term:'Heterotroph', def:'An organism that must eat food to get energy.', extra:null, diagram:null},
+  {cat:'chloro', term:'Chloroplast', def:'The organelle where photosynthesis happens. It has its own DNA, its own ribosomes, and a double membrane.', extra:'Found in plant cells and some algae.', diagram:diagChloroplast},
+  {cat:'chloro', term:'Thylakoid', def:'A flattened sac in the chloroplast whose membrane contains chlorophyll and converts light energy into chemical energy.', extra:'The light-dependent reactions happen in the thylakoid membranes. The space inside is the lumen.', diagram:diagChloroplast},
+  {cat:'chloro', term:'Granum (grana)', def:'A stack of thylakoids.', extra:'Grana are connected to each other by lamellae.', diagram:null},
+  {cat:'chloro', term:'Stroma', def:'The fluid that fills the chloroplast, outside the thylakoids.', extra:'The Calvin cycle happens here.', diagram:null},
+  {cat:'chloro', term:'The two stages', def:'1. Light-dependent reactions (thylakoid membranes). 2. Light-independent reactions, the Calvin cycle (stroma).', extra:'The light-dependent reactions come first.', diagram:diagOverview},
+  {cat:'light', term:'Light-dependent reactions: in & out', def:'In: water, sunlight, NADP⁺, ADP. Out: oxygen, NADPH, ATP.', extra:'Purpose: make ATP and NADPH for the Calvin cycle.', diagram:diagLightRxn},
+  {cat:'light', term:'Photosystem II', def:'Where light first hits chlorophyll and energizes ("excites") an electron.', extra:'Photosynthesis starts here, not at photosystem I.', diagram:null},
+  {cat:'light', term:'Electron transport chain (photosynthesis)', def:'Proteins in the thylakoid membrane that pass electrons along and use their energy to pump H⁺ into the thylakoid.', extra:'The H⁺ pump is active transport (low → high).', diagram:null},
+  {cat:'light', term:'Splitting water', def:'Enzymes split water into electrons (to replace the ones that left chlorophyll), oxygen (released), and H⁺.', extra:'This is where the O₂ comes from.', diagram:null},
+  {cat:'light', term:'Photosystem I', def:'Uses light energy to re-energize electrons after the ETC so they can be used to make NADPH.', extra:null, diagram:null},
+  {cat:'light', term:'ATP synthase', def:'An enzyme that spins as H⁺ diffuses through it, adding a phosphate to ADP to make ATP.', extra:'In photosynthesis, H⁺ flows from inside the thylakoid (high) out to the stroma (low).', diagram:diagLightRxn},
+  {cat:'light', term:'NADP⁺ / NADPH', def:'The electron carrier in photosynthesis. NADP⁺ picks up 2 electrons and a hydrogen ion to become NADPH.', extra:'A carrier molecule carries electrons from one part of the process to the next.', diagram:null},
+  {cat:'calvin', term:'Calvin cycle: in & out', def:'In: ATP, NADPH, CO₂. Out: ADP, NADP⁺, glucose.', extra:'Also called the light-independent reactions. Happens in the stroma.', diagram:diagCalvin},
+  {cat:'calvin', term:'Rubisco', def:'The enzyme that attaches CO₂ to RuBP (carbon fixation).', extra:null, diagram:null},
+  {cat:'calvin', term:'Carbon fixation', def:'3 CO₂ are attached to 3 RuBP. The unstable 6-carbon molecules split into 6 BPG.', extra:null, diagram:diagCalvin},
+  {cat:'calvin', term:'G3P', def:'The 3-carbon sugar the Calvin cycle builds. 1 leaves each turn; 2 G3P make 1 glucose.', extra:'Its main purpose: to make glucose and other carbon-based molecules.', diagram:null},
+  {cat:'calvin', term:'One glucose costs…', def:'2 turns of the cycle: 6 CO₂, 18 ATP, and 12 NADPH.', extra:'Per turn: 3 CO₂, 9 ATP, 6 NADPH.', diagram:null},
+  {cat:'calvin', term:'Chlorophyll', def:'The main light-absorbing pigment in plants. It comes in different types and makes plants green.', extra:'It absorbs blue and red light and very little green.', diagram:diagSpectrum},
+  {cat:'calvin', term:'Why leaves change color', def:'With less light, chlorophyll breaks down, so the other colors (from accessory pigments and chlorophyll residue) show.', extra:'Carotenoids are accessory pigments.', diagram:null},
+  {cat:'resp', term:'Cellular respiration', def:'The process in which cells make ATP by breaking down food (glucose) in the presence of oxygen.', extra:'C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + ATP. The inverse of photosynthesis. Both autotrophs and heterotrophs do it.', diagram:diagRespOverview},
+  {cat:'resp', term:'Aerobic vs. anaerobic', def:'Aerobic = requires oxygen. Anaerobic = does not require oxygen.', extra:'Cellular respiration overall is aerobic; glycolysis and fermentation are anaerobic.', diagram:null},
+  {cat:'resp', term:'Mitochondrion', def:'The organelle where most of cellular respiration happens. It has its own DNA, its own ribosomes, and a double membrane.', extra:'Cristae = inner-membrane folds (ETC). Matrix = the fluid inside (Krebs cycle).', diagram:diagMito},
+  {cat:'resp', term:'Order of the stages', def:'Glycolysis → Krebs cycle → electron transport chain.', extra:'The Calvin cycle is NOT part of cellular respiration.', diagram:null},
+  {cat:'resp', term:'Glycolysis', def:'Splits glucose (6-C) into 2 pyruvate (3-C) in the cytoplasm. Anaerobic.', extra:'Net: 2 pyruvate, 2 ATP (4 made − 2 used), 2 NADH.', diagram:diagGlycolysis},
+  {cat:'resp', term:'Pre-Krebs', def:'In the matrix, each pyruvate loses a carbon (as CO₂) to become a 2-C acetyl, and NADH is made. Coenzyme A carries the acetyl into the Krebs cycle.', extra:'Also called pyruvate oxidation.', diagram:null},
+  {cat:'resp', term:'Krebs cycle (citric acid cycle)', def:'In the matrix, breaks down citric acid to load electron carriers. Turns twice per glucose.', extra:'Totals with pre-Krebs: 6 CO₂, 8 NADH, 2 FADH₂, 2 ATP. Makes most of the CO₂.', diagram:diagKrebs},
+  {cat:'resp', term:'NADH and FADH₂', def:'The electron carriers of cellular respiration. They bring electrons to the ETC.', extra:'NAD⁺ is a different carrier from photosynthesis\'s NADP⁺.', diagram:null},
+  {cat:'resp', term:'Electron transport chain (respiration)', def:'In the inner membrane (cristae), electrons from NADH and FADH₂ power H⁺ pumps; H⁺ flows back through ATP synthase to make ATP.', extra:'Makes the most ATP: about 32–34. Also makes 6 H₂O.', diagram:diagMitoETC},
+  {cat:'resp', term:'Final electron acceptor', def:'Oxygen. It picks up electrons at the end of the ETC, then 2 H⁺, making water.', extra:'In photosynthesis the electrons end on NADP⁺ instead: that\'s the key difference between the two ETCs.', diagram:null},
+  {cat:'resp', term:'ATP from one glucose', def:'About 36: glycolysis 2 + Krebs 2 + ETC about 32.', extra:'Some sources (the textbook) say up to 38.', diagram:null},
+  {cat:'ferm', term:'Fermentation', def:'Lets glycolysis continue without oxygen by turning NADH back into NAD⁺.', extra:'Anaerobic, in the cytoplasm. Doesn\'t make ATP itself, but glycolysis still makes 2 ATP.', diagram:diagFerment},
+  {cat:'ferm', term:'Alcoholic fermentation', def:'Pyruvate → ethyl alcohol (ethanol) + CO₂, regenerating NAD⁺. Done by yeast and many bacteria.', extra:'Bread rising, beer and wine, gut bacteria making gas.', diagram:null},
+  {cat:'ferm', term:'Lactic acid fermentation', def:'Pyruvate → lactic acid (lactate), regenerating NAD⁺. Done by some bacteria, fungi, and our muscle cells.', extra:'Cheese, yogurt, sore muscles, tooth decay from mouth bacteria.', diagram:null},
+  {cat:'ferm', term:'Interdependence', def:'The products of photosynthesis are the reactants of cellular respiration, and the reactants of photosynthesis are the products of respiration.', extra:'Photosynthesis = energy capture (chloroplast). Respiration = energy release (mitochondria).', diagram:diagEnergyCycle},
+  {cat:'ferm', term:'BTB (bromothymol blue)', def:'An indicator: blue = more O₂, yellow = more CO₂, green = both.', extra:'Breathing into BTB water turns it yellow; a plant in light turns it back to blue.', diagram:null},
+  {cat:'ferm', term:'Factors that affect photosynthesis', def:'Light intensity, CO₂ concentration, and temperature.', extra:'Light and CO₂ graphs level off at some point; too much heat lowers the rate because enzymes stop working well.', diagram:null}
+];
+
+/* ============ Deck state & rendering ============ */
+var activeCat = 'all';
+var order = CARDS.map(function(_,i){return i;});
+var pos = 0;
+var flipped = false;
+var goodCount = 0, badCount = 0;
+var seenRated = {};
+
+function currentIndices(){
+  if(activeCat==='all') return order;
+  return order.filter(function(i){ return CARDS[i].cat===activeCat; });
+}
+
+function buildTabs(){
+  var tabsEl = document.getElementById('tabs');
+  var allBtn = document.createElement('button');
+  allBtn.className='tab-btn active'; allBtn.textContent='All'; allBtn.dataset.key='all';
+  tabsEl.appendChild(allBtn);
+  CATS.forEach(function(c){
+    var b=document.createElement('button');
+    b.className='tab-btn'; b.textContent=c.label; b.dataset.key=c.key;
+    tabsEl.appendChild(b);
+  });
+  tabsEl.addEventListener('click', function(e){
+    if(e.target.tagName!=='BUTTON') return;
+    activeCat = e.target.dataset.key;
+    Array.prototype.forEach.call(tabsEl.children, function(b){ b.classList.toggle('active', b.dataset.key===activeCat); });
+    document.getElementById('filterLabel').textContent = activeCat==='all' ? 'All cards' : catInfo(activeCat).label;
+    pos = 0; flipped=false;
+    renderCard();
+  });
+}
+
+function renderCard(){
+  var idxs = currentIndices();
+  if(idxs.length===0) return;
+  if(pos>=idxs.length) pos=0;
+  var card = CARDS[idxs[pos]];
+  var info = catInfo(card.cat);
+
+  document.getElementById('flashcard').classList.remove('flipped');
+  flipped=false;
+
+  document.getElementById('catTagFront').textContent = info.label;
+  document.getElementById('catTagFront').style.background = info.color;
+  document.getElementById('catTagFront').style.color = '#fff';
+  document.getElementById('catTagBack').textContent = info.label;
+  document.getElementById('catTagBack').style.background = info.color;
+  document.getElementById('catTagBack').style.color = '#fff';
+
+  document.getElementById('termText').textContent = card.term;
+  document.getElementById('defText').textContent = card.def;
+  document.getElementById('extraText').textContent = card.extra || '';
+
+  var dWrap = document.getElementById('diagramWrap');
+  if(card.diagram){
+    dWrap.style.display='block';
+    dWrap.innerHTML = card.diagram();
+  } else {
+    dWrap.style.display='none';
+    dWrap.innerHTML='';
+  }
+
+  document.getElementById('cardNum').textContent = pos+1;
+  document.getElementById('cardTotal').textContent = idxs.length;
+  document.getElementById('progressFill').style.width = Math.round(((pos+1)/idxs.length)*100)+'%';
+
+  document.getElementById('rateRow').style.visibility='hidden';
+  updateTally();
+}
+
+function updateTally(){
+  var t = document.getElementById('tally');
+  if(goodCount+badCount===0){ t.textContent=''; return; }
+  t.innerHTML = '<b class="good">'+goodCount+'</b> got it &middot; <b class="bad">'+badCount+'</b> still learning';
+}
+
+function nextCard(){ var idxs=currentIndices(); pos=(pos+1)%idxs.length; renderCard(); }
+function prevCard(){ var idxs=currentIndices(); pos=(pos-1+idxs.length)%idxs.length; renderCard(); }
+function shuffleDeck(){
+  for(var i=order.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=order[i]; order[i]=order[j]; order[j]=t; }
+  pos=0; goodCount=0; badCount=0; seenRated={}; renderCard();
+}
+
+document.getElementById('flashcard').addEventListener('click', function(){
+  flipped=!flipped;
+  this.classList.toggle('flipped', flipped);
+  document.getElementById('rateRow').style.visibility = flipped ? 'visible' : 'hidden';
+});
+document.getElementById('btnNext').addEventListener('click', function(e){ e.stopPropagation(); nextCard(); });
+document.getElementById('btnPrev').addEventListener('click', function(e){ e.stopPropagation(); prevCard(); });
+document.getElementById('btnShuffle').addEventListener('click', function(e){ e.stopPropagation(); shuffleDeck(); });
+document.getElementById('btnGood').addEventListener('click', function(e){
+  e.stopPropagation();
+  var idxs=currentIndices(); var key=idxs[pos];
+  if(seenRated[key]==='bad') badCount--; if(seenRated[key]!=='good'){ goodCount++; seenRated[key]='good'; }
+  updateTally(); nextCard();
+});
+document.getElementById('btnBad').addEventListener('click', function(e){
+  e.stopPropagation();
+  var idxs=currentIndices(); var key=idxs[pos];
+  if(seenRated[key]==='good') goodCount--; if(seenRated[key]!=='bad'){ badCount++; seenRated[key]='bad'; }
+  updateTally(); nextCard();
+});
+
+buildTabs();
+renderCard();
+</script>
+</body>
+</html>

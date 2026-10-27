@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 5: Congruent Triangles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FBFAF7;
+    --grid-line: rgba(28,43,74,0.055);
+    --ink: #1C2B4A;
+    --text: #2B3648;
+    --text-soft: #64707F;
+    --blue: #2E86AB;
+    --blue-soft: #E9F3F8;
+    --amber: #D98A2B;
+    --amber-soft: #FCF1DE;
+    --coral: #D65A5A;
+    --coral-soft: #FBEBEB;
+    --teal: #2C9C82;
+    --teal-soft: #E6F5F0;
+    --violet: #7C5CBF;
+    --violet-soft: #EFE9F8;
+    --gray: #94A0AD;
+    --gray-line: #CBD3DC;
+    --card-bg: #FFFFFF;
+    --border: #E4E0D4;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  h1, h2, h3, .display {
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--ink);
+  }
+
+  a { color: inherit; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--text-soft); text-decoration: none; font-size: 0.88rem; font-weight: 600; margin-bottom: 18px; }
+  .back-link:hover { color: var(--blue); }
+
+  .wrap {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: var(--ink);
+    border-radius: 18px;
+    padding: 28px 30px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-text h1 {
+    color: #fff;
+    font-size: 1.9rem;
+    margin: 0 0 6px;
+    line-height: 1.15;
+  }
+  .hero-text p {
+    margin: 0;
+    color: #C8D3E0;
+    font-size: 0.98rem;
+    max-width: 48ch;
+  }
+  .hero svg { flex-shrink: 0; }
+
+  /* ---------- Tabs ---------- */
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 26px 0 20px;
+  }
+  .tab-btn {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.86rem;
+    border: 1.5px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text-soft);
+    padding: 9px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    transition: transform 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+  }
+  .tab-btn:hover { transform: translateY(-1px); }
+  .tab-btn.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: #fff;
+  }
+  .tab-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  /* ---------- Panels ---------- */
+  .panel { display: none; animation: fade .18s ease; }
+  .panel.active { display: block; }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+  .section-title {
+    font-size: 1.3rem;
+    margin: 0 0 4px;
+  }
+  .section-sub {
+    color: var(--text-soft);
+    font-size: 0.92rem;
+    margin: 0 0 18px;
+  }
+
+  /* ---------- Callout boxes ---------- */
+  .box {
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin: 14px 0;
+    border-left: 4px solid transparent;
+  }
+  .box h4 {
+    margin: 0 0 6px;
+    font-size: 0.98rem;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .box p, .box ul { margin: 0; font-size: 0.93rem; line-height: 1.55; }
+  .box ul { padding-left: 20px; }
+
+  .box.theorem { background: var(--blue-soft); border-color: var(--blue); }
+  .box.theorem h4 { color: var(--blue); }
+  .box.postulate { background: var(--teal-soft); border-color: var(--teal); }
+  .box.postulate h4 { color: var(--teal); }
+  .box.watch { background: var(--coral-soft); border-color: var(--coral); }
+  .box.watch h4 { color: var(--coral); }
+  .box.tip { background: var(--amber-soft); border-color: var(--amber); }
+  .box.tip h4 { color: var(--amber); }
+
+  /* ---------- Definition grid ---------- */
+  .def-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 10px;
+    margin: 14px 0;
+  }
+  .def-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .def-card .term {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--ink);
+    display: block;
+    margin-bottom: 3px;
+  }
+  .def-card .desc { font-size: 0.85rem; color: var(--text-soft); }
+
+  /* ---------- Proof/step tables ---------- */
+  .proof-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--ink);
+    margin: 18px 0 8px;
+  }
+  table.proof {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 6px;
+    font-size: 0.88rem;
+    background: var(--card-bg);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  table.proof th {
+    text-align: left;
+    background: var(--ink);
+    color: #fff;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
+    padding: 8px 12px;
+  }
+  table.proof td {
+    padding: 8px 12px;
+    border-top: 1px solid var(--border);
+  }
+  table.proof td:first-child { width: 55%; }
+  table.proof tr:nth-child(even) td { background: #FAF9F5; }
+
+  /* ---------- Numeric example ---------- */
+  .numex {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 10px 0;
+    font-size: 0.9rem;
+  }
+  .numex .setup { color: var(--text-soft); margin-bottom: 6px; }
+  .numex .steps { font-family: 'Space Grotesk', sans-serif; color: var(--ink); line-height: 1.7; }
+
+  /* ---------- Family tree ---------- */
+  .tree-box {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 10px 0;
+    font-size: 0.88rem;
+    line-height: 1.9;
+  }
+  .tree-box .lvl0 { font-weight: 700; color: var(--ink); font-family: 'Space Grotesk', sans-serif; }
+  .tree-box .lvl1 { padding-left: 22px; color: var(--ink); }
+  .tree-box .lvl2 { padding-left: 44px; color: var(--text-soft); }
+  .tree-box .note { color: var(--text-soft); font-size: 0.82rem; }
+
+  /* ---------- Footer: reasons bank + checklist ---------- */
+  .foot-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 16px;
+    margin-top: 34px;
+  }
+  @media (max-width: 700px) { .foot-grid { grid-template-columns: 1fr; } }
+
+  .foot-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+  }
+  .foot-card h3 { font-size: 1rem; margin: 0 0 10px; }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    font-size: 0.78rem;
+    background: var(--blue-soft);
+    color: var(--blue);
+    border-radius: 999px;
+    padding: 5px 11px;
+    font-weight: 600;
+  }
+  .checklist { list-style: none; margin: 0; padding: 0; font-size: 0.87rem; }
+  .checklist li {
+    display: flex;
+    gap: 9px;
+    align-items: flex-start;
+    padding: 6px 0;
+    border-bottom: 1px dashed var(--border);
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checkmark {
+    flex-shrink: 0;
+    width: 18px; height: 18px;
+    border-radius: 5px;
+    background: var(--teal-soft);
+    color: var(--teal);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem;
+    margin-top: 1px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="geometry.html">&larr; Back to Geometry</a>
+  <div class="hero">
+    <div class="hero-text">
+      <h1>Unit 5 &mdash; Congruent Triangles</h1>
+      <p>Lessons 5.1&ndash;5.4: congruent polygons and congruence statements, the SSS, SAS, HL, ASA, and AAS shortcuts, and two-column triangle proofs.</p>
+    </div>
+  </div>
+  <div class="tabs" id="tabs"></div>
+  <div id="panels"></div>
+  <div class="foot-grid">
+    <div class="foot-card">
+      <h3>Term bank</h3>
+      <div class="chip-row"><span class="chip">Congruent</span><span class="chip">Corresponding parts</span><span class="chip">Congruence statement</span><span class="chip">SSS</span><span class="chip">SAS</span><span class="chip">HL</span><span class="chip">ASA</span><span class="chip">AAS</span><span class="chip">Included angle</span><span class="chip">Included side</span><span class="chip">Hypotenuse</span><span class="chip">Leg</span><span class="chip">Reflexive property</span><span class="chip">Vertical angles</span><span class="chip">Midpoint</span><span class="chip">Bisector</span><span class="chip">Alternate interior angles</span><span class="chip">Two-column proof</span></div>
+    </div>
+    <div class="foot-card">
+      <h3>Before you answer</h3>
+      <ul class="checklist"><li><span class="checkmark">✓</span><span><b>Five shortcuts:</b> SSS, SAS, ASA, AAS, HL. SSA does not work.</span></li><li><span class="checkmark">✓</span><span><b>Included?</b> SAS needs the angle between the sides; ASA needs the side between the angles.</span></li><li><span class="checkmark">✓</span><span><b>Look for free parts:</b> a shared side (reflexive), vertical angles at an X, midpoints and bisectors, parallel lines.</span></li><li><span class="checkmark">✓</span><span><b>Congruence statements:</b> keep corresponding vertices in the same order.</span></li><li><span class="checkmark">✓</span><span><b>Lesson numbers:</b> some handouts are headed 4.1&ndash;4.4 but are filed as Unit 5 (5.1&ndash;5.4). This site uses the Unit 5 numbers. The 5.3 and 5.4 worksheets came without keys, so those examples are original.</span></li></ul>
+    </div>
+  </div>
+</div>
+<script>
+function svg(inner, vb, h) { return '<svg viewBox="'+vb+'" width="100%" height="'+(h||180)+'" xmlns="http://www.w3.org/2000/svg">'+inner+'</svg>'; }
+function lineEl(x1,y1,x2,y2,color,w,dash){ return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round"'+(dash?' stroke-dasharray="5 4"':'')+'/>'; }
+function dot(x,y,color,r){ return '<circle cx="'+x+'" cy="'+y+'" r="'+(r||3.2)+'" fill="'+(color||'var(--ink)')+'"/>'; }
+function txt(x,y,s,color,size,weight,anchor){ return '<text x="'+x+'" y="'+y+'" fill="'+(color||'var(--ink)')+'" font-family="Space Grotesk, sans-serif" font-size="'+(size||13)+'" font-weight="'+(weight||700)+'" text-anchor="'+(anchor||'middle')+'">'+s+'</text>'; }
+function poly(pts,color,w,fill){ return '<polygon points="'+pts+'" fill="'+(fill||'none')+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linejoin="round"/>'; }
+function ellipseEl(cx,cy,rx,ry,fill,stroke,w){ return '<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rx+'" ry="'+ry+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(w||2.5)+'"/>'; }
+function circleEl(cx,cy,r,fill,stroke,w){ return '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(w||2.5)+'"/>'; }
+function rectEl(x,y,w,h,rx,fill,stroke,sw){ return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+(rx||0)+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(sw||2.5)+'"/>'; }
+function pathEl(d,stroke,w,fill,dash){ return '<path d="'+d+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round"'+(dash?' stroke-dasharray="4 3"':'')+'/>'; }
+function wavy(x1,y1,x2,y2,amp,cycles,color,w){
+  var n=28, pts=[];
+  var dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy)||1;
+  var ux=dx/len, uy=dy/len, px=-uy, py=ux;
+  for(var i=0;i<=n;i++){
+    var t=i/n;
+    var bx=x1+dx*t, by=y1+dy*t;
+    var off=Math.sin(t*Math.PI*2*cycles)*amp;
+    pts.push((bx+px*off).toFixed(1)+','+(by+py*off).toFixed(1));
+  }
+  return '<polyline points="'+pts.join(' ')+'" fill="none" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.2)+'" stroke-linecap="round"/>';
+}
+/* ---- Coordinate grid with several figures (original helper for Unit 4) ----
+   opts: {min,max,h, shapes:[{pts,labels,color,dash}], lines:[{a:[x,y],b:[x,y],color,label}], points:[{p,label,color}]} */
+function gridPlot(opts){
+  var min=(opts.min!==undefined)?opts.min:-7, max=(opts.max!==undefined)?opts.max:7;
+  var u=16, pad=16, n=max-min, size=n*u+pad*2;
+  function X(x){ return pad+(x-min)*u; } function Y(y){ return pad+(max-y)*u; }
+  var s='';
+  for(var i=min;i<=max;i++){
+    s+='<line x1="'+X(i)+'" y1="'+Y(min)+'" x2="'+X(i)+'" y2="'+Y(max)+'" stroke="var(--gray-line, #CBD3DC)" stroke-width="0.7"/>';
+    s+='<line x1="'+X(min)+'" y1="'+Y(i)+'" x2="'+X(max)+'" y2="'+Y(i)+'" stroke="var(--gray-line, #CBD3DC)" stroke-width="0.7"/>';
+  }
+  if(min<0&&max>0){
+    s+='<line x1="'+X(0)+'" y1="'+Y(min)+'" x2="'+X(0)+'" y2="'+Y(max)+'" stroke="var(--gray, #94A0AD)" stroke-width="1.6"/>';
+    s+='<line x1="'+X(min)+'" y1="'+Y(0)+'" x2="'+X(max)+'" y2="'+Y(0)+'" stroke="var(--gray, #94A0AD)" stroke-width="1.6"/>';
+  }
+  (opts.lines||[]).forEach(function(L){
+    s+='<line x1="'+X(L.a[0])+'" y1="'+Y(L.a[1])+'" x2="'+X(L.b[0])+'" y2="'+Y(L.b[1])+'" stroke="'+(L.color||'var(--violet)')+'" stroke-width="2" stroke-dasharray="6 4"/>';
+    if(L.label) s+='<text x="'+(X(L.b[0])+(L.dx||-4))+'" y="'+(Y(L.b[1])+(L.dy||12))+'" fill="'+(L.color||'var(--violet)')+'" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="700" text-anchor="end">'+L.label+'</text>';
+  });
+  (opts.shapes||[]).forEach(function(sh){
+    var col=sh.color||'var(--blue)';
+    var ptsStr=sh.pts.map(function(p){return X(p[0])+','+Y(p[1]);}).join(' ');
+    s+=(sh.pts.length>2?'<polygon points="'+ptsStr+'" fill="'+(sh.fill||'none')+'" fill-opacity="0.18"':'<polyline points="'+ptsStr+'" fill="none"')+' stroke="'+col+'" stroke-width="2.6" stroke-linejoin="round"'+(sh.dash?' stroke-dasharray="6 4"':'')+'/>';
+    var cx=0,cy=0; sh.pts.forEach(function(p){cx+=p[0];cy+=p[1];}); cx/=sh.pts.length; cy/=sh.pts.length;
+    sh.pts.forEach(function(p,i){
+      s+='<circle cx="'+X(p[0])+'" cy="'+Y(p[1])+'" r="3.4" fill="'+col+'"/>';
+      if(sh.labels&&sh.labels[i]){
+        var dx=p[0]-cx, dy=p[1]-cy, L=Math.sqrt(dx*dx+dy*dy)||1;
+        s+='<text x="'+(X(p[0])+dx/L*13)+'" y="'+(Y(p[1])-dy/L*13+5)+'" fill="'+col+'" font-family="Space Grotesk, sans-serif" font-size="12.5" font-weight="700" text-anchor="middle">'+sh.labels[i]+'</text>';
+      }
+    });
+  });
+  (opts.points||[]).forEach(function(P){
+    s+='<circle cx="'+X(P.p[0])+'" cy="'+Y(P.p[1])+'" r="4" fill="'+(P.color||'var(--ink)')+'"/>';
+    if(P.label) s+='<text x="'+(X(P.p[0])+8)+'" y="'+(Y(P.p[1])-7)+'" fill="'+(P.color||'var(--ink)')+'" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="700">'+P.label+'</text>';
+  });
+  return '<svg viewBox="0 0 '+size+' '+size+'" width="100%" height="'+(opts.h||230)+'" xmlns="http://www.w3.org/2000/svg">'+s+'</svg>';
+}
+
+/* ============ Unit 5 triangle diagrams (original) ============
+   triMark(pts, labels, opts): opts.ticks = {sideIndex: count} (side i = pts[i]→pts[i+1]),
+   opts.arcs = {vertexIndex: count}, opts.right = vertexIndex, opts.color, opts.fill, opts.sideLabels = {i:'text'} */
+function triMark(pts, labels, o){
+  o = o || {}; var col = o.color || 'var(--blue)', s = '';
+  var n = pts.length;
+  s += '<polygon points="'+pts.map(function(p){return p[0]+','+p[1];}).join(' ')+'" fill="'+(o.fill||'none')+'" stroke="'+col+'" stroke-width="2.4" stroke-linejoin="round"/>';
+  var cx=0, cy=0; pts.forEach(function(p){cx+=p[0];cy+=p[1];}); cx/=n; cy/=n;
+  Object.keys(o.ticks||{}).forEach(function(k){
+    var i=+k, a=pts[i], b=pts[(i+1)%n], c=o.ticks[k], mx=(a[0]+b[0])/2, my=(a[1]+b[1])/2;
+    var dx=b[0]-a[0], dy=b[1]-a[1], L=Math.sqrt(dx*dx+dy*dy), ux=dx/L, uy=dy/L, px=-uy, py=ux;
+    for(var t=0;t<c;t++){ var off=(t-(c-1)/2)*5; var x=mx+ux*off, y=my+uy*off;
+      s += '<line x1="'+(x-px*6)+'" y1="'+(y-py*6)+'" x2="'+(x+px*6)+'" y2="'+(y+py*6)+'" stroke="var(--coral)" stroke-width="2"/>'; }
+  });
+  Object.keys(o.arcs||{}).forEach(function(k){
+    var i=+k, v=pts[i], a=pts[(i+n-1)%n], b=pts[(i+1)%n], c=o.arcs[k];
+    var a1=Math.atan2(a[1]-v[1],a[0]-v[0]), a2=Math.atan2(b[1]-v[1],b[0]-v[0]);
+    var d=a2-a1; while(d<=-Math.PI) d+=2*Math.PI; while(d>Math.PI) d-=2*Math.PI;
+    for(var t=0;t<c;t++){ var r=14+t*5; var x1=v[0]+r*Math.cos(a1), y1=v[1]+r*Math.sin(a1), x2=v[0]+r*Math.cos(a1+d), y2=v[1]+r*Math.sin(a1+d);
+      s += '<path d="M'+x1.toFixed(1)+','+y1.toFixed(1)+' A'+r+','+r+' 0 0,'+(d>0?1:0)+' '+x2.toFixed(1)+','+y2.toFixed(1)+'" fill="none" stroke="var(--teal)" stroke-width="2"/>'; }
+  });
+  if(o.right!==undefined){
+    var i=o.right, v=pts[i], a=pts[(i+n-1)%n], b=pts[(i+1)%n];
+    function u(p){ var dx=p[0]-v[0], dy=p[1]-v[1], L=Math.sqrt(dx*dx+dy*dy); return [dx/L*11, dy/L*11]; }
+    var ua=u(a), ub=u(b);
+    s += '<polyline points="'+(v[0]+ua[0])+','+(v[1]+ua[1])+' '+(v[0]+ua[0]+ub[0])+','+(v[1]+ua[1]+ub[1])+' '+(v[0]+ub[0])+','+(v[1]+ub[1])+'" fill="none" stroke="var(--ink)" stroke-width="1.6"/>';
+  }
+  Object.keys(o.sideLabels||{}).forEach(function(k){
+    var i=+k, a=pts[i], b=pts[(i+1)%n], mx=(a[0]+b[0])/2, my=(a[1]+b[1])/2, dx=mx-cx, dy=my-cy, L=Math.sqrt(dx*dx+dy*dy)||1;
+    s += '<text x="'+(mx+dx/L*14)+'" y="'+(my+dy/L*14+4)+'" fill="var(--text-soft)" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="700" text-anchor="middle">'+o.sideLabels[k]+'</text>';
+  });
+  (labels||[]).forEach(function(l,i){ if(!l) return; var p=pts[i], dx=p[0]-cx, dy=p[1]-cy, L=Math.sqrt(dx*dx+dy*dy)||1;
+    s += '<text x="'+(p[0]+dx/L*13)+'" y="'+(p[1]+dy/L*13+5)+'" fill="var(--ink)" font-family="Space Grotesk, sans-serif" font-size="13" font-weight="700" text-anchor="middle">'+l+'</text>'; });
+  return s;
+}
+function pair(a, b, caption, vb){ return svg(a + b + ((caption&&!window.NOCAP)?txt(210,198,caption,'var(--ink)',11,700):''), vb||'0 0 420 206', 200); }
+
+function diagSSS(){ return pair(triMark([[30,160],[170,160],[80,40]],['A','B','C'],{ticks:{0:1,1:2,2:3}}), triMark([[240,160],[380,160],[290,40]],['D','E','F'],{ticks:{0:1,1:2,2:3},color:'var(--violet)'}), 'SSS: three pairs of sides'); }
+function diagSAS(){ return pair(triMark([[30,160],[170,160],[80,40]],['A','B','C'],{ticks:{0:1,2:2},arcs:{0:1}}), triMark([[240,160],[380,160],[290,40]],['D','E','F'],{ticks:{0:1,2:2},arcs:{0:1},color:'var(--violet)'}), 'SAS: the angle is BETWEEN the two sides'); }
+function diagHL(){ return pair(triMark([[40,170],[40,40],[170,170]],['A','B','C'],{right:0,ticks:{1:2,2:1}}), triMark([[250,170],[250,40],[380,170]],['D','E','F'],{right:0,ticks:{1:2,2:1},color:'var(--violet)'}), 'HL: right angle, hypotenuse, and one leg'); }
+function diagASA(){ return pair(triMark([[30,160],[170,160],[80,40]],['A','B','C'],{ticks:{0:1},arcs:{0:1,1:2}}), triMark([[240,160],[380,160],[290,40]],['D','E','F'],{ticks:{0:1},arcs:{0:1,1:2},color:'var(--violet)'}), 'ASA: the side is BETWEEN the two angles'); }
+function diagAAS(){ return pair(triMark([[30,160],[170,160],[80,40]],['A','B','C'],{ticks:{1:1},arcs:{0:1,1:2}}), triMark([[240,160],[380,160],[290,40]],['D','E','F'],{ticks:{1:1},arcs:{0:1,1:2},color:'var(--violet)'}), 'AAS: the side is NOT between the angles'); }
+function diagSSA(){ return pair(triMark([[30,160],[170,160],[100,50]],['A','B','C'],{ticks:{0:1,1:2},arcs:{0:1}}), triMark([[240,160],[380,160],[330,70]],['D','E','F'],{ticks:{0:1,1:2},arcs:{0:1},color:'var(--violet)'}), 'SSA: angle not between the sides → NOT a shortcut'); }
+function diagVertical(){
+  var s = triMark([[40,40],[40,160],[200,100]],['A','B','C'],{ticks:{0:1},arcs:{2:1}}) + triMark([[360,40],[360,160],[200,100]],['D','E',''],{ticks:{0:1},arcs:{2:1},color:'var(--violet)'});
+  if(!window.NOCAP) s += txt(210,198,'vertical angles at C are congruent','var(--ink)',11,700);
+  return svg(s,'0 0 420 206',200);
+}
+function diagShared(){
+  var s = triMark([[60,100],[210,30],[210,170]],['A','B','D'],{ticks:{0:1,1:2}}) + triMark([[360,100],[210,170],[210,30]],['C','',''],{ticks:{0:1},color:'var(--violet)'});
+  s += txt(232,104,'shared side BD','var(--teal)',10,700,'start'); if(!window.NOCAP) s += txt(210,198,'BD ≅ BD by the reflexive property','var(--ink)',11,700);
+  return svg(s,'0 0 420 206',200);
+}
+function diagCongPoly(){
+  var s = triMark([[30,150],[150,150],[60,50]],['J','K','L'],{ticks:{0:1,1:2,2:3},arcs:{0:1,1:2,2:3}}) + triMark([[390,150],[270,150],[360,50]],['T','S','R'],{ticks:{0:1,1:2,2:3},arcs:{0:1,1:2,2:3},color:'var(--violet)'});
+  s += txt(210,190, window.NOCAP ? 'ΔJKL ≅ ΔTSR' : 'ΔJKL ≅ ΔTSR: J↔T, K↔S, L↔R','var(--ink)',11,700);
+  return svg(s,'0 0 420 200',195);
+}
+
+var DIAGRAMS = { congPoly:diagCongPoly, sss:diagSSS, sas:diagSAS, hl:diagHL, asa:diagASA, aas:diagAAS, ssa:diagSSA, vertical:diagVertical, shared:diagShared };
+
+const sections = [
+  {
+    id: "c1",
+    label: "5.1 Congruent Polygons",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 19l5-12 5 12z"/><path d="M12 19l5-12 5 12z"/></svg>',
+    title: "Congruent polygons and congruence statements",
+    sub: "Lesson 5.1: matching up corresponding parts, and using them to solve for unknowns.",
+    body: `
+      <div class="box postulate">
+        <h4>Congruent figures</h4>
+        <p>In two congruent figures, <b>all corresponding parts are congruent</b>: every pair of matching sides and every pair of matching angles. (Congruent = same size and shape. Isometries from Unit 4 always make congruent figures.)</p>
+      </div>
+      <div class="diagram-wrap" data-diagram="congPoly"></div>
+      <div class="box theorem">
+        <h4>Congruence statements</h4>
+        <ul>
+          <li>Always list the <b>corresponding vertices in the same order</b>. ΔJKL ≅ ΔTSR means J ↔ T, K ↔ S, L ↔ R.</li>
+          <li>From that order you can read every part: ∠K ≅ ∠S, JL ≅ TR, KL ≅ SR, and so on.</li>
+          <li>You can write the same statement more than one way, as long as the pairs stay matched: ΔKLJ ≅ ΔSRT and ΔLJK ≅ ΔRTS say the same thing.</li>
+        </ul>
+      </div>
+      <div class="box tip">
+        <h4>How to match the vertices</h4>
+        <p>Use the marks: matching tick marks = congruent sides, matching arcs = congruent angles. Start with the vertex that has the most-distinctive angle, then follow the sides around.</p>
+      </div>
+      <div class="proof-label">Solving for unknowns (original numbers)</div>
+      <div class="numex">
+        <div class="setup">ΔABC ≅ ΔXYZ. ∠A = 48°, ∠B = 77°, and ∠Z = (4x + 15)°. Find x.</div>
+        <div class="steps">∠C = 180 − 48 − 77 = 55°. ∠Z corresponds to ∠C, so 4x + 15 = 55 → 4x = 40 → <b>x = 10</b>.</div>
+      </div>
+      <div class="numex">
+        <div class="setup">ΔDEF ≅ ΔPQR. DE = 3y − 4 and PQ = 17. EF = 2x + 1 and QR = 13. Find x and y.</div>
+        <div class="steps">Corresponding sides are equal: 3y − 4 = 17 → <b>y = 7</b>. 2x + 1 = 13 → <b>x = 6</b>.</div>
+      </div>
+      <div class="numex">
+        <div class="setup">Quadrilateral WXYZ ≅ quadrilateral MNOP. ∠W = 90°, ∠X = 90°, ∠Y = 110°. Find ∠P.</div>
+        <div class="steps">Quadrilateral angles add to 360°: ∠Z = 360 − 90 − 90 − 110 = 70°. ∠P corresponds to ∠Z, so <b>∠P = 70°</b>.</div>
+      </div>
+      <div class="box watch">
+        <h4>Remember the angle sums</h4>
+        <p>Triangle angles add to <b>180°</b>; quadrilateral angles add to <b>360°</b>. You often need the missing angle before you can match it.</p>
+      </div>
+    `
+  },
+  {
+    id: "c2",
+    label: "5.2 SSS, SAS, HL",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 20h18L8 4z"/><path d="M11 11l2 1M5 12l2-1M14 20v-2"/></svg>',
+    title: "Triangle congruence: SSS, SAS, and HL",
+    sub: "Lesson 5.2: you don't need all six parts. These shortcuts are enough to prove two triangles congruent.",
+    body: `
+      <div class="def-grid">
+        <div class="def-card"><span class="term">SSS (side-side-side)</span><span class="desc">If all three corresponding <b>sides</b> are congruent, the triangles are congruent.</span></div>
+        <div class="def-card"><span class="term">SAS (side-angle-side)</span><span class="desc">If two sides and the <b>included angle</b> (the angle BETWEEN them) are congruent, the triangles are congruent.</span></div>
+        <div class="def-card"><span class="term">HL (hypotenuse-leg)</span><span class="desc">For <b>right</b> triangles only: if the hypotenuse and one leg are congruent, the triangles are congruent.</span></div>
+      </div>
+      <div class="diagram-wrap" data-diagram="sss"></div>
+      <div class="diagram-wrap" data-diagram="sas"></div>
+      <div class="diagram-wrap" data-diagram="hl"></div>
+      <div class="box watch">
+        <h4>SSA is not a shortcut</h4>
+        <p>If the angle is <b>not between</b> the two marked sides, the parts "don't match positions," and you <b>can't</b> conclude the triangles are congruent.</p>
+      </div>
+      <div class="diagram-wrap" data-diagram="ssa"></div>
+      <div class="proof-label">Hidden congruent parts</div>
+      <div class="def-grid">
+        <div class="def-card"><span class="term">Shared side</span><span class="desc">A side both triangles use is congruent to itself: the <b>reflexive property</b>.</span></div>
+        <div class="def-card"><span class="term">Midpoint</span><span class="desc">A midpoint splits a segment into <b>two congruent</b> pieces.</span></div>
+        <div class="def-card"><span class="term">Squares and rectangles</span><span class="desc">Give you <b>right angles</b> (and, for a square, congruent sides).</span></div>
+      </div>
+      <div class="diagram-wrap" data-diagram="shared"></div>
+      <div class="box tip">
+        <h4>Writing the congruence statement</h4>
+        <p>After you decide which shortcut works, list the vertices in matching order: if A ↔ E, B ↔ F, C ↔ D, write <b>ΔABC ≅ ΔEFD</b> (not ΔABC ≅ ΔDEF).</p>
+      </div>
+      <div class="box theorem">
+        <h4>"What else do you need?"</h4>
+        <p>Given two pairs of sides, you need either the <b>third side</b> (SSS) or the <b>angle between</b> the two sides (SAS). Given a right angle and a hypotenuse, you need <b>one leg</b> (HL).</p>
+      </div>
+    `
+  },
+  {
+    id: "c3",
+    label: "5.3 ASA & AAS",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 20h18L8 4z"/><path d="M6 20a3 3 0 0 0-1-2M18 20a3 3 0 0 1 1-2"/></svg>',
+    title: "Triangle congruence: ASA and AAS",
+    sub: "Lesson 5.3: two angles and a side.",
+    body: `
+      <div class="def-grid">
+        <div class="def-card"><span class="term">ASA (angle-side-angle)</span><span class="desc">If two angles and the <b>included side</b> (the side BETWEEN them) are congruent, the triangles are congruent.</span></div>
+        <div class="def-card"><span class="term">AAS (angle-angle-side)</span><span class="desc">If two angles and a <b>non-included side</b> are congruent, the triangles are congruent.</span></div>
+      </div>
+      <div class="diagram-wrap" data-diagram="asa"></div>
+      <div class="diagram-wrap" data-diagram="aas"></div>
+      <div class="box tip">
+        <h4>Included or not?</h4>
+        <p>Find the two marked angles. Is the marked side the one that <b>connects</b> their vertices? Yes → ASA. No → AAS.</p>
+      </div>
+      <div class="proof-label">Angles you get for free</div>
+      <div class="def-grid">
+        <div class="def-card"><span class="term">Vertical angles</span><span class="desc">When two triangles meet at a point where segments cross (an "X" or bow-tie), the angles at that point are <b>vertical angles</b>, so they're congruent.</span></div>
+        <div class="def-card"><span class="term">Parallel lines</span><span class="desc">If two sides are marked parallel, the <b>alternate interior angles</b> are congruent (Unit 2).</span></div>
+        <div class="def-card"><span class="term">Right angles</span><span class="desc">All right angles are congruent.</span></div>
+      </div>
+      <div class="diagram-wrap" data-diagram="vertical"></div>
+      <div class="box theorem">
+        <h4>All five shortcuts</h4>
+        <p><b>SSS, SAS, ASA, AAS, HL.</b> SSA does not work.</p>
+      </div>
+      <div class="box theorem">
+        <h4>"What else do you need?" (ASA vs. AAS)</h4>
+        <p>Given two pairs of angles: for <b>ASA</b> you need the side between them; for <b>AAS</b> you need a side that's not between them.</p>
+      </div>
+    `
+  },
+  {
+    id: "c4",
+    label: "5.4 Triangle Proofs",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="9" x2="21" y2="9"/></svg>',
+    title: "Two-column triangle proofs",
+    sub: "Lesson 5.4: prove two triangles congruent, one justified step at a time.",
+    body: `
+      <div class="box postulate">
+        <h4>The plan</h4>
+        <ul>
+          <li>Start with the <b>Given</b> facts.</li>
+          <li>Add any <b>hidden</b> congruent parts (shared side, vertical angles, midpoint, bisector, parallel lines, right angles).</li>
+          <li>Once you have three pairs that fit a shortcut, the last line is the congruence with the shortcut as the reason.</li>
+        </ul>
+      </div>
+      <div class="proof-label">Reason bank</div>
+      <div class="def-grid">
+        <div class="def-card"><span class="term">Given</span><span class="desc">Facts stated in the problem.</span></div>
+        <div class="def-card"><span class="term">Reflexive property</span><span class="desc">A segment or angle is congruent to itself (shared side).</span></div>
+        <div class="def-card"><span class="term">Vertical angles are congruent</span><span class="desc">The angles across from each other where two lines cross.</span></div>
+        <div class="def-card"><span class="term">Definition of midpoint</span><span class="desc">A midpoint makes two congruent segments.</span></div>
+        <div class="def-card"><span class="term">Definition of segment bisector</span><span class="desc">A segment that bisects another cuts it into two congruent segments.</span></div>
+        <div class="def-card"><span class="term">All right angles are congruent</span><span class="desc">Use when two right angles are given.</span></div>
+        <div class="def-card"><span class="term">Alternate interior angles theorem</span><span class="desc">Parallel lines → alternate interior angles are congruent.</span></div>
+        <div class="def-card"><span class="term">SSS · SAS · ASA · AAS · HL</span><span class="desc">The final reason.</span></div>
+      </div>
+      <div class="proof-label">Example 1 (original): right triangles</div>
+      <div class="numex">
+        <div class="setup">Given: in quadrilateral PQRS with diagonal PR, ∠Q and ∠S are right angles and PQ ≅ RS. Prove: ΔPQR ≅ ΔRSP.</div>
+        <div class="steps">
+          1. ∠Q and ∠S are right angles — Given<br>
+          2. PQ ≅ RS — Given<br>
+          3. PR ≅ RP — Reflexive property (shared hypotenuse)<br>
+          4. ΔPQR ≅ ΔRSP — <b>HL</b>
+        </div>
+      </div>
+      <div class="proof-label">Example 2 (original): a bow-tie</div>
+      <div class="numex">
+        <div class="setup">Given: M is the midpoint of AD and of BC (AD and BC cross at M). Prove: ΔAMB ≅ ΔDMC.</div>
+        <div class="steps">
+          1. M is the midpoint of AD — Given<br>
+          2. AM ≅ DM — Definition of midpoint<br>
+          3. M is the midpoint of BC — Given<br>
+          4. BM ≅ CM — Definition of midpoint<br>
+          5. ∠AMB ≅ ∠DMC — Vertical angles are congruent<br>
+          6. ΔAMB ≅ ΔDMC — <b>SAS</b>
+        </div>
+      </div>
+      <div class="proof-label">Example 3 (original): parallel sides</div>
+      <div class="numex">
+        <div class="setup">Given: GH ∥ JK, and GK and HJ cross at L, with GL ≅ KL. Prove: ΔGLH ≅ ΔKLJ.</div>
+        <div class="steps">
+          1. GH ∥ JK — Given<br>
+          2. ∠G ≅ ∠K — Alternate interior angles theorem<br>
+          3. GL ≅ KL — Given<br>
+          4. ∠GLH ≅ ∠KLJ — Vertical angles are congruent<br>
+          5. ΔGLH ≅ ΔKLJ — <b>ASA</b> (the side GL / KL is between the two angles)
+        </div>
+      </div>
+      <div class="box watch">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li>Every statement needs a reason, and "Given" only works for facts actually stated.</li>
+          <li>Don't forget the "free" parts: a shared side (reflexive) or vertical angles is often the third piece you need.</li>
+          <li>Check that your final shortcut matches the <b>positions</b> of your parts (included vs. not).</li>
+        </ul>
+      </div>
+    `
+  }
+];
+
+const tabsEl = document.getElementById('tabs');
+const panelsEl = document.getElementById('panels');
+sections.forEach((s, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
+  btn.innerHTML = s.icon + '<span>' + s.label + '</span>';
+  btn.onclick = () => selectTab(s.id);
+  btn.dataset.id = s.id;
+  tabsEl.appendChild(btn);
+  const panel = document.createElement('div');
+  panel.className = 'panel' + (i === 0 ? ' active' : '');
+  panel.id = s.id;
+  panel.innerHTML = '<h2 class="section-title">' + s.title + '</h2><p class="section-sub">' + s.sub + '</p>' + s.body;
+  panelsEl.appendChild(panel);
+});
+document.querySelectorAll('[data-diagram]').forEach(function(el){ var fn = DIAGRAMS[el.dataset.diagram]; if (fn) el.innerHTML = fn(); });
+function selectTab(id) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.id === id));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === id));
+  window.scrollTo({top: document.getElementById('tabs').offsetTop - 10, behavior: 'smooth'});
+}
+</script>
+</body>
+</html>

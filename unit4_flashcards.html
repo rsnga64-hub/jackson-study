@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 4 Flashcards: Transformations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FBFAF7;
+    --grid-line: rgba(28,43,74,0.055);
+    --ink: #1C2B4A;
+    --text: #2B3648;
+    --text-soft: #64707F;
+    --blue: #2E86AB;
+    --blue-soft: #E9F3F8;
+    --amber: #D98A2B;
+    --amber-soft: #FCF1DE;
+    --coral: #D65A5A;
+    --coral-soft: #FBEBEB;
+    --teal: #2C9C82;
+    --teal-soft: #E6F5F0;
+    --violet: #7C5CBF;
+    --violet-soft: #EFE9F8;
+    --card-bg: #FFFFFF;
+    --border: #E4E0D4;
+    --gray: #94A0AD;
+    --gray-line: #CBD3DC;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  h1, h2, h3, .display { font-family: 'Space Grotesk', sans-serif; color: var(--ink); }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 32px 20px 80px; }
+  a { color: inherit; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--text-soft); text-decoration: none; font-size: 0.88rem; font-weight: 600; margin-bottom: 18px; }
+  .back-link:hover { color: var(--blue); }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    background: var(--ink);
+    border-radius: 18px;
+    padding: 26px 28px;
+    color: #fff;
+    margin-bottom: 22px;
+  }
+  .hero h1 { color: #fff; font-size: 1.7rem; margin: 0 0 6px; line-height: 1.15; }
+  .hero p { margin: 0; color: #C8D3E0; font-size: 0.96rem; max-width: 52ch; }
+
+  /* ---------- Category tabs ---------- */
+  .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 20px; }
+  .tab-btn {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.84rem;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text-soft);
+    border-radius: 999px;
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .tab-btn:hover { border-color: var(--ink); color: var(--ink); }
+  .tab-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  /* ---------- Progress / stats ---------- */
+  .statline {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.82rem; color: var(--text-soft); margin-bottom: 10px; flex-wrap: wrap; gap: 6px;
+  }
+  .statline b { color: var(--ink); }
+  .progress-track { height: 6px; background: var(--border); border-radius: 999px; overflow: hidden; margin-bottom: 18px; }
+  .progress-fill { height: 100%; background: var(--blue); border-radius: 999px; transition: width 0.2s ease; }
+
+  /* ---------- Flashcard ---------- */
+  .stage { perspective: 1600px; margin-bottom: 18px; }
+  .flashcard {
+    position: relative;
+    min-height: 380px;
+    border-radius: 18px;
+    cursor: pointer;
+    transition: transform 0.5s cubic-bezier(.4,.2,.2,1);
+    transform-style: preserve-3d;
+  }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .face {
+    position: absolute; inset: 0;
+    -webkit-backface-visibility: hidden; backface-visibility: hidden;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    box-shadow: 0 4px 18px rgba(28,43,74,0.07);
+    padding: 26px 28px;
+    display: flex; flex-direction: column;
+  }
+  .face.back { transform: rotateY(180deg); }
+  .cat-tag {
+    display: inline-flex; align-self: flex-start;
+    font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.72rem;
+    letter-spacing: 0.02em; text-transform: uppercase;
+    padding: 4px 11px; border-radius: 999px; margin-bottom: 14px;
+  }
+  .face.front { align-items: center; text-align: center; justify-content: center; }
+  .term { font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: var(--ink); font-size: 1.55rem; line-height: 1.25; margin: 0; }
+  .flip-hint { margin-top: 18px; font-size: 0.8rem; color: var(--gray); }
+  .def { font-size: 1.05rem; font-weight: 600; color: var(--ink); line-height: 1.4; margin: 0 0 10px; }
+  .extra { font-size: 0.9rem; color: var(--text-soft); line-height: 1.45; margin: 0 0 14px; }
+  .diagram-wrap { margin-top: auto; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 6px; }
+  .diagram-wrap svg { display: block; width: 100%; height: auto; max-height: 190px; }
+
+  /* ---------- Controls ---------- */
+  .controls { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  .btn {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.88rem;
+    border: 1px solid var(--border); background: var(--card-bg); color: var(--ink);
+    border-radius: 10px; padding: 10px 16px; cursor: pointer; transition: all 0.15s ease;
+  }
+  .btn:hover { border-color: var(--ink); }
+  .btn:disabled { opacity: 0.4; cursor: default; }
+  .btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .btn.primary:hover { opacity: 0.9; }
+  .rate-row { display: flex; gap: 10px; justify-content: center; margin-bottom: 6px; }
+  .btn.rate-bad { border-color: var(--coral); color: var(--coral); }
+  .btn.rate-bad:hover { background: var(--coral-soft); }
+  .btn.rate-good { border-color: var(--teal); color: var(--teal); }
+  .btn.rate-good:hover { background: var(--teal-soft); }
+
+  .tally { text-align: center; font-size: 0.82rem; color: var(--text-soft); margin-top: 4px; }
+  .tally b.good { color: var(--teal); }
+  .tally b.bad { color: var(--coral); }
+
+  @media (max-width: 480px) {
+    .flashcard { min-height: 420px; }
+    .term { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="geometry.html">&larr; Back to Geometry</a>
+  <div class="hero">
+    <h1>Unit 4 Flashcards</h1>
+    <p>Lessons 4.1&ndash;4.7: basics, translations, reflections, rotations and symmetry, extensions, and compositions. Tap a card to flip it.</p>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="statline">
+    <span>Card <b id="cardNum">1</b> of <b id="cardTotal">14</b></span>
+    <span id="filterLabel">All cards</span>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+  <div class="stage">
+    <div class="flashcard" id="flashcard">
+      <div class="face front">
+        <span class="cat-tag" id="catTagFront"></span>
+        <p class="term" id="termText"></p>
+        <p class="flip-hint">Tap the card to see the definition</p>
+      </div>
+      <div class="face back">
+        <span class="cat-tag" id="catTagBack"></span>
+        <p class="def" id="defText"></p>
+        <p class="extra" id="extraText"></p>
+        <div class="diagram-wrap" id="diagramWrap" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rate-row" id="rateRow" style="visibility:hidden;">
+    <button class="btn rate-bad" id="btnBad">Still learning</button>
+    <button class="btn rate-good" id="btnGood">Got it</button>
+  </div>
+
+  <div class="controls">
+    <button class="btn" id="btnPrev">&larr; Prev</button>
+    <button class="btn primary" id="btnShuffle">Shuffle</button>
+    <button class="btn" id="btnNext">Next &rarr;</button>
+  </div>
+
+  <p class="tally" id="tally"></p>
+</div>
+
+<script>
+function svg(inner, vb, h) { return '<svg viewBox="'+vb+'" width="100%" height="'+(h||180)+'" xmlns="http://www.w3.org/2000/svg">'+inner+'</svg>'; }
+function lineEl(x1,y1,x2,y2,color,w,dash){ return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round"'+(dash?' stroke-dasharray="5 4"':'')+'/>'; }
+function dot(x,y,color,r){ return '<circle cx="'+x+'" cy="'+y+'" r="'+(r||3.2)+'" fill="'+(color||'var(--ink)')+'"/>'; }
+function txt(x,y,s,color,size,weight,anchor){ return '<text x="'+x+'" y="'+y+'" fill="'+(color||'var(--ink)')+'" font-family="Space Grotesk, sans-serif" font-size="'+(size||13)+'" font-weight="'+(weight||700)+'" text-anchor="'+(anchor||'middle')+'">'+s+'</text>'; }
+function poly(pts,color,w,fill){ return '<polygon points="'+pts+'" fill="'+(fill||'none')+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linejoin="round"/>'; }
+function ellipseEl(cx,cy,rx,ry,fill,stroke,w){ return '<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rx+'" ry="'+ry+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(w||2.5)+'"/>'; }
+function circleEl(cx,cy,r,fill,stroke,w){ return '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(w||2.5)+'"/>'; }
+function rectEl(x,y,w,h,rx,fill,stroke,sw){ return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+(rx||0)+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(sw||2.5)+'"/>'; }
+function pathEl(d,stroke,w,fill,dash){ return '<path d="'+d+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round"'+(dash?' stroke-dasharray="4 3"':'')+'/>'; }
+function wavy(x1,y1,x2,y2,amp,cycles,color,w){
+  var n=28, pts=[];
+  var dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy)||1;
+  var ux=dx/len, uy=dy/len, px=-uy, py=ux;
+  for(var i=0;i<=n;i++){
+    var t=i/n;
+    var bx=x1+dx*t, by=y1+dy*t;
+    var off=Math.sin(t*Math.PI*2*cycles)*amp;
+    pts.push((bx+px*off).toFixed(1)+','+(by+py*off).toFixed(1));
+  }
+  return '<polyline points="'+pts.join(' ')+'" fill="none" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.2)+'" stroke-linecap="round"/>';
+}
+/* ---- Coordinate grid with several figures (original helper for Unit 4) ----
+   opts: {min,max,h, shapes:[{pts,labels,color,dash}], lines:[{a:[x,y],b:[x,y],color,label}], points:[{p,label,color}]} */
+function gridPlot(opts){
+  var min=(opts.min!==undefined)?opts.min:-7, max=(opts.max!==undefined)?opts.max:7;
+  var u=16, pad=16, n=max-min, size=n*u+pad*2;
+  function X(x){ return pad+(x-min)*u; } function Y(y){ return pad+(max-y)*u; }
+  var s='';
+  for(var i=min;i<=max;i++){
+    s+='<line x1="'+X(i)+'" y1="'+Y(min)+'" x2="'+X(i)+'" y2="'+Y(max)+'" stroke="var(--gray-line, #CBD3DC)" stroke-width="0.7"/>';
+    s+='<line x1="'+X(min)+'" y1="'+Y(i)+'" x2="'+X(max)+'" y2="'+Y(i)+'" stroke="var(--gray-line, #CBD3DC)" stroke-width="0.7"/>';
+  }
+  if(min<0&&max>0){
+    s+='<line x1="'+X(0)+'" y1="'+Y(min)+'" x2="'+X(0)+'" y2="'+Y(max)+'" stroke="var(--gray, #94A0AD)" stroke-width="1.6"/>';
+    s+='<line x1="'+X(min)+'" y1="'+Y(0)+'" x2="'+X(max)+'" y2="'+Y(0)+'" stroke="var(--gray, #94A0AD)" stroke-width="1.6"/>';
+  }
+  (opts.lines||[]).forEach(function(L){
+    s+='<line x1="'+X(L.a[0])+'" y1="'+Y(L.a[1])+'" x2="'+X(L.b[0])+'" y2="'+Y(L.b[1])+'" stroke="'+(L.color||'var(--violet)')+'" stroke-width="2" stroke-dasharray="6 4"/>';
+    if(L.label) s+='<text x="'+(X(L.b[0])+(L.dx||-4))+'" y="'+(Y(L.b[1])+(L.dy||12))+'" fill="'+(L.color||'var(--violet)')+'" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="700" text-anchor="end">'+L.label+'</text>';
+  });
+  (opts.shapes||[]).forEach(function(sh){
+    var col=sh.color||'var(--blue)';
+    var ptsStr=sh.pts.map(function(p){return X(p[0])+','+Y(p[1]);}).join(' ');
+    s+=(sh.pts.length>2?'<polygon points="'+ptsStr+'" fill="'+(sh.fill||'none')+'" fill-opacity="0.18"':'<polyline points="'+ptsStr+'" fill="none"')+' stroke="'+col+'" stroke-width="2.6" stroke-linejoin="round"'+(sh.dash?' stroke-dasharray="6 4"':'')+'/>';
+    var cx=0,cy=0; sh.pts.forEach(function(p){cx+=p[0];cy+=p[1];}); cx/=sh.pts.length; cy/=sh.pts.length;
+    sh.pts.forEach(function(p,i){
+      s+='<circle cx="'+X(p[0])+'" cy="'+Y(p[1])+'" r="3.4" fill="'+col+'"/>';
+      if(sh.labels&&sh.labels[i]){
+        var dx=p[0]-cx, dy=p[1]-cy, L=Math.sqrt(dx*dx+dy*dy)||1;
+        s+='<text x="'+(X(p[0])+dx/L*13)+'" y="'+(Y(p[1])-dy/L*13+5)+'" fill="'+col+'" font-family="Space Grotesk, sans-serif" font-size="12.5" font-weight="700" text-anchor="middle">'+sh.labels[i]+'</text>';
+      }
+    });
+  });
+  (opts.points||[]).forEach(function(P){
+    s+='<circle cx="'+X(P.p[0])+'" cy="'+Y(P.p[1])+'" r="4" fill="'+(P.color||'var(--ink)')+'"/>';
+    if(P.label) s+='<text x="'+(X(P.p[0])+8)+'" y="'+(Y(P.p[1])-7)+'" fill="'+(P.color||'var(--ink)')+'" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="700">'+P.label+'</text>';
+  });
+  return '<svg viewBox="0 0 '+size+' '+size+'" width="100%" height="'+(opts.h||230)+'" xmlns="http://www.w3.org/2000/svg">'+s+'</svg>';
+}
+
+var CATS = [
+  {key:'basics', label:'Basics & Notation', color:'var(--blue)'},
+  {key:'trans', label:'Translations', color:'var(--teal)'},
+  {key:'refl', label:'Reflections', color:'var(--coral)'},
+  {key:'rot', label:'Rotations & Symmetry', color:'var(--violet)'},
+  {key:'ext', label:'Extensions & Compositions', color:'var(--amber)'}
+];
+function catInfo(key){ for(var i=0;i<CATS.length;i++) if(CATS[i].key===key) return CATS[i]; return CATS[0]; }
+var CARDS = [
+{
+"cat": "basics",
+"term": "Transformation",
+"def": "An operation that moves or changes a figure to produce a new figure.",
+"extra": "Pre-image = original; image = new figure (A → A′)."
+},
+{
+"cat": "basics",
+"term": "Pre-image / Image",
+"def": "Pre-image is the original figure; the image is the new one, labeled with primes (A′, B′, C′).",
+"extra": "The vertex order matches: ΔABC → ΔPQR means A ↔ P, B ↔ Q, C ↔ R."
+},
+{
+"cat": "basics",
+"term": "The 4 main transformations",
+"def": "Translation (slide), reflection (flip), rotation (turn), dilation (resize).",
+"extra": "This unit focuses on translations, reflections, and rotations."
+},
+{
+"cat": "basics",
+"term": "Rigid transformation (isometry)",
+"def": "A transformation that preserves size AND shape: translations, reflections, rotations.",
+"extra": "They are congruence transformations: the image is congruent to the pre-image."
+},
+{
+"cat": "basics",
+"term": "Dilation",
+"def": "Multiplies every point of a figure by a scale amount.",
+"extra": "Changes size, so it is NOT an isometry."
+},
+{
+"cat": "basics",
+"term": "Confirming congruence",
+"def": "Use the distance formula on matching sides of the pre-image and image. Equal lengths = congruent.",
+"extra": "d = √((x₂ − x₁)² + (y₂ − y₁)²). Matching sides can also be set equal to solve for x."
+},
+{
+"cat": "trans",
+"term": "Translation",
+"def": "Moves every point of a figure the same distance in the same direction (a slide).",
+"extra": null,
+"plot": {
+"min": -7,
+"max": 7,
+"h": 190,
+"shapes": [
+{
+"pts": [
+[
+2,
+5
+],
+[
+5,
+3
+],
+[
+1,
+1
+]
+],
+"labels": [
+"A",
+"B",
+"C"
+],
+"color": "var(--blue)"
+},
+{
+"pts": [
+[
+-2,
+-1
+],
+[
+1,
+-3
+],
+[
+-3,
+-5
+]
+],
+"labels": [
+"A′",
+"B′",
+"C′"
+],
+"color": "var(--coral)"
+}
+]
+}
+},
+{
+"cat": "trans",
+"term": "Translation: function notation",
+"def": "T(x, y) → (x + a, y + b)",
+"extra": "a = horizontal move (+ right, − left); b = vertical move (+ up, − down)."
+},
+{
+"cat": "trans",
+"term": "Translation: vector notation",
+"def": "⟨a, b⟩",
+"extra": "Shorthand: T with (a, b) written small underneath. Example: left 2, up 3 is ⟨−2, 3⟩."
+},
+{
+"cat": "trans",
+"term": "Writing a translation rule",
+"def": "Subtract a pre-image point from its image point: (x′ − x, y′ − y) = (a, b).",
+"extra": "Check it with a second point."
+},
+{
+"cat": "trans",
+"term": "Finding a pre-image",
+"def": "Work backwards: do the opposite of the rule.",
+"extra": "If the rule adds 6, subtract 6. A reflection undoes itself, so use the same reflection rule."
+},
+{
+"cat": "refl",
+"term": "Reflection",
+"def": "A flip over a line of reflection, creating a mirror image.",
+"extra": "The line of reflection is the perpendicular bisector of the segment from each point to its image."
+},
+{
+"cat": "refl",
+"term": "Line of symmetry",
+"def": "A line a figure can be reflected over to land on itself (a mirror line).",
+"extra": "Write its equation: x = k for vertical lines, y = k for horizontal, y = x or y = −x for diagonals through the origin."
+},
+{
+"cat": "refl",
+"term": "Reflect across the x-axis",
+"def": "(x, y) → (x, −y)",
+"extra": "Multiply the y-coordinate by −1.",
+"plot": {
+"min": -7,
+"max": 7,
+"h": 190,
+"shapes": [
+{
+"pts": [
+[
+2,
+1
+],
+[
+5,
+2
+],
+[
+3,
+6
+]
+],
+"labels": [
+"A",
+"B",
+"C"
+],
+"color": "var(--blue)"
+},
+{
+"pts": [
+[
+2,
+-1
+],
+[
+5,
+-2
+],
+[
+3,
+-6
+]
+],
+"labels": [
+"A′",
+"B′",
+"C′"
+],
+"color": "var(--coral)"
+}
+]
+}
+},
+{
+"cat": "refl",
+"term": "Reflect across the y-axis",
+"def": "(x, y) → (−x, y)",
+"extra": "Multiply the x-coordinate by −1.",
+"plot": {
+"min": -7,
+"max": 7,
+"h": 190,
+"shapes": [
+{
+"pts": [
+[
+2,
+1
+],
+[
+5,
+2
+],
+[
+3,
+6
+]
+],
+"labels": [
+"A",
+"B",
+"C"
+],
+"color": "var(--blue)"
+},
+{
+"pts": [
+[
+-2,
+1
+],
+[
+-5,
+2
+],
+[
+-3,
+6
+]
+],
+"labels": [
+"A′",
+"B′",
+"C′"
+],
+"color": "var(--coral)"
+}
+]
+}
+},
+{
+"cat": "refl",
+"term": "Reflect across y = x",
+"def": "(x, y) → (y, x)",
+"extra": "Swap the coordinates.",
+"plot": {
+"min": -7,
+"max": 7,
+"h": 190,
+"shapes": [
+{
+"pts": [
+[
+2,
+1
+],
+[
+5,
+2
+],
+[
+3,
+6
+]
+],
+"labels": [
+"A",
+"B",
+"C"
+],
+"color": "var(--blue)"
+},
+{
+"pts": [
+[
+1,
+2
+],
+[
+2,
+5
+],
+[
+6,
+3
+]
+],
+"labels": [
+"A′",
+"B′",
+"C′"
+],
+"color": "var(--coral)"
+}
+],
+"lines": [
+{
+"a": [
+-7,
+-7
+],
+"b": [
+7,
+7
+],
+"label": "y = x",
+"dx": -16,
+"dy": 34
+}
+]
+}
+},
+{
+"cat": "refl",
+"term": "Reflect across y = −x",
+"def": "(x, y) → (−y, −x)",
+"extra": "Swap the coordinates and change both signs.",
+"plot": {
+"min": -7,
+"max": 7,
+"h": 190,
+"shapes": [
+{
+"pts": [
+[
+2,
+1
+],
+[
+5,
+2
+],
+[
+3,
+6
+]
+],
+"labels": [
+"A",
+"B",
+"C"
+],
+"color": "var(--blue)"
+},
+{
+"pts": [
+[
+-1,
+-2
+],
+[
+-2,
+-5
+],
+[
+-6,
+-3
+]
+],
+"labels": [
+"A′",
+"B′",
+"C′"
+],
+"color": "var(--coral)"
+}
+],
+"lines": [
+{
+"a": [
+-7,
+7
+],
+"b": [
+7,
+-7
+],
+"label": "y = −x",
+"dx": -22,
+"dy": -4
+}
+]
+}
+},
+{
+"cat": "refl",
+"term": "Reflect across y = k or x = k",
+"def": "Count the distance from the point to the line, then go the same distance on the other side.",
+"extra": "Horizontal line (y = k): x stays the same. Vertical line (x = k): y stays the same.",
+"plot": {
+"min": -7,
+"max": 7,
+"h": 190,
+"shapes": [
+{
+"pts": [
+[
+-5,
+3
+],
+[
+-2,
+4
+],
+[
+-3,
+1
+]
+],
+"labels": [
+"D",
+"E",
+"F"
+],
+"color": "var(--blue)"
+},
+{
+"pts": [
+[
+-5,
+-5
+],
+[
+-2,
+-6
+],
+[
+-3,
+-3
+]
+],
+"labels": [
+"D′",
+"E′",
+"F′"
+],
+"color": "var(--coral)"
+}
+],
+"lines": [
+{
+"a": [
+-7,
+-1
+],
+"b": [
+7,
+-1
+],
+"label": "y = −1",
+"dy": -6
+}
+]
+}
+},
+{
+"cat": "rot",
+"term": "Rotation",
+"def": "Turns a figure about a fixed point, the center of rotation.",
+"extra": "The subscript (R₉₀) shows the angle."
+},
+{
+"cat": "rot",
+"term": "Rotate 90° counterclockwise",
+"def": "(x, y) → (−y, x)",
+"extra": "Same as 270° clockwise.",
+"plot": {
+"min": -7,
+"max": 7,
+"h": 190,
+"shapes": [
+{
+"pts": [
+[
+1,
+2
+],
+[
+5,
+2
+],
+[
+2,
+5
+]
+],
+"labels": [
+"J",
+"K",
+"L"
+],
+"color": "var(--blue)"
+},
+{
+"pts": [
+[
+-2,
+1
+],
+[
+-2,
+5
+],
+[
+-5,
+2
+]
+],
+"labels": [
+"J′",
+"K′",
+"L′"
+],
+"color": "var(--coral)"
+}
+]
+}
+},
+{
+"cat": "rot",
+"term": "Rotate 90° clockwise",
+"def": "(x, y) → (y, −x)",
+"extra": "Same as 270° counterclockwise. The old y becomes the new x; the old x times −1 becomes the new y.",
+"plot": {
+"min": -7,
+"max": 7,
+"h": 190,
+"shapes": [
+{
+"pts": [
+[
+1,
+2
+],
+[
+5,
+2
+],
+[
+2,
+5
+]
+],
+"labels": [
+"J",
+"K",
+"L"
+],
+"color": "var(--blue)"
+},
+{
+"pts": [
+[
+2,
+-1
+],
+[
+2,
+-5
+],
+[
+5,
+-2
+]
+],
+"labels": [
+"J′",
+"K′",
+"L′"
+],
+"color": "var(--coral)"
+}
+]
+}
+},
+{
+"cat": "rot",
+"term": "Rotate 180°",
+"def": "(x, y) → (−x, −y)",
+"extra": "Either direction gives the same result. Change both signs.",
+"plot": {
+"min": -7,
+"max": 7,
+"h": 190,
+"shapes": [
+{
+"pts": [
+[
+1,
+2
+],
+[
+5,
+2
+],
+[
+2,
+5
+]
+],
+"labels": [
+"J",
+"K",
+"L"
+],
+"color": "var(--blue)"
+},
+{
+"pts": [
+[
+-1,
+-2
+],
+[
+-5,
+-2
+],
+[
+-2,
+-5
+]
+],
+"labels": [
+"J′",
+"K′",
+"L′"
+],
+"color": "var(--coral)"
+}
+]
+}
+},
+{
+"cat": "rot",
+"term": "Rotational symmetry",
+"def": "A figure has rotational symmetry if it rotates onto itself at least once before a full 360° turn.",
+"extra": null
+},
+{
+"cat": "rot",
+"term": "Order of rotational symmetry",
+"def": "The number of times a figure matches itself in one full turn.",
+"extra": "Order 1 = no rotational symmetry. A square has order 4 (every 90°)."
+},
+{
+"cat": "rot",
+"term": "Regular polygon rotation angle",
+"def": "360° ÷ number of sides.",
+"extra": "Equilateral triangle: 120°. Square: 90°. Regular decagon: 36°. To map one vertex to another, multiply by the number of steps."
+},
+{
+"cat": "ext",
+"term": "Rotating around a point that isn't the origin",
+"def": "1. Find how far the point is from the center. 2. Rotate that with the usual rule. 3. Add the center back.",
+"extra": "Or count on the grid from the center.",
+"plot": {
+"min": -7,
+"max": 7,
+"h": 190,
+"shapes": [
+{
+"pts": [
+[
+-6,
+3
+],
+[
+-2,
+5
+],
+[
+-3,
+1
+]
+],
+"labels": [
+"A",
+"B",
+"C"
+],
+"color": "var(--blue)"
+},
+{
+"pts": [
+[
+-5,
+-6
+],
+[
+-7,
+-2
+],
+[
+-3,
+-3
+]
+],
+"labels": [
+"A′",
+"B′",
+"C′"
+],
+"color": "var(--coral)"
+}
+],
+"points": [
+{
+"p": [
+-1,
+-1
+],
+"label": "center",
+"color": "var(--violet)"
+}
+]
+}
+},
+{
+"cat": "ext",
+"term": "Composition of transformations",
+"def": "Doing two (or more) transformations in a row. The image of the first becomes the pre-image of the second.",
+"extra": "Labels: A → A′ → A″."
+},
+{
+"cat": "ext",
+"term": "Reading composition notation",
+"def": "R ∘ T means do T FIRST, then R. Work right to left.",
+"extra": "The step closest to the figure happens first."
+},
+{
+"cat": "ext",
+"term": "Does order matter?",
+"def": "Usually yes: T then R can land somewhere different from R then T.",
+"extra": "Sometimes it doesn't (R₁₈₀ and a reflection over y = x give the same result either way), so check."
+},
+{
+"cat": "ext",
+"term": "Two reflections over parallel lines",
+"def": "The same as one translation, twice the distance between the lines, in the direction from the first line to the second.",
+"extra": "Reflect over y = 4 then y = −1 (5 apart) → translate 10 down."
+}
+];
+CARDS.forEach(function(c){ if(c.plot){ var p=c.plot; c.diagram=function(){ return gridPlot(p); }; } else c.diagram=null; });
+
+/* ============ Deck state & rendering ============ */
+var activeCat = 'all';
+var order = CARDS.map(function(_,i){return i;});
+var pos = 0;
+var flipped = false;
+var goodCount = 0, badCount = 0;
+var seenRated = {};
+
+function currentIndices(){
+  if(activeCat==='all') return order;
+  return order.filter(function(i){ return CARDS[i].cat===activeCat; });
+}
+
+function buildTabs(){
+  var tabsEl = document.getElementById('tabs');
+  var allBtn = document.createElement('button');
+  allBtn.className='tab-btn active'; allBtn.textContent='All'; allBtn.dataset.key='all';
+  tabsEl.appendChild(allBtn);
+  CATS.forEach(function(c){
+    var b=document.createElement('button');
+    b.className='tab-btn'; b.textContent=c.label; b.dataset.key=c.key;
+    tabsEl.appendChild(b);
+  });
+  tabsEl.addEventListener('click', function(e){
+    if(e.target.tagName!=='BUTTON') return;
+    activeCat = e.target.dataset.key;
+    Array.prototype.forEach.call(tabsEl.children, function(b){ b.classList.toggle('active', b.dataset.key===activeCat); });
+    document.getElementById('filterLabel').textContent = activeCat==='all' ? 'All cards' : catInfo(activeCat).label;
+    pos = 0; flipped=false;
+    renderCard();
+  });
+}
+
+function renderCard(){
+  var idxs = currentIndices();
+  if(idxs.length===0) return;
+  if(pos>=idxs.length) pos=0;
+  var card = CARDS[idxs[pos]];
+  var info = catInfo(card.cat);
+
+  document.getElementById('flashcard').classList.remove('flipped');
+  flipped=false;
+
+  document.getElementById('catTagFront').textContent = info.label;
+  document.getElementById('catTagFront').style.background = info.color;
+  document.getElementById('catTagFront').style.color = '#fff';
+  document.getElementById('catTagBack').textContent = info.label;
+  document.getElementById('catTagBack').style.background = info.color;
+  document.getElementById('catTagBack').style.color = '#fff';
+
+  document.getElementById('termText').textContent = card.term;
+  document.getElementById('defText').textContent = card.def;
+  document.getElementById('extraText').textContent = card.extra || '';
+
+  var dWrap = document.getElementById('diagramWrap');
+  if(card.diagram){
+    dWrap.style.display='block';
+    dWrap.innerHTML = card.diagram();
+  } else {
+    dWrap.style.display='none';
+    dWrap.innerHTML='';
+  }
+
+  document.getElementById('cardNum').textContent = pos+1;
+  document.getElementById('cardTotal').textContent = idxs.length;
+  document.getElementById('progressFill').style.width = Math.round(((pos+1)/idxs.length)*100)+'%';
+
+  document.getElementById('rateRow').style.visibility='hidden';
+  updateTally();
+}
+
+function updateTally(){
+  var t = document.getElementById('tally');
+  if(goodCount+badCount===0){ t.textContent=''; return; }
+  t.innerHTML = '<b class="good">'+goodCount+'</b> got it &middot; <b class="bad">'+badCount+'</b> still learning';
+}
+
+function nextCard(){ var idxs=currentIndices(); pos=(pos+1)%idxs.length; renderCard(); }
+function prevCard(){ var idxs=currentIndices(); pos=(pos-1+idxs.length)%idxs.length; renderCard(); }
+function shuffleDeck(){
+  for(var i=order.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=order[i]; order[i]=order[j]; order[j]=t; }
+  pos=0; goodCount=0; badCount=0; seenRated={}; renderCard();
+}
+
+document.getElementById('flashcard').addEventListener('click', function(){
+  flipped=!flipped;
+  this.classList.toggle('flipped', flipped);
+  document.getElementById('rateRow').style.visibility = flipped ? 'visible' : 'hidden';
+});
+document.getElementById('btnNext').addEventListener('click', function(e){ e.stopPropagation(); nextCard(); });
+document.getElementById('btnPrev').addEventListener('click', function(e){ e.stopPropagation(); prevCard(); });
+document.getElementById('btnShuffle').addEventListener('click', function(e){ e.stopPropagation(); shuffleDeck(); });
+document.getElementById('btnGood').addEventListener('click', function(e){
+  e.stopPropagation();
+  var idxs=currentIndices(); var key=idxs[pos];
+  if(seenRated[key]==='bad') badCount--; if(seenRated[key]!=='good'){ goodCount++; seenRated[key]='good'; }
+  updateTally(); nextCard();
+});
+document.getElementById('btnBad').addEventListener('click', function(e){
+  e.stopPropagation();
+  var idxs=currentIndices(); var key=idxs[pos];
+  if(seenRated[key]==='good') goodCount--; if(seenRated[key]!=='bad'){ badCount++; seenRated[key]='bad'; }
+  updateTally(); nextCard();
+});
+
+buildTabs();
+renderCard();
+</script>
+</body>
+</html>

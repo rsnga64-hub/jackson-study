@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 4 Quiz: Transformations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FBFAF7;
+    --grid-line: rgba(28,43,74,0.055);
+    --ink: #1C2B4A;
+    --text: #2B3648;
+    --text-soft: #64707F;
+    --blue: #2E86AB;
+    --blue-soft: #E9F3F8;
+    --amber: #D98A2B;
+    --amber-soft: #FCF1DE;
+    --coral: #D65A5A;
+    --coral-soft: #FBEBEB;
+    --teal: #2C9C82;
+    --teal-soft: #E6F5F0;
+    --card-bg: #FFFFFF;
+    --border: #E4E0D4;
+    --gray: #94A0AD;
+    --gray-line: #CBD3DC;
+      --violet: #7C5CBF;
+    --violet-soft: #EFE9F8;
+}
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; color: var(--ink); }
+  .wrap { max-width: 680px; margin: 0 auto; padding: 32px 20px 80px; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--text-soft); text-decoration: none; font-size: 0.88rem; font-weight: 600; margin-bottom: 18px; }
+  .back-link:hover { color: var(--blue); }
+
+  .hero { background: var(--ink); border-radius: 18px; padding: 26px 28px; color: #fff; margin-bottom: 22px; }
+  .hero h1 { color: #fff; font-size: 1.7rem; margin: 0 0 6px; }
+  .hero p { margin: 0; color: #C8D3E0; font-size: 0.96rem; max-width: 52ch; }
+
+  .statline { display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text-soft); margin-bottom: 8px; }
+  .statline b { color: var(--ink); }
+  .progress-track { height: 6px; background: var(--border); border-radius: 999px; overflow: hidden; margin-bottom: 20px; }
+  .progress-fill { height: 100%; background: var(--blue); border-radius: 999px; transition: width 0.25s ease; }
+
+  .qcard {
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px;
+    padding: 26px 28px; box-shadow: 0 4px 18px rgba(28,43,74,0.06);
+  }
+  .qkicker { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.72rem; letter-spacing: 0.03em; text-transform: uppercase; color: var(--blue); margin: 0 0 8px; }
+  .qtext { font-size: 1.15rem; font-weight: 700; color: var(--ink); line-height: 1.35; margin: 0 0 16px; }
+  .diagram-wrap { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 6px; margin-bottom: 18px; }
+  .diagram-wrap svg { display: block; width: 100%; height: auto; max-height: 270px; }
+
+  .opt {
+    display: flex; align-items: center; gap: 10px;
+    width: 100%; text-align: left; font-family: 'Inter', sans-serif; font-size: 0.98rem; font-weight: 600;
+    color: var(--ink); background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 12px;
+    padding: 12px 16px; margin-bottom: 10px; cursor: pointer; transition: all 0.15s ease;
+  }
+  .opt:hover:not(.locked) { border-color: var(--blue); background: var(--blue-soft); }
+  .opt .letter {
+    flex-shrink: 0; width: 24px; height: 24px; border-radius: 999px; border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 700; color: var(--text-soft);
+  }
+  .opt.correct { border-color: var(--teal); background: var(--teal-soft); }
+  .opt.correct .letter { background: var(--teal); border-color: var(--teal); color: #fff; }
+  .opt.incorrect { border-color: var(--coral); background: var(--coral-soft); }
+  .opt.incorrect .letter { background: var(--coral); border-color: var(--coral); color: #fff; }
+  .opt.locked { cursor: default; }
+  .opt.dim { opacity: 0.55; }
+
+  .explain {
+    display: none; margin-top: 14px; padding: 12px 14px; border-radius: 10px;
+    background: var(--blue-soft); color: var(--ink); font-size: 0.9rem; line-height: 1.45;
+  }
+  .explain.show { display: block; }
+  .explain b { color: var(--blue); }
+
+  .qcontrols { display: flex; justify-content: flex-end; margin-top: 18px; }
+  .btn {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.92rem;
+    border: 1px solid var(--ink); background: var(--ink); color: #fff;
+    border-radius: 10px; padding: 11px 20px; cursor: pointer; transition: opacity 0.15s ease;
+  }
+  .btn:hover { opacity: 0.88; }
+  .btn:disabled { opacity: 0.35; cursor: default; }
+  .btn.ghost { background: var(--card-bg); color: var(--ink); }
+
+  /* results screen */
+  .results { text-align: center; }
+  .score-big { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 3rem; color: var(--ink); margin: 6px 0; }
+  .score-msg { font-size: 1rem; color: var(--text-soft); margin-bottom: 22px; }
+  .missed-list { text-align: left; margin: 20px 0; padding: 0; list-style: none; }
+  .missed-list li { padding: 10px 0; border-top: 1px solid var(--border); font-size: 0.88rem; color: var(--text-soft); }
+  .missed-list li b { color: var(--ink); display: block; margin-bottom: 2px; }
+
+  @media (max-width: 480px) {
+    .qtext { font-size: 1.03rem; }
+  }
+  .sec-picker{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 16px}
+  .sec-picker button{font:600 0.8rem Inter,sans-serif;border:1.5px solid var(--border);background:var(--card-bg);color:var(--text-soft);padding:7px 12px;border-radius:999px;cursor:pointer}
+  .sec-picker button.active{background:var(--ink);border-color:var(--ink);color:#fff}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="geometry.html">&larr; Back to Geometry</a>
+  <div class="hero">
+    <h1>Unit 4 Quiz</h1>
+    <p id="heroSub"></p>
+  </div>
+  <div class="sec-picker" id="secPicker"></div>
+  <div id="quizArea">
+    <div class="statline">
+      <span>Question <b id="qNum">1</b> of <b id="qTotal">1</b></span>
+      <span id="scoreLive">Score: 0</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="qcard">
+      <p class="qkicker" id="qKicker"></p>
+      <p class="qtext" id="qText"></p>
+      <div class="diagram-wrap" id="diagramWrap" style="display:none;"></div>
+      <div id="optsWrap"></div>
+      <div class="explain" id="explain"></div>
+      <div class="qcontrols"><button class="btn" id="btnNext" disabled>Next Question &rarr;</button></div>
+    </div>
+  </div>
+  <div id="resultsArea" style="display:none;">
+    <div class="qcard results">
+      <p class="qkicker">Quiz complete</p>
+      <div class="score-big" id="finalScore">0 / 0</div>
+      <p class="score-msg" id="finalMsg"></p>
+      <ul class="missed-list" id="missedList"></ul>
+      <button class="btn" id="btnRetake">Retake Quiz</button>
+    </div>
+  </div>
+</div>
+<script>
+function svg(inner, vb, h) { return '<svg viewBox="'+vb+'" width="100%" height="'+(h||180)+'" xmlns="http://www.w3.org/2000/svg">'+inner+'</svg>'; }
+function lineEl(x1,y1,x2,y2,color,w,dash){ return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round"'+(dash?' stroke-dasharray="5 4"':'')+'/>'; }
+function dot(x,y,color,r){ return '<circle cx="'+x+'" cy="'+y+'" r="'+(r||3.2)+'" fill="'+(color||'var(--ink)')+'"/>'; }
+function txt(x,y,s,color,size,weight,anchor){ return '<text x="'+x+'" y="'+y+'" fill="'+(color||'var(--ink)')+'" font-family="Space Grotesk, sans-serif" font-size="'+(size||13)+'" font-weight="'+(weight||700)+'" text-anchor="'+(anchor||'middle')+'">'+s+'</text>'; }
+function poly(pts,color,w,fill){ return '<polygon points="'+pts+'" fill="'+(fill||'none')+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linejoin="round"/>'; }
+function ellipseEl(cx,cy,rx,ry,fill,stroke,w){ return '<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rx+'" ry="'+ry+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(w||2.5)+'"/>'; }
+function circleEl(cx,cy,r,fill,stroke,w){ return '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(w||2.5)+'"/>'; }
+function rectEl(x,y,w,h,rx,fill,stroke,sw){ return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+(rx||0)+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(sw||2.5)+'"/>'; }
+function pathEl(d,stroke,w,fill,dash){ return '<path d="'+d+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round"'+(dash?' stroke-dasharray="4 3"':'')+'/>'; }
+function wavy(x1,y1,x2,y2,amp,cycles,color,w){
+  var n=28, pts=[];
+  var dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy)||1;
+  var ux=dx/len, uy=dy/len, px=-uy, py=ux;
+  for(var i=0;i<=n;i++){
+    var t=i/n;
+    var bx=x1+dx*t, by=y1+dy*t;
+    var off=Math.sin(t*Math.PI*2*cycles)*amp;
+    pts.push((bx+px*off).toFixed(1)+','+(by+py*off).toFixed(1));
+  }
+  return '<polyline points="'+pts.join(' ')+'" fill="none" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.2)+'" stroke-linecap="round"/>';
+}
+/* ---- Coordinate grid with several figures (original helper for Unit 4) ----
+   opts: {min,max,h, shapes:[{pts,labels,color,dash}], lines:[{a:[x,y],b:[x,y],color,label}], points:[{p,label,color}]} */
+function gridPlot(opts){
+  var min=(opts.min!==undefined)?opts.min:-7, max=(opts.max!==undefined)?opts.max:7;
+  var u=16, pad=16, n=max-min, size=n*u+pad*2;
+  function X(x){ return pad+(x-min)*u; } function Y(y){ return pad+(max-y)*u; }
+  var s='';
+  for(var i=min;i<=max;i++){
+    s+='<line x1="'+X(i)+'" y1="'+Y(min)+'" x2="'+X(i)+'" y2="'+Y(max)+'" stroke="var(--gray-line, #CBD3DC)" stroke-width="0.7"/>';
+    s+='<line x1="'+X(min)+'" y1="'+Y(i)+'" x2="'+X(max)+'" y2="'+Y(i)+'" stroke="var(--gray-line, #CBD3DC)" stroke-width="0.7"/>';
+  }
+  if(min<0&&max>0){
+    s+='<line x1="'+X(0)+'" y1="'+Y(min)+'" x2="'+X(0)+'" y2="'+Y(max)+'" stroke="var(--gray, #94A0AD)" stroke-width="1.6"/>';
+    s+='<line x1="'+X(min)+'" y1="'+Y(0)+'" x2="'+X(max)+'" y2="'+Y(0)+'" stroke="var(--gray, #94A0AD)" stroke-width="1.6"/>';
+  }
+  (opts.lines||[]).forEach(function(L){
+    s+='<line x1="'+X(L.a[0])+'" y1="'+Y(L.a[1])+'" x2="'+X(L.b[0])+'" y2="'+Y(L.b[1])+'" stroke="'+(L.color||'var(--violet)')+'" stroke-width="2" stroke-dasharray="6 4"/>';
+    if(L.label) s+='<text x="'+(X(L.b[0])+(L.dx||-4))+'" y="'+(Y(L.b[1])+(L.dy||12))+'" fill="'+(L.color||'var(--violet)')+'" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="700" text-anchor="end">'+L.label+'</text>';
+  });
+  (opts.shapes||[]).forEach(function(sh){
+    var col=sh.color||'var(--blue)';
+    var ptsStr=sh.pts.map(function(p){return X(p[0])+','+Y(p[1]);}).join(' ');
+    s+=(sh.pts.length>2?'<polygon points="'+ptsStr+'" fill="'+(sh.fill||'none')+'" fill-opacity="0.18"':'<polyline points="'+ptsStr+'" fill="none"')+' stroke="'+col+'" stroke-width="2.6" stroke-linejoin="round"'+(sh.dash?' stroke-dasharray="6 4"':'')+'/>';
+    var cx=0,cy=0; sh.pts.forEach(function(p){cx+=p[0];cy+=p[1];}); cx/=sh.pts.length; cy/=sh.pts.length;
+    sh.pts.forEach(function(p,i){
+      s+='<circle cx="'+X(p[0])+'" cy="'+Y(p[1])+'" r="3.4" fill="'+col+'"/>';
+      if(sh.labels&&sh.labels[i]){
+        var dx=p[0]-cx, dy=p[1]-cy, L=Math.sqrt(dx*dx+dy*dy)||1;
+        s+='<text x="'+(X(p[0])+dx/L*13)+'" y="'+(Y(p[1])-dy/L*13+5)+'" fill="'+col+'" font-family="Space Grotesk, sans-serif" font-size="12.5" font-weight="700" text-anchor="middle">'+sh.labels[i]+'</text>';
+      }
+    });
+  });
+  (opts.points||[]).forEach(function(P){
+    s+='<circle cx="'+X(P.p[0])+'" cy="'+Y(P.p[1])+'" r="4" fill="'+(P.color||'var(--ink)')+'"/>';
+    if(P.label) s+='<text x="'+(X(P.p[0])+8)+'" y="'+(Y(P.p[1])-7)+'" fill="'+(P.color||'var(--ink)')+'" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="700">'+P.label+'</text>';
+  });
+  return '<svg viewBox="0 0 '+size+' '+size+'" width="100%" height="'+(opts.h||230)+'" xmlns="http://www.w3.org/2000/svg">'+s+'</svg>';
+}
+
+var DIAGQ = {};
+var ALLQ = [
+{
+"sec": "4.1",
+"kicker": "4.1 Vocabulary",
+"text": "In a transformation, the original figure is called the:",
+"opts": [
+"pre-image",
+"image",
+"vector",
+"isometry"
+],
+"explain": "Pre-image = original. Image = the new figure (written with primes, like A′)."
+},
+{
+"sec": "4.1",
+"kicker": "4.1 Vocabulary",
+"text": "ΔABC → ΔPQR. Which point corresponds to B?",
+"opts": [
+"Q",
+"P",
+"R",
+"C"
+],
+"explain": "The order of the vertices matches: A ↔ P, B ↔ Q, C ↔ R."
+},
+{
+"sec": "4.1",
+"kicker": "4.1 Types",
+"text": "Which transformation turns a figure about a fixed point?",
+"opts": [
+"Rotation",
+"Translation",
+"Reflection",
+"Dilation"
+],
+"explain": "A rotation turns a figure about the center of rotation."
+},
+{
+"sec": "4.1",
+"kicker": "4.1 Types",
+"text": "Which transformation moves every point the same distance in the same direction?",
+"opts": [
+"Translation",
+"Rotation",
+"Reflection",
+"Dilation"
+],
+"explain": "A translation is a slide."
+},
+{
+"sec": "4.1",
+"kicker": "4.1 Rigid Transformations",
+"text": "Which transformation is NOT an isometry (rigid transformation)?",
+"opts": [
+"Dilation",
+"Translation",
+"Reflection",
+"Rotation"
+],
+"explain": "A dilation multiplies the points by a scale amount, so it changes size. Translations, reflections, and rotations keep size and shape."
+},
+{
+"sec": "4.1",
+"kicker": "4.1 Rigid Transformations",
+"text": "Why are translations, reflections, and rotations called congruence transformations?",
+"opts": [
+"They preserve both size and shape",
+"They change the size but not the shape",
+"They always flip the figure",
+"They only work on triangles"
+],
+"explain": "Congruent = same size and same shape, so the image is congruent to the pre-image."
+},
+{
+"sec": "4.1",
+"kicker": "4.1 Identify — Graph",
+"text": "Blue is the pre-image and red is the image. Which transformation is shown?",
+"opts": [
+"Reflection across the y-axis",
+"Translation",
+"Rotation 180° around the origin",
+"Reflection across the x-axis"
+],
+"explain": "Each x-coordinate changed sign while y stayed the same: (x, y) → (−x, y). Blue: A(−6, 2), B(−3, 2), C(−3, 5). Red: A′(6, 2), B′(3, 2), C′(3, 5).",
+"plot": {
+"min": -7,
+"max": 7,
+"h": 230,
+"shapes": [
+{
+"pts": [
+[
+-6,
+2
+],
+[
+-3,
+2
+],
+[
+-3,
+5
+]
+],
+"labels": [
+"A",
+"B",
+"C"
+],
+"color": "var(--blue)"
+},
+{
+"pts": [
+[
+6,
+2
+],
+[
+3,
+2
+],
+[
+3,
+5
+]
+],
+"labels": [
+"A′",
+"B′",
+"C′"
+],
+"color": "var(--coral)"
+}
+]
+}
+},
+{
+"sec": "4.1",
+"kicker": "4.1 Identify — Graph",
+"text": "Blue is the pre-image and red is the image. Which transformation is shown?",
+"opts": [
+"Rotation 180° around the origin",
+"Translation",
+"Reflection across the y-axis",
+"Dilation"
+],
+"explain": "Both coordinates changed sign: (x, y) → (−x, −y). Blue: A(−6, 2), B(−3, 2), C(−3, 5). Red: A′(6, −2), B′(3, −2), C′(3, −5).",
+"plot": {
+"min": -7,
+"max": 7,
+"h": 230,
+"shapes": [
+{
+"pts": [
+[
+-6,
+2
+],
+[
+-3,
+2
+],
+[
+-3,
+5
+]
+],
+"labels": [
+"A",
+"B",
+"C"
+],
+"color": "var(--blue)"
+},
+{
+"pts": [
+[
+6,
+-2
+],
+[
+3,
+-2
+],
+[
+3,
+-5
+]
+],
+"labels": [
+"A′",
+"B′",
+"C′"
+],
+"color": "var(--coral)"
+}
+]
+}
+},
+{
+"sec": "4.1",
+"kicker": "4.1 Confirm Congruence",
+"text": "To confirm a translation kept the size the same, you measure segment AB with A(−4, −1) and B(−1, 3). What is AB?",
+"opts": [
+"5",
+"7",
+"25",
+"√7"
+],
+"explain": "Distance formula: √((−1 − (−4))² + (3 − (−1))²) = √(9 + 16) = √25 = 5. A′B′ should also be 5."
+},
+{
+"sec": "4.1",
+"kicker": "4.1 Notation",
+"text": "In the notation R₉₀cw, what does the subscript tell you?",
+"opts": [
+"The angle (and direction) of rotation",
+"How far to slide the figure",
+"The line of reflection",
+"The scale factor"
+],
+"explain": "For rotations the subscript shows the angle of rotation. For reflections, like R x-axis, it names the line you reflect across."
+},
+{
+"sec": "4.1",
+"kicker": "4.1 Congruent Image",
+"text": "A triangle is rotated. A side of length 2x − 1 on the pre-image matches a side of length 9 on the image. What is x?",
+"opts": [
+"5",
+"4",
+"9",
+"10"
+],
+"explain": "Rotations keep lengths the same, so 2x − 1 = 9 → 2x = 10 → x = 5."
+},
+{
+"sec": "4.2",
+"kicker": "4.2 Perform a Translation",
+"text": "Translate the point (3, −2) using T(x, y) → (x − 5, y + 4). Where does it land?",
+"opts": [
+"(−2, 2)",
+"(8, −6)",
+"(7, −7)",
+"(−2, −6)"
+],
+"explain": "Add −5 to x and 4 to y: (3, −2) → (−2, 2)."
+},
+{
+"sec": "4.2",
+"kicker": "4.2 Perform a Translation",
+"text": "Translate the point (−6, 1) using T(x, y) → (x + 2, y − 7). Where does it land?",
+"opts": [
+"(−4, −6)",
+"(−8, 8)",
+"(−13, 3)",
+"(−4, 8)"
+],
+"explain": "Add 2 to x and −7 to y: (−6, 1) → (−4, −6)."
+},
+{
+"sec": "4.2",
+"kicker": "4.2 Vector Notation",
+"text": "Translate (−2, −3) by the vector ⟨4, 6⟩.",
+"opts": [
+"(2, 3)",
+"(2, −9)",
+"(−6, −9)",
+"(4, 3)"
+],
+"explain": "A vector ⟨a, b⟩ means move a horizontally and b vertically: (−2 + 4, −3 + 6) = (2, 3)."
+},
+{
+"sec": "4.2",
+"kicker": "4.2 In Words",
+"text": "Which rule translates a figure 3 units left and 8 units up?",
+"opts": [
+"T(x, y) → (x − 3, y + 8)",
+"T(x, y) → (x + 3, y + 8)",
+"T(x, y) → (x − 3, y − 8)",
+"T(x, y) → (x + 8, y − 3)"
+],
+"explain": "Left is negative x, up is positive y."
+},
+{
+"sec": "4.2",
+"kicker": "4.2 In Words",
+"text": "Describe ⟨5, −2⟩ in words.",
+"opts": [
+"5 units right and 2 units down",
+"5 units left and 2 units up",
+"2 units right and 5 units down",
+"5 units up and 2 units left"
+],
+"explain": "The first number is horizontal (positive = right); the second is vertical (negative = down)."
+},
+{
+"sec": "4.2",
+"kicker": "4.2 Write the Rule — Graph",
+"text": "Blue is the pre-image, red is the image. Which rule describes the translation?",
+"opts": [
+"T(x, y) → (x + 7, y − 4)",
+"T(x, y) → (x − 7, y + 4)",
+"T(x, y) → (x − 4, y + 7)",
+"T(x, y) → (x + 7, y + 4)"
+],
+"explain": "Pick one point and subtract: (−6, −1) → (1, −5), so x changes by 7 and y by −4. Vector: ⟨7, −4⟩.",
+"plot": {
+"min": -7,
+"max": 7,
+"h": 230,
+"shapes": [
+{
+"pts": [
+[
+-6,
+-1
+],
+[
+-4,
+3
+],
+[
+-1,
+0
+]
+],
+"labels": [
+"D",
+"E",
+"F"
+],
+"color": "var(--blue)"
+},
+{
+"pts": [
+[
+1,
+-5
+],
+[
+3,
+-1
+],
+[
+6,
+-4
+]
+],
+"labels": [
+"D′",
+"E′",
+"F′"
+],
+"color": "var(--coral)"
+}
+]
+}
+},
+{
+"sec": "4.2",
+"kicker": "4.2 Write the Rule",
+"text": "Pre-image: G(−3, 4), H(0, 6), K(1, 2). Image: G′(2, 1), H′(5, 3), K′(6, −1). What is the vector?",
+"opts": [
+"⟨5, −3⟩",
+"⟨−5, 3⟩",
+"⟨−3, 5⟩",
+"⟨5, 3⟩"
+],
+"explain": "Image minus pre-image: (2, 1) − (−3, 4) gives 5 right and 3 down. Every point moves the same way."
+},
+{
+"sec": "4.2",
+"kicker": "4.2 Find the Pre-image",
+"text": "Using T(x, y) → (x + 4, y − 3), the image is A′(2, −5). What was A?",
+"opts": [
+"(−2, −2)",
+"(6, −8)",
+"(−2, −8)",
+"(6, −2)"
+],
+"explain": "Work backwards: do the opposite. Subtract 4 from x and −3 from y: (2, −5) → (−2, −2)."
+},
+{
+"sec": "4.2",
+"kicker": "4.2 Find the Pre-image",
+"text": "Using T(x, y) → (x − 2, y + 9), the image is A′(−7, 6). What was A?",
+"opts": [
+"(−5, −3)",
+"(−9, 15)",
+"(−5, 15)",
+"(−9, −3)"
+],
+"explain": "Work backwards: do the opposite. Subtract −2 from x and 9 from y: (−7, 6) → (−5, −3)."
+},
+{
+"sec": "4.3R",
+"kicker": "4.3 Reflection Rules",
+"text": "Reflect (3, −5) across the x-axis.",
+"opts": [
+"(3, 5)",
+"(−3, −5)",
+"(−5, 3)",
+"(5, −3)"
+],
+"explain": "Reflection across the x-axis: (x, y) → (x, −y). So (3, −5) → (3, 5)."
+},
+{
+"sec": "4.3R",
+"kicker": "4.3 Reflection Rules",
+"text": "Reflect (−4, 6) across the y-axis.",
+"opts": [
+"(4, 6)",
+"(−4, −6)",
+"(6, −4)",
+"(−6, 4)"
+],
+"explain": "Reflection across the y-axis: (x, y) → (−x, y). So (−4, 6) → (4, 6)."
+},
+{
+"sec": "4.3R",
+"kicker": "4.3 Reflection Rules",
+"text": "Reflect (−2, 7) across the line y = x.",
+"opts": [
+"(7, −2)",
+"(−2, −7)",
+"(2, 7)",
+"(−7, 2)"
+],
+"explain": "Reflection across the line y = x: (x, y) → (y, x). So (−2, 7) → (7, −2)."
+},
+{
+"sec": "4.3R",
+"kicker": "4.3 Reflection Rules",
+"text": "Reflect (5, −3) across the line y = −x.",
+"opts": [
+"(3, −5)",
+"(5, 3)",
+"(−5, −3)",
+"(−3, 5)"
+],
+"explain": "Reflection across the line y = −x: (x, y) → (−y, −x). So (5, −3) → (3, −5)."
+},
+{
+"sec": "4.3R",
+"kicker": "4.3 Reflection Rules",
+"text": "Which rule reflects across the line y = −x?",
+"opts": [
+"(x, y) → (−y, −x)",
+"(x, y) → (y, x)",
+"(x, y) → (−x, −y)",
+"(x, y) → (y, −x)"
+],
+"explain": "For y = −x, swap the coordinates AND change both signs. (y, x) is the rule for y = x; (−x, −y) is a 180° rotation."
+},
+{
+"sec": "4.3R",
+"kicker": "4.3 Identify the Line — Graph",
+"text": "Blue is the pre-image and red is the image. What was the line of reflection?",
+"opts": [
+"y = x",
+"y = −x",
+"the x-axis",
+"the y-axis"
+],
+"explain": "Each image point has its coordinates swapped: P(1, 2), Q(4, 2), R(2, 6) → P′(2, 1), Q′(2, 4), R′(6, 2). Swapping x and y = reflecting across y = x.",
+"plot": {
+"min": -7,
+"max": 7,
+"h": 230,
+"shapes": [
+{
+"pts": [
+[
+1,
+2
+],
+[
+4,
+2
+],
+[
+2,
+6
+]
+],
+"labels": [
+"P",
+"Q",
+"R"
+],
+"color": "var(--blue)"
+},
+{
+"pts": [
+[
+2,
+1
+],
+[
+2,
+4
+],
+[
+6,
+2
+]
+],
+"labels": [
+"P′",
+"Q′",
+"R′"
+],
+"color": "var(--coral)"
+}
+]
+}
+},
+{
+"sec": "4.3R",
+"kicker": "4.3 Other Lines — Graph",
+"text": "Reflect the point (3, 5) across the line y = 2 (dashed).",
+"opts": [
+"(3, −1)",
+"(3, −5)",
+"(3, 0)",
+"(−1, 5)"
+],
+"explain": "Count: (3, 5) is 3 units above y = 2, so its image is 3 units below: (3, −1). The x-coordinate stays the same for a horizontal line.",
+"plot": {
+"min": -7,
+"max": 7,
+"h": 230,
+"shapes": [],
+"lines": [
+{
+"a": [
+-7,
+2
+],
+"b": [
+7,
+2
+],
+"label": "y = 2",
+"dy": -6
+}
+],
+"points": [
+{
+"p": [
+3,
+5
+],
+"label": "(3, 5)",
+"color": "var(--blue)"
+}
+]
+}
+},
+{
+"sec": "4.3R",
+"kicker": "4.3 Other Lines",
+"text": "Reflect (−4, 2) across the line x = 1.",
+"opts": [
+"(6, 2)",
+"(4, 2)",
+"(−4, 0)",
+"(5, −2)"
+],
+"explain": "(−4, 2) is 5 units left of x = 1, so its image is 5 units right of it: (6, 2). The y-coordinate stays the same for a vertical line."
+},
+{
+"sec": "4.3R",
+"kicker": "4.3 Line of Reflection",
+"text": "The line of reflection is always the ______ of the segment joining a point P and its image P′.",
+"opts": [
+"perpendicular bisector",
+"midpoint",
+"parallel line",
+"angle bisector"
+],
+"explain": "It crosses PP′ at a right angle and cuts it exactly in half, so P and P′ are the same distance from the line."
+},
+{
+"sec": "4.3R",
+"kicker": "4.3 Line Symmetry",
+"text": "How many lines of symmetry does a non-square rectangle have?",
+"opts": [
+"2",
+"4",
+"1",
+"0"
+],
+"explain": "One vertical and one horizontal line through the center. The diagonals are NOT lines of symmetry unless it's a square."
+},
+{
+"sec": "4.3R",
+"kicker": "4.3 Line Symmetry",
+"text": "A rectangle has vertices (−3, 4), (5, 4), (5, −2), (−3, −2). What are the equations of its lines of symmetry?",
+"opts": [
+"x = 1 and y = 1",
+"x = 1 and y = 2",
+"x = 0 and y = 0",
+"y = x and y = −x"
+],
+"explain": "The lines go through the middle: x = (−3 + 5) ÷ 2 = 1 and y = (4 + (−2)) ÷ 2 = 1."
+},
+{
+"sec": "4.3Rot",
+"kicker": "4.3 Rotation Rules",
+"text": "Rotate (5, 2) 90° counterclockwise around the origin.",
+"opts": [
+"(−2, 5)",
+"(2, −5)",
+"(−5, −2)",
+"(2, 5)"
+],
+"explain": "90° counterclockwise: (x, y) → (−y, x). So (5, 2) → (−2, 5)."
+},
+{
+"sec": "4.3Rot",
+"kicker": "4.3 Rotation Rules",
+"text": "Rotate (−3, 6) 90° clockwise around the origin.",
+"opts": [
+"(6, 3)",
+"(−6, −3)",
+"(3, −6)",
+"(6, −3)"
+],
+"explain": "90° clockwise: (x, y) → (y, −x). So (−3, 6) → (6, 3)."
+},
+{
+"sec": "4.3Rot",
+"kicker": "4.3 Rotation Rules",
+"text": "Rotate (4, −7) 180° around the origin.",
+"opts": [
+"(−4, 7)",
+"(7, 4)",
+"(−7, −4)",
+"(−7, 4)"
+],
+"explain": "180°: (x, y) → (−x, −y). So (4, −7) → (−4, 7)."
+},
+{
+"sec": "4.3Rot",
+"kicker": "4.3 Rotation Rules",
+"text": "Rotate (−1, −5) 90° counterclockwise around the origin.",
+"opts": [
+"(5, −1)",
+"(−5, 1)",
+"(1, 5)",
+"(−5, −1)"
+],
+"explain": "90° counterclockwise: (x, y) → (−y, x). So (−1, −5) → (5, −1)."
+},
+{
+"sec": "4.3Rot",
+"kicker": "4.3 Rotation Rules",
+"text": "A rotation of 90° clockwise is the same as a rotation of:",
+"opts": [
+"270° counterclockwise",
+"90° counterclockwise",
+"180°",
+"360°"
+],
+"explain": "Going 90° one way lands in the same place as going 270° the other way. That's why both share the rule (x, y) → (y, −x)."
+},
+{
+"sec": "4.3Rot",
+"kicker": "4.3 Identify — Graph",
+"text": "Blue is the pre-image and red is the image. Which rotation around the origin is shown?",
+"opts": [
+"90° counterclockwise",
+"90° clockwise",
+"180°",
+"Reflection across y = x"
+],
+"explain": "Check one point: (5, 1) → (−1, 5) fits (x, y) → (−y, x), the 90° counterclockwise rule.",
+"plot": {
+"min": -7,
+"max": 7,
+"h": 230,
+"shapes": [
+{
+"pts": [
+[
+1,
+1
+],
+[
+5,
+1
+],
+[
+1,
+4
+]
+],
+"labels": [
+"J",
+"K",
+"L"
+],
+"color": "var(--blue)"
+},
+{
+"pts": [
+[
+-1,
+1
+],
+[
+-1,
+5
+],
+[
+-4,
+1
+]
+],
+"labels": [
+"J′",
+"K′",
+"L′"
+],
+"color": "var(--coral)"
+}
+]
+}
+},
+{
+"sec": "4.3Rot",
+"kicker": "4.3 Rotational Symmetry",
+"text": "What is the smallest angle that rotates a regular nonagon (9 sides) onto itself?",
+"opts": [
+"40°",
+"9°",
+"36°",
+"45°"
+],
+"explain": "For a regular polygon: 360° ÷ number of sides = 360 ÷ 9 = 40°."
+},
+{
+"sec": "4.3Rot",
+"kicker": "4.3 Rotational Symmetry",
+"text": "A regular decagon (10 sides) has rotational symmetry of what order?",
+"opts": [
+"10",
+"5",
+"36",
+"360"
+],
+"explain": "It maps onto itself 10 times in a full turn (every 36°), so its order is 10."
+},
+{
+"sec": "4.3Rot",
+"kicker": "4.3 Rotational Symmetry",
+"text": "A shape only matches itself after a full 360° turn. Its rotational symmetry is:",
+"opts": [
+"Order 1: no rotational symmetry",
+"Order 360",
+"Order 4",
+"Order 2"
+],
+"explain": "Everything matches itself after a full turn, so order 1 means it has no rotational symmetry."
+},
+{
+"sec": "4.3Rot",
+"kicker": "4.3 Rotating a Polygon",
+"text": "The vertices of a regular hexagon are labeled A–F going clockwise. What clockwise rotation about its center maps A onto D?",
+"opts": [
+"180°",
+"60°",
+"120°",
+"240°"
+],
+"explain": "Each step around a regular hexagon is 360 ÷ 6 = 60°. A → D is 3 steps: 3 × 60° = 180°."
+},
+{
+"sec": "4.5",
+"kicker": "4.5 Not the Origin",
+"text": "Rotate (4, 1) 90° counterclockwise around the point (1, −2).",
+"opts": [
+"(−2, 1)",
+"(−1, 4)",
+"(4, −5)",
+"(−2, −5)"
+],
+"explain": "Measure from the center: (4, 1) is 3 right and 3 up from (1, −2). Rotate that (3, 3) by (−y, x) → (−3, 3). Add back to the center: (1 − 3, −2 + 3) = (−2, 1)."
+},
+{
+"sec": "4.5",
+"kicker": "4.5 Not the Origin",
+"text": "Rotate (1, 5) 180° around the point (−2, 3).",
+"opts": [
+"(−5, 1)",
+"(−1, −5)",
+"(−4, 6)",
+"(−5, 5)"
+],
+"explain": "(1, 5) is 3 right and 2 up from (−2, 3). A 180° turn sends it 3 left and 2 down from the center: (−5, 1)."
+},
+{
+"sec": "4.5",
+"kicker": "4.5 Not the Origin",
+"text": "Rotate (5, 4) 90° clockwise around the point (3, 0).",
+"opts": [
+"(7, −2)",
+"(4, −5)",
+"(−1, 2)",
+"(1, −4)"
+],
+"explain": "(5, 4) is (2, 4) from the center. 90° clockwise: (y, −x) → (4, −2). Add back the center: (3 + 4, 0 − 2) = (7, −2)."
+},
+{
+"sec": "4.5",
+"kicker": "4.5 Work Backwards",
+"text": "A′(6, −1) is the image after a reflection across the x-axis. What is the pre-image A?",
+"opts": [
+"(6, 1)",
+"(−6, −1)",
+"(−1, 6)",
+"(1, −6)"
+],
+"explain": "A reflection undoes itself, so apply the same rule to A′: (x, −y) → (6, 1). Check: reflecting (6, 1) gives back (6, −1)."
+},
+{
+"sec": "4.5",
+"kicker": "4.5 Work Backwards",
+"text": "A′(6, −1) is the image after a reflection across the line y = x. What is the pre-image A?",
+"opts": [
+"(−1, 6)",
+"(6, 1)",
+"(−6, −1)",
+"(1, −6)"
+],
+"explain": "A reflection undoes itself, so apply the same rule to A′: (y, x) → (−1, 6). Check: reflecting (−1, 6) gives back (6, −1)."
+},
+{
+"sec": "4.5",
+"kicker": "4.5 Work Backwards",
+"text": "A′(6, −1) is the image after a reflection across the line y = −x. What is the pre-image A?",
+"opts": [
+"(1, −6)",
+"(6, 1)",
+"(−6, −1)",
+"(−1, 6)"
+],
+"explain": "A reflection undoes itself, so apply the same rule to A′: (−y, −x) → (1, −6). Check: reflecting (1, −6) gives back (6, −1)."
+},
+{
+"sec": "4.5",
+"kicker": "4.5 Work Backwards",
+"text": "A′(−2, 7) is the image after a translation ⟨−5, 3⟩. What is the pre-image A?",
+"opts": [
+"(3, 4)",
+"(−7, 10)",
+"(3, 10)",
+"(−7, 4)"
+],
+"explain": "Do the opposite: add 5 to x and subtract 3 from y: (−2 + 5, 7 − 3) = (3, 4)."
+},
+{
+"sec": "4.5",
+"kicker": "4.5 Not the Origin — Graph",
+"text": "Blue is rotated 90° counterclockwise around the purple point (−1, −1). Where does A(−6, 3) land?",
+"opts": [
+"(−5, −6)",
+"(−3, −6)",
+"(3, 4)",
+"(4, −5)"
+],
+"explain": "A is (−5, 4) from the center. Rotate: (−y, x) → (−4, −5). Add the center back: (−1 − 4, −1 − 5) = (−5, −6).",
+"plot": {
+"min": -7,
+"max": 7,
+"h": 230,
+"shapes": [
+{
+"pts": [
+[
+-6,
+3
+],
+[
+-2,
+5
+],
+[
+-3,
+1
+]
+],
+"labels": [
+"A",
+"B",
+"C"
+],
+"color": "var(--blue)"
+},
+{
+"pts": [
+[
+-5,
+-6
+],
+[
+-7,
+-2
+],
+[
+-3,
+-3
+]
+],
+"labels": [
+"A′",
+"B′",
+"C′"
+],
+"color": "var(--coral)"
+}
+],
+"points": [
+{
+"p": [
+-1,
+-1
+],
+"label": "center",
+"color": "var(--violet)"
+}
+]
+}
+},
+{
+"sec": "4.6",
+"kicker": "4.6 Notation",
+"text": "In the composition R<sub>x-axis</sub> ∘ T<sub>⟨3, 4⟩</sub>, which transformation is done FIRST?",
+"opts": [
+"The translation ⟨3, 4⟩",
+"The reflection across the x-axis",
+"Both at the same time",
+"It doesn't matter"
+],
+"explain": "Read compositions right to left: the one closest to the figure (on the right) happens first."
+},
+{
+"sec": "4.6",
+"kicker": "4.6 Notation",
+"text": "A figure is rotated 90° counterclockwise, THEN translated 4 left and 1 up. How is that written?",
+"opts": [
+"T<sub>⟨−4, 1⟩</sub> ∘ R<sub>90ccw</sub>",
+"R<sub>90ccw</sub> ∘ T<sub>⟨−4, 1⟩</sub>",
+"T<sub>⟨4, −1⟩</sub> ∘ R<sub>90ccw</sub>",
+"R<sub>90cw</sub> ∘ T<sub>⟨−4, 1⟩</sub>"
+],
+"explain": "The first step goes on the RIGHT, closest to the figure. So the rotation is written last."
+},
+{
+"sec": "4.6",
+"kicker": "4.6 Apply a Composition",
+"text": "Find the image of (−2, 4) under R<sub>x-axis</sub> ∘ T<sub>⟨2, −3⟩</sub>.",
+"opts": [
+"(0, −1)",
+"(0, −7)",
+"(0, 1)",
+"(0, 4)"
+],
+"explain": "Translate first: (−2 + 2, 4 − 3) = (0, 1). Then reflect across the x-axis: (0, −1)."
+},
+{
+"sec": "4.6",
+"kicker": "4.6 Order Matters",
+"text": "Find the image of (−2, 4) under T<sub>⟨2, −3⟩</sub> ∘ R<sub>x-axis</sub>.",
+"opts": [
+"(0, −7)",
+"(0, −1)",
+"(0, 1)",
+"(2, −1)"
+],
+"explain": "Reflect first: (−2, −4). Then translate: (−2 + 2, −4 − 3) = (0, −7). Compare with the last question: same two steps, different order, different answer."
+},
+{
+"sec": "4.6",
+"kicker": "4.6 Apply a Composition",
+"text": "Find the image of (3, −1) under R<sub>90cw</sub> ∘ R<sub>y-axis</sub>.",
+"opts": [
+"(−1, 3)",
+"(1, −3)",
+"(−1, −3)",
+"(−3, −1)"
+],
+"explain": "Reflect over the y-axis first: (−3, −1). Then rotate 90° clockwise, (y, −x): (−1, 3)."
+},
+{
+"sec": "4.6",
+"kicker": "4.6 Describe — Graph",
+"text": "Blue was translated, then reflected, to make red (A″B″C″). Which composition is it?",
+"opts": [
+"R<sub>x-axis</sub> ∘ T<sub>⟨6, 0⟩</sub>",
+"T<sub>⟨6, 0⟩</sub> ∘ R<sub>x-axis</sub>",
+"R<sub>y-axis</sub> ∘ T<sub>⟨6, 0⟩</sub>",
+"R<sub>x-axis</sub> ∘ T<sub>⟨0, 6⟩</sub>"
+],
+"explain": "A(−5, 1) slides 6 right to (1, 1), then flips over the x-axis to (1, −1). Translation first, so it goes on the right.",
+"plot": {
+"min": -7,
+"max": 7,
+"h": 230,
+"shapes": [
+{
+"pts": [
+[
+-5,
+1
+],
+[
+-2,
+1
+],
+[
+-2,
+3
+]
+],
+"labels": [
+"A",
+"B",
+"C"
+],
+"color": "var(--blue)"
+},
+{
+"pts": [
+[
+1,
+-1
+],
+[
+4,
+-1
+],
+[
+4,
+-3
+]
+],
+"labels": [
+"A″",
+"B″",
+"C″"
+],
+"color": "var(--coral)"
+}
+]
+}
+},
+{
+"sec": "4.7",
+"kicker": "4.7 Two Reflections",
+"text": "A figure is reflected over y = 3, then over y = −1. What single transformation does the same thing?",
+"opts": [
+"A translation 8 units down",
+"A translation 4 units down",
+"A reflection over y = 1",
+"A rotation of 180°"
+],
+"explain": "Two reflections over parallel lines make a translation twice the distance between the lines: the lines are 4 apart, so the figure moves 8 down."
+},
+{
+"sec": "4.7",
+"kicker": "4.7 Same Result?",
+"text": "Do R<sub>y=x</sub> ∘ R<sub>180</sub> and R<sub>180</sub> ∘ R<sub>y=x</sub> give the same image?",
+"opts": [
+"Yes: both send (x, y) to (−y, −x)",
+"No: order always changes the answer",
+"Yes: both send (x, y) to (y, x)",
+"No: one of them isn't an isometry"
+],
+"explain": "Order usually matters, but not always. Here both orders swap the coordinates and change both signs, the same as reflecting over y = −x."
+},
+{
+"sec": "4.7",
+"kicker": "4.7 Get There in 2 Steps",
+"text": "A point at (−4, 5) needs to end at (4, −4). Which composition works?",
+"opts": [
+"T<sub>⟨8, 1⟩</sub> ∘ R<sub>x-axis</sub>",
+"T<sub>⟨8, 1⟩</sub> ∘ R<sub>y-axis</sub>",
+"R<sub>x-axis</sub> ∘ T<sub>⟨8, 1⟩</sub>",
+"T<sub>⟨0, −9⟩</sub> ∘ R<sub>x-axis</sub>"
+],
+"explain": "Reflect over the x-axis first: (−4, −5). Then translate 8 right and 1 up: (4, −4)."
+}
+];
+var SECS = [["all", "All of Unit 4"], ["4.1", "4.1 Basics"], ["4.2", "4.2 Translations"], ["4.3R", "4.3 Reflections"], ["4.3Rot", "4.3 Rotations & Symmetry"], ["4.5", "4.5 Extensions"], ["4.6", "4.6 Compositions"], ["4.7", "4.7 Composition Practice"]];
+
+
+/* ---- quiz engine: per-lesson picker + answer order shuffled on every render ---- */
+var Q = ALLQ.slice(), idx = 0, score = 0, answered = false, missed = [], shown = [];
+
+function render(){
+  var q = Q[idx];
+  document.getElementById('qNum').textContent = idx+1;
+  document.getElementById('qTotal').textContent = Q.length;
+  document.getElementById('scoreLive').textContent = 'Score: '+score;
+  document.getElementById('progressFill').style.width = Math.round((idx/Q.length)*100)+'%';
+  document.getElementById('qKicker').textContent = q.kicker;
+  document.getElementById('qText').innerHTML = q.text;
+  var dWrap = document.getElementById('diagramWrap');
+  if(q.plot){ dWrap.style.display='block'; dWrap.innerHTML = gridPlot(q.plot); }
+  else if(q.diagram && DIAGQ[q.diagram]){ dWrap.style.display='block'; dWrap.innerHTML = DIAGQ[q.diagram](); }
+  else { dWrap.style.display='none'; dWrap.innerHTML=''; }
+  var optsWrap = document.getElementById('optsWrap');
+  optsWrap.innerHTML='';
+  var letters=['A','B','C','D'];
+  shown = q.opts.map(function(_,k){return k;});
+  for(var k=shown.length-1;k>0;k--){ var j=Math.floor(Math.random()*(k+1)); var t=shown[k]; shown[k]=shown[j]; shown[j]=t; }
+  shown.forEach(function(orig, i){
+    var b = document.createElement('button');
+    b.className='opt';
+    b.innerHTML = '<span class="letter">'+letters[i]+'</span><span>'+q.opts[orig]+'</span>';
+    b.addEventListener('click', function(){ selectAnswer(orig); });
+    optsWrap.appendChild(b);
+  });
+  document.getElementById('explain').classList.remove('show');
+  document.getElementById('explain').textContent='';
+  document.getElementById('btnNext').disabled = true;
+  answered = false;
+}
+
+function selectAnswer(i){
+  if(answered) return;
+  answered = true;
+  var q = Q[idx];
+  document.querySelectorAll('.opt').forEach(function(el,pos){
+    var i2 = shown[pos];
+    el.classList.add('locked');
+    if(i2===0) el.classList.add('correct');
+    else if(i2===i) el.classList.add('incorrect');
+    else el.classList.add('dim');
+  });
+  if(i===0) score++; else missed.push(q);
+  document.getElementById('scoreLive').textContent = 'Score: '+score;
+  var ex = document.getElementById('explain');
+  ex.innerHTML = '<b>'+(i===0?'Correct. ':'Not quite. ')+'</b>'+q.explain;
+  ex.classList.add('show');
+  document.getElementById('btnNext').disabled = false;
+}
+
+function nextQuestion(){ if(idx < Q.length-1){ idx++; render(); } else { showResults(); } }
+
+function showResults(){
+  document.getElementById('quizArea').style.display='none';
+  document.getElementById('resultsArea').style.display='block';
+  document.getElementById('finalScore').textContent = score+' / '+Q.length;
+  var pct = Math.round((score/Q.length)*100), msg;
+  if(pct===100) msg = 'Perfect score — locked in.';
+  else if(pct>=80) msg = 'Strong work. Review the missed ones below and you\'ve got it.';
+  else if(pct>=60) msg = 'Good start — a few gaps to close. Check the missed questions below.';
+  else msg = 'Worth another pass through the flashcards before the next round.';
+  document.getElementById('finalMsg').textContent = msg+' ('+pct+'%)';
+  var list = document.getElementById('missedList'); list.innerHTML='';
+  if(missed.length===0){ var li=document.createElement('li'); li.textContent='No missed questions — nice.'; list.appendChild(li); }
+  else missed.forEach(function(q){ var li=document.createElement('li'); li.innerHTML='<b>'+q.text+'</b>Correct answer: '+q.opts[0]; list.appendChild(li); });
+}
+
+var currentSec = 'all';
+function startSec(k){
+  currentSec = k;
+  Q = k==='all' ? ALLQ.slice() : ALLQ.filter(function(x){return x.sec===k;});
+  idx=0; score=0; missed=[]; answered=false;
+  document.getElementById('resultsArea').style.display='none';
+  document.getElementById('quizArea').style.display='block';
+  var label=SECS.filter(function(s){return s[0]===k;})[0][1];
+  document.getElementById('heroSub').textContent = Q.length+' questions · '+label+'. Pick a lesson below or take the whole unit. Answer order shuffles every time.';
+  Array.prototype.forEach.call(document.getElementById('secPicker').children,function(b){b.classList.toggle('active',b.dataset.k===k);});
+  render();
+}
+document.getElementById('btnNext').addEventListener('click', nextQuestion);
+document.getElementById('btnRetake').addEventListener('click', function(){ startSec(currentSec); });
+(function(){ var p=document.getElementById('secPicker');
+  SECS.forEach(function(s){ var b=document.createElement('button'); b.textContent=s[1]; b.dataset.k=s[0]; b.onclick=function(){startSec(s[0]);}; p.appendChild(b); });
+})();
+startSec('all');
+</script>
+</body>
+</html>

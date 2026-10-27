@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 4: Transformations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FBFAF7;
+    --grid-line: rgba(28,43,74,0.055);
+    --ink: #1C2B4A;
+    --text: #2B3648;
+    --text-soft: #64707F;
+    --blue: #2E86AB;
+    --blue-soft: #E9F3F8;
+    --amber: #D98A2B;
+    --amber-soft: #FCF1DE;
+    --coral: #D65A5A;
+    --coral-soft: #FBEBEB;
+    --teal: #2C9C82;
+    --teal-soft: #E6F5F0;
+    --violet: #7C5CBF;
+    --violet-soft: #EFE9F8;
+    --gray: #94A0AD;
+    --gray-line: #CBD3DC;
+    --card-bg: #FFFFFF;
+    --border: #E4E0D4;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  h1, h2, h3, .display {
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--ink);
+  }
+
+  a { color: inherit; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--text-soft); text-decoration: none; font-size: 0.88rem; font-weight: 600; margin-bottom: 18px; }
+  .back-link:hover { color: var(--blue); }
+
+  .wrap {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: var(--ink);
+    border-radius: 18px;
+    padding: 28px 30px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-text h1 {
+    color: #fff;
+    font-size: 1.9rem;
+    margin: 0 0 6px;
+    line-height: 1.15;
+  }
+  .hero-text p {
+    margin: 0;
+    color: #C8D3E0;
+    font-size: 0.98rem;
+    max-width: 48ch;
+  }
+  .hero svg { flex-shrink: 0; }
+
+  /* ---------- Tabs ---------- */
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 26px 0 20px;
+  }
+  .tab-btn {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.86rem;
+    border: 1.5px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text-soft);
+    padding: 9px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    transition: transform 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+  }
+  .tab-btn:hover { transform: translateY(-1px); }
+  .tab-btn.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: #fff;
+  }
+  .tab-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  /* ---------- Panels ---------- */
+  .panel { display: none; animation: fade .18s ease; }
+  .panel.active { display: block; }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+  .section-title {
+    font-size: 1.3rem;
+    margin: 0 0 4px;
+  }
+  .section-sub {
+    color: var(--text-soft);
+    font-size: 0.92rem;
+    margin: 0 0 18px;
+  }
+
+  /* ---------- Callout boxes ---------- */
+  .box {
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin: 14px 0;
+    border-left: 4px solid transparent;
+  }
+  .box h4 {
+    margin: 0 0 6px;
+    font-size: 0.98rem;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .box p, .box ul { margin: 0; font-size: 0.93rem; line-height: 1.55; }
+  .box ul { padding-left: 20px; }
+
+  .box.theorem { background: var(--blue-soft); border-color: var(--blue); }
+  .box.theorem h4 { color: var(--blue); }
+  .box.postulate { background: var(--teal-soft); border-color: var(--teal); }
+  .box.postulate h4 { color: var(--teal); }
+  .box.watch { background: var(--coral-soft); border-color: var(--coral); }
+  .box.watch h4 { color: var(--coral); }
+  .box.tip { background: var(--amber-soft); border-color: var(--amber); }
+  .box.tip h4 { color: var(--amber); }
+
+  /* ---------- Definition grid ---------- */
+  .def-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 10px;
+    margin: 14px 0;
+  }
+  .def-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .def-card .term {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--ink);
+    display: block;
+    margin-bottom: 3px;
+  }
+  .def-card .desc { font-size: 0.85rem; color: var(--text-soft); }
+
+  /* ---------- Proof/step tables ---------- */
+  .proof-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--ink);
+    margin: 18px 0 8px;
+  }
+  table.proof {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 6px;
+    font-size: 0.88rem;
+    background: var(--card-bg);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  table.proof th {
+    text-align: left;
+    background: var(--ink);
+    color: #fff;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
+    padding: 8px 12px;
+  }
+  table.proof td {
+    padding: 8px 12px;
+    border-top: 1px solid var(--border);
+  }
+  table.proof td:first-child { width: 55%; }
+  table.proof tr:nth-child(even) td { background: #FAF9F5; }
+
+  /* ---------- Numeric example ---------- */
+  .numex {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 10px 0;
+    font-size: 0.9rem;
+  }
+  .numex .setup { color: var(--text-soft); margin-bottom: 6px; }
+  .numex .steps { font-family: 'Space Grotesk', sans-serif; color: var(--ink); line-height: 1.7; }
+
+  /* ---------- Family tree ---------- */
+  .tree-box {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 10px 0;
+    font-size: 0.88rem;
+    line-height: 1.9;
+  }
+  .tree-box .lvl0 { font-weight: 700; color: var(--ink); font-family: 'Space Grotesk', sans-serif; }
+  .tree-box .lvl1 { padding-left: 22px; color: var(--ink); }
+  .tree-box .lvl2 { padding-left: 44px; color: var(--text-soft); }
+  .tree-box .note { color: var(--text-soft); font-size: 0.82rem; }
+
+  /* ---------- Footer: reasons bank + checklist ---------- */
+  .foot-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 16px;
+    margin-top: 34px;
+  }
+  @media (max-width: 700px) { .foot-grid { grid-template-columns: 1fr; } }
+
+  .foot-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+  }
+  .foot-card h3 { font-size: 1rem; margin: 0 0 10px; }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    font-size: 0.78rem;
+    background: var(--blue-soft);
+    color: var(--blue);
+    border-radius: 999px;
+    padding: 5px 11px;
+    font-weight: 600;
+  }
+  .checklist { list-style: none; margin: 0; padding: 0; font-size: 0.87rem; }
+  .checklist li {
+    display: flex;
+    gap: 9px;
+    align-items: flex-start;
+    padding: 6px 0;
+    border-bottom: 1px dashed var(--border);
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checkmark {
+    flex-shrink: 0;
+    width: 18px; height: 18px;
+    border-radius: 5px;
+    background: var(--teal-soft);
+    color: var(--teal);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem;
+    margin-top: 1px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="geometry.html">&larr; Back to Geometry</a>
+  <div class="hero">
+    <div class="hero-text">
+      <h1>Unit 4 &mdash; Transformations</h1>
+      <p>Lessons 4.1&ndash;4.7: transformation basics and notation, translations, reflections, rotations and symmetry, rotating around any point, working backwards, and compositions.</p>
+    </div>
+  </div>
+  <div class="tabs" id="tabs"></div>
+  <div id="panels"></div>
+  <div class="foot-grid">
+    <div class="foot-card">
+      <h3>Term bank</h3>
+      <div class="chip-row"><span class="chip">Pre-image</span><span class="chip">Image</span><span class="chip">Translation</span><span class="chip">Reflection</span><span class="chip">Rotation</span><span class="chip">Dilation</span><span class="chip">Rigid transformation</span><span class="chip">Isometry</span><span class="chip">Congruent</span><span class="chip">Function notation</span><span class="chip">Vector ⟨a, b⟩</span><span class="chip">Line of reflection</span><span class="chip">Line of symmetry</span><span class="chip">Perpendicular bisector</span><span class="chip">Center of rotation</span><span class="chip">Clockwise</span><span class="chip">Counterclockwise</span><span class="chip">Rotational symmetry</span><span class="chip">Order</span><span class="chip">Composition</span><span class="chip">∘ (do the right one first)</span></div>
+    </div>
+    <div class="foot-card">
+      <h3>Before you answer</h3>
+      <ul class="checklist"><li><span class="checkmark">✓</span><span><b>Rules to know cold:</b> x-axis (x, −y) · y-axis (−x, y) · y = x (y, x) · y = −x (−y, −x) · 90° ccw (−y, x) · 90° cw (y, −x) · 180° (−x, −y).</span></li><li><span class="checkmark">✓</span><span><b>Writing a translation rule:</b> image − pre-image (new − old). Finding a pre-image: do the opposite. A reflection undoes itself.</span></li><li><span class="checkmark">✓</span><span><b>Not the origin?</b> Measure from the center, rotate, add the center back.</span></li><li><span class="checkmark">✓</span><span><b>Compositions:</b> read right to left. R ∘ T means do T first. Order usually matters.</span></li><li><span class="checkmark">✓</span><span><b>Lesson numbers:</b> the handouts are headed 3.1&ndash;3.8 but are filed as Unit 4 (4.1&ndash;4.7). This site uses the Unit 4 numbers.</span></li></ul>
+    </div>
+  </div>
+</div>
+<script>
+function svg(inner, vb, h) { return '<svg viewBox="'+vb+'" width="100%" height="'+(h||180)+'" xmlns="http://www.w3.org/2000/svg">'+inner+'</svg>'; }
+function lineEl(x1,y1,x2,y2,color,w,dash){ return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round"'+(dash?' stroke-dasharray="5 4"':'')+'/>'; }
+function dot(x,y,color,r){ return '<circle cx="'+x+'" cy="'+y+'" r="'+(r||3.2)+'" fill="'+(color||'var(--ink)')+'"/>'; }
+function txt(x,y,s,color,size,weight,anchor){ return '<text x="'+x+'" y="'+y+'" fill="'+(color||'var(--ink)')+'" font-family="Space Grotesk, sans-serif" font-size="'+(size||13)+'" font-weight="'+(weight||700)+'" text-anchor="'+(anchor||'middle')+'">'+s+'</text>'; }
+function poly(pts,color,w,fill){ return '<polygon points="'+pts+'" fill="'+(fill||'none')+'" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linejoin="round"/>'; }
+function ellipseEl(cx,cy,rx,ry,fill,stroke,w){ return '<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rx+'" ry="'+ry+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(w||2.5)+'"/>'; }
+function circleEl(cx,cy,r,fill,stroke,w){ return '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(w||2.5)+'"/>'; }
+function rectEl(x,y,w,h,rx,fill,stroke,sw){ return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+(rx||0)+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(sw||2.5)+'"/>'; }
+function pathEl(d,stroke,w,fill,dash){ return '<path d="'+d+'" fill="'+(fill||'none')+'" stroke="'+(stroke||'var(--ink)')+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round"'+(dash?' stroke-dasharray="4 3"':'')+'/>'; }
+function wavy(x1,y1,x2,y2,amp,cycles,color,w){
+  var n=28, pts=[];
+  var dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy)||1;
+  var ux=dx/len, uy=dy/len, px=-uy, py=ux;
+  for(var i=0;i<=n;i++){
+    var t=i/n;
+    var bx=x1+dx*t, by=y1+dy*t;
+    var off=Math.sin(t*Math.PI*2*cycles)*amp;
+    pts.push((bx+px*off).toFixed(1)+','+(by+py*off).toFixed(1));
+  }
+  return '<polyline points="'+pts.join(' ')+'" fill="none" stroke="'+(color||'var(--ink)')+'" stroke-width="'+(w||2.2)+'" stroke-linecap="round"/>';
+}
+/* ---- Coordinate grid with several figures (original helper for Unit 4) ----
+   opts: {min,max,h, shapes:[{pts,labels,color,dash}], lines:[{a:[x,y],b:[x,y],color,label}], points:[{p,label,color}]} */
+function gridPlot(opts){
+  var min=(opts.min!==undefined)?opts.min:-7, max=(opts.max!==undefined)?opts.max:7;
+  var u=16, pad=16, n=max-min, size=n*u+pad*2;
+  function X(x){ return pad+(x-min)*u; } function Y(y){ return pad+(max-y)*u; }
+  var s='';
+  for(var i=min;i<=max;i++){
+    s+='<line x1="'+X(i)+'" y1="'+Y(min)+'" x2="'+X(i)+'" y2="'+Y(max)+'" stroke="var(--gray-line, #CBD3DC)" stroke-width="0.7"/>';
+    s+='<line x1="'+X(min)+'" y1="'+Y(i)+'" x2="'+X(max)+'" y2="'+Y(i)+'" stroke="var(--gray-line, #CBD3DC)" stroke-width="0.7"/>';
+  }
+  if(min<0&&max>0){
+    s+='<line x1="'+X(0)+'" y1="'+Y(min)+'" x2="'+X(0)+'" y2="'+Y(max)+'" stroke="var(--gray, #94A0AD)" stroke-width="1.6"/>';
+    s+='<line x1="'+X(min)+'" y1="'+Y(0)+'" x2="'+X(max)+'" y2="'+Y(0)+'" stroke="var(--gray, #94A0AD)" stroke-width="1.6"/>';
+  }
+  (opts.lines||[]).forEach(function(L){
+    s+='<line x1="'+X(L.a[0])+'" y1="'+Y(L.a[1])+'" x2="'+X(L.b[0])+'" y2="'+Y(L.b[1])+'" stroke="'+(L.color||'var(--violet)')+'" stroke-width="2" stroke-dasharray="6 4"/>';
+    if(L.label) s+='<text x="'+(X(L.b[0])+(L.dx||-4))+'" y="'+(Y(L.b[1])+(L.dy||12))+'" fill="'+(L.color||'var(--violet)')+'" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="700" text-anchor="end">'+L.label+'</text>';
+  });
+  (opts.shapes||[]).forEach(function(sh){
+    var col=sh.color||'var(--blue)';
+    var ptsStr=sh.pts.map(function(p){return X(p[0])+','+Y(p[1]);}).join(' ');
+    s+=(sh.pts.length>2?'<polygon points="'+ptsStr+'" fill="'+(sh.fill||'none')+'" fill-opacity="0.18"':'<polyline points="'+ptsStr+'" fill="none"')+' stroke="'+col+'" stroke-width="2.6" stroke-linejoin="round"'+(sh.dash?' stroke-dasharray="6 4"':'')+'/>';
+    var cx=0,cy=0; sh.pts.forEach(function(p){cx+=p[0];cy+=p[1];}); cx/=sh.pts.length; cy/=sh.pts.length;
+    sh.pts.forEach(function(p,i){
+      s+='<circle cx="'+X(p[0])+'" cy="'+Y(p[1])+'" r="3.4" fill="'+col+'"/>';
+      if(sh.labels&&sh.labels[i]){
+        var dx=p[0]-cx, dy=p[1]-cy, L=Math.sqrt(dx*dx+dy*dy)||1;
+        s+='<text x="'+(X(p[0])+dx/L*13)+'" y="'+(Y(p[1])-dy/L*13+5)+'" fill="'+col+'" font-family="Space Grotesk, sans-serif" font-size="12.5" font-weight="700" text-anchor="middle">'+sh.labels[i]+'</text>';
+      }
+    });
+  });
+  (opts.points||[]).forEach(function(P){
+    s+='<circle cx="'+X(P.p[0])+'" cy="'+Y(P.p[1])+'" r="4" fill="'+(P.color||'var(--ink)')+'"/>';
+    if(P.label) s+='<text x="'+(X(P.p[0])+8)+'" y="'+(Y(P.p[1])-7)+'" fill="'+(P.color||'var(--ink)')+'" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="700">'+P.label+'</text>';
+  });
+  return '<svg viewBox="0 0 '+size+' '+size+'" width="100%" height="'+(opts.h||230)+'" xmlns="http://www.w3.org/2000/svg">'+s+'</svg>';
+}
+
+var BL='var(--blue)', CO='var(--coral)', VI='var(--violet)';
+function S(pts,labels,color,prime){ return {pts:pts,labels:labels.split('').map(function(l){return l+(prime===2?'″':prime?'′':'');}),color:color}; }
+var DIAGRAMS = {
+  cong: function(){ return gridPlot({h:250,shapes:[S([[-6,1],[-3,1],[-6,5]],'ABC',BL),S([[1,-4],[4,-4],[1,0]],'ABC',CO,true)]}); },
+  trans: function(){ return gridPlot({h:250,shapes:[S([[2,5],[5,3],[1,1]],'ABC',BL),S([[-2,-1],[1,-3],[-3,-5]],'ABC',CO,true)]}); },
+  writeRule: function(){ return gridPlot({h:250,shapes:[S([[-5,-2],[-2,-1],[-4,-5]],'DEF',BL),S([[1,4],[4,5],[2,1]],'DEF',CO,true)]}); },
+  reflX: function(){ return gridPlot({h:220,shapes:[S([[2,1],[5,2],[3,6]],'ABC',BL),S([[2,-1],[5,-2],[3,-6]],'ABC',CO,true)]}); },
+  reflYX: function(){ return gridPlot({h:220,shapes:[S([[2,1],[5,2],[3,6]],'ABC',BL),S([[1,2],[2,5],[6,3]],'ABC',CO,true)],lines:[{a:[-7,-7],b:[7,7],label:'y = x',dx:-16,dy:34}]}); },
+  reflYNX: function(){ return gridPlot({h:220,shapes:[S([[2,1],[5,2],[3,6]],'ABC',BL),S([[-1,-2],[-2,-5],[-6,-3]],'ABC',CO,true)],lines:[{a:[-7,7],b:[7,-7],label:'y = −x',dx:-22,dy:-4}]}); },
+  reflK: function(){ return gridPlot({h:250,shapes:[S([[-5,3],[-2,4],[-3,1]],'DEF',BL),S([[-5,-5],[-2,-6],[-3,-3]],'DEF',CO,true)],lines:[{a:[-7,-1],b:[7,-1],label:'y = −1',dy:-6}]}); },
+  rotCCW: function(){ return gridPlot({h:220,shapes:[S([[1,2],[5,2],[2,5]],'JKL',BL),S([[-2,1],[-2,5],[-5,2]],'JKL',CO,true)]}); },
+  rotCW: function(){ return gridPlot({h:220,shapes:[S([[1,2],[5,2],[2,5]],'JKL',BL),S([[2,-1],[2,-5],[5,-2]],'JKL',CO,true)]}); },
+  rot180: function(){ return gridPlot({h:220,shapes:[S([[1,2],[5,2],[2,5]],'JKL',BL),S([[-1,-2],[-5,-2],[-2,-5]],'JKL',CO,true)]}); },
+  about: function(){ return gridPlot({h:250,shapes:[S([[4,1],[6,3],[3,4]],'PQR',BL),S([[2,3],[0,5],[-1,2]],'PQR',CO,true)],points:[{p:[2,1],label:'C(2, 1)',color:VI}]}); },
+  compose: function(){ return gridPlot({h:260,shapes:[S([[-6,2],[-3,2],[-3,5]],'ABC',BL),S([[-4,-1],[-1,-1],[-1,2]],'ABC','var(--amber)',true),S([[-4,1],[-1,1],[-1,-2]],'ABC',CO,2)]}); },
+  twoRefl: function(){ return gridPlot({h:250,shapes:[S([[-4,5],[1,3],[3,6]],'XYZ',BL),S([[-4,-1],[1,-3],[3,0]],'XYZ',CO,2)],lines:[{a:[-7,2],b:[7,2],label:'y = 2',dy:-6},{a:[-7,-1],b:[7,-1],label:'y = −1',dy:-6,color:'var(--teal)'}]}); },
+  symmetry: function(){
+    var inner='';
+    inner += rectEl(30,40,90,90,0,'var(--blue-soft)','var(--blue)',2.5);
+    inner += lineEl(75,30,75,140,'var(--violet)',1.8,true) + lineEl(20,85,130,85,'var(--violet)',1.8,true) + lineEl(22,32,128,138,'var(--violet)',1.8,true) + lineEl(128,32,22,138,'var(--violet)',1.8,true);
+    inner += txt(75,166,'square: 4 lines of symmetry','var(--ink)',10,700) + txt(75,180,'rotates onto itself every 90° (order 4)','var(--text-soft)',9,600);
+    inner += poly('250,36 300,122 200,122','var(--coral)',2.5,'var(--coral-soft)');
+    inner += lineEl(250,28,250,132,'var(--violet)',1.8,true) + lineEl(196,124,280,74,'var(--violet)',1.8,true) + lineEl(304,124,220,74,'var(--violet)',1.8,true);
+    inner += txt(250,166,'equilateral triangle: 3 lines','var(--ink)',10,700) + txt(250,180,'rotates onto itself every 120° (order 3)','var(--text-soft)',9,600);
+    return svg(inner,'0 0 340 190',190);
+  }
+};
+
+const sections = [
+  {
+    id: "g1",
+    label: "4.1 Transformations",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18l5-9 5 9z"/><path d="M13 12l5-9 5 9z" stroke-dasharray="3 2"/></svg>',
+    title: "Transformation basics",
+    sub: "Lesson 4.1: what a transformation is, the four main types, and which ones keep a figure congruent.",
+    body: `
+      <div class="box postulate">
+        <h4>Transformation</h4>
+        <p>An operation that moves or changes a figure to produce a new figure. The <b>pre-image</b> is the original; the <b>image</b> is the new figure, labeled with primes (A′, read "A prime").</p>
+      </div>
+      <div class="box theorem">
+        <h4>Vertex order matters</h4>
+        <p>ΔABC → ΔPQR means A ↔ P, B ↔ Q, and C ↔ R. The letters line up in order.</p>
+      </div>
+      <div class="proof-label">The four main types</div>
+      <div class="def-grid">
+        <div class="def-card"><span class="term">Translation (slide)</span><span class="desc">Moves every point the <b>same distance</b> in the <b>same direction</b>.</span></div>
+        <div class="def-card"><span class="term">Reflection (flip)</span><span class="desc">Uses a <b>line of reflection</b> to make a mirror image.</span></div>
+        <div class="def-card"><span class="term">Rotation (turn)</span><span class="desc">Turns a figure about a fixed point, the <b>center of rotation</b>.</span></div>
+        <div class="def-card"><span class="term">Dilation (resize)</span><span class="desc">Multiplies every point by a <b>scale amount</b>, so the size changes.</span></div>
+      </div>
+      <div class="box postulate">
+        <h4>Rigid transformations (isometries)</h4>
+        <p><b>Translations, reflections, and rotations</b> are <b>rigid transformations</b>, also called <b>isometries</b> or <b>congruence transformations</b>: they preserve <b>both size and shape</b>. The image is congruent to the pre-image. A dilation is <b>not</b> an isometry.</p>
+      </div>
+      <div class="proof-label">Confirm congruence with the distance formula (original example)</div>
+      <div class="diagram-wrap" data-diagram="cong"></div>
+      <div class="numex">
+        <div class="setup">Blue ΔABC: A(−6, 1), B(−3, 1), C(−6, 5). Red ΔA′B′C′: A′(1, −4), B′(4, −4), C′(1, 0). Which transformation, and are they congruent?</div>
+        <div class="steps">
+          Every point moved 7 right and 5 down → a <b>translation</b>.<br>
+          AB = √(3² + 0²) = 3 &nbsp;·&nbsp; A′B′ = √(3² + 0²) = 3<br>
+          BC = √(3² + 4²) = 5 &nbsp;·&nbsp; B′C′ = √(3² + 4²) = 5<br>
+          CA = √(0² + 4²) = 4 &nbsp;·&nbsp; C′A′ = √(0² + 4²) = 4 → all three sides match: <b>congruent</b>.
+        </div>
+      </div>
+      <div class="numex">
+        <div class="setup">Solving with a congruent image: a triangle is rotated, and a side labeled 3x + 2 on the pre-image matches a side of 14 on the image. Find x.</div>
+        <div class="steps">Isometries keep lengths the same: 3x + 2 = 14 → 3x = 12 → <b>x = 4</b></div>
+      </div>
+      <div class="box tip">
+        <h4>Describe it, then write the rule</h4>
+        <p>Practice problems ask three things: <b>choose</b> translate, reflect, or rotate; <b>describe</b> it in words; and <b>write the rule</b> in function notation.</p>
+      </div>
+    `
+  },
+  {
+    id: "g2",
+    label: "4.1 Notation",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h10M4 17h13"/></svg>',
+    title: "Writing transformation rules",
+    sub: "Lesson 4.1: function notation and vector notation.",
+    body: `
+      <div class="def-grid">
+        <div class="def-card"><span class="term">Translation: function notation</span><span class="desc">T(x, y) → (x + a, y + b): move <b>a</b> units horizontally and <b>b</b> units vertically.</span></div>
+        <div class="def-card"><span class="term">Translation: vector notation</span><span class="desc">⟨a, b⟩. Shorthand: T<sub>(a, b)</sub>, for example T<sub>(−2, 3)</sub>.</span></div>
+        <div class="def-card"><span class="term">Reflection notation</span><span class="desc">R<sub>x-axis</sub>(x, y) → (x, −y). The subscript names the <b>line</b> you reflect across.</span></div>
+        <div class="def-card"><span class="term">Rotation notation</span><span class="desc">R<sub>90cw</sub>(x, y) → (y, −x). The subscript shows the <b>angle of rotation</b>.</span></div>
+      </div>
+      <div class="box tip">
+        <h4>Signs and directions</h4>
+        <ul>
+          <li><b>+ a</b> = right, <b>− a</b> = left (x changes).</li>
+          <li><b>+ b</b> = up, <b>− b</b> = down (y changes).</li>
+        </ul>
+      </div>
+      <div class="numex">
+        <div class="setup">Each point slides 4 units left and 6 units down. Write it every way.</div>
+        <div class="steps">Words: left 4 and down 6 &nbsp;·&nbsp; Function: T(x, y) → (x − 4, y − 6) &nbsp;·&nbsp; Vector: ⟨−4, −6⟩ &nbsp;·&nbsp; Shorthand: T<sub>(−4, −6)</sub></div>
+      </div>
+      <div class="box theorem">
+        <h4>Reading a rotation rule</h4>
+        <p>For R<sub>90cw</sub>(x, y) → (y, −x): the original <b>y</b> becomes the image's <b>x</b>, and the original <b>x times −1</b> becomes the image's <b>y</b>.</p>
+      </div>
+    `
+  },
+  {
+    id: "g3",
+    label: "4.2 Translations",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="12" width="7" height="7"/><rect x="13" y="4" width="7" height="7" stroke-dasharray="3 2"/><path d="M10 12l3-3"/></svg>',
+    title: "Translations",
+    sub: "Lesson 4.2: perform a translation, write its rule, and work backwards to a pre-image.",
+    body: `
+      <div class="box postulate">
+        <h4>Translation (slide)</h4>
+        <p>Moves each point of a figure the <b>same distance</b> in the <b>same direction</b>. It's an isometry. A translation is sometimes called a <b>shift</b> or <b>slide</b>.</p>
+      </div>
+      <div class="proof-label">1. Perform a translation</div>
+      <div class="diagram-wrap" data-diagram="trans"></div>
+      <div class="numex">
+        <div class="setup">Translate A(2, 5), B(5, 3), C(1, 1) using T(x, y) → (x − 4, y − 6).</div>
+        <div class="steps">A(2, 5) → A′(−2, −1) &nbsp;·&nbsp; B(5, 3) → B′(1, −3) &nbsp;·&nbsp; C(1, 1) → C′(−3, −5) &nbsp;·&nbsp; Vector: ⟨−4, −6⟩</div>
+      </div>
+      <div class="proof-label">2. Write the rule from a pre-image and image</div>
+      <div class="diagram-wrap" data-diagram="writeRule"></div>
+      <div class="numex">
+        <div class="setup">D(−5, −2), E(−2, −1), F(−4, −5) → D′(1, 4), E′(4, 5), F′(2, 1). What's the rule?</div>
+        <div class="steps">Image − pre-image for one point: x: 1 − (−5) = 6, y: 4 − (−2) = 6.<br>Check E: (−2 + 6, −1 + 6) = (4, 5) ✓<br>Rule: <b>T(x, y) → (x + 6, y + 6)</b> &nbsp;·&nbsp; Vector: <b>⟨6, 6⟩</b></div>
+      </div>
+      <div class="proof-label">3. Given the image, find the pre-image</div>
+      <div class="numex">
+        <div class="setup">Using T(x, y) → (x + 6, y − 2), the image is A′(4, −3). Find A.</div>
+        <div class="steps">Work backwards: do the opposite. Subtract 6 from x, add 2 to y: A = (4 − 6, −3 + 2) = <b>(−2, −1)</b>.<br>Check: (−2 + 6, −1 − 2) = (4, −3) ✓</div>
+      </div>
+      <div class="box watch">
+        <h4>Common slip</h4>
+        <p>When writing the rule, subtract <b>image minus pre-image</b> (new − old). Doing it backwards flips every sign.</p>
+      </div>
+    `
+  },
+  {
+    id: "g4",
+    label: "4.3 Reflections",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="22" stroke-dasharray="3 2"/><path d="M9 6L3 18h6zM15 6l6 12h-6z"/></svg>',
+    title: "Reflections and line symmetry",
+    sub: "Lesson 4.3: flip a figure over a line, using the rules or by counting.",
+    body: `
+      <div class="def-grid">
+        <div class="def-card"><span class="term">Line of symmetry</span><span class="desc">A line a figure can be reflected over so it lands on <b>itself</b> (a mirror line).</span></div>
+        <div class="def-card"><span class="term">Line of reflection</span><span class="desc">The <b>perpendicular bisector</b> of the segment joining every point P to its image P′.</span></div>
+      </div>
+      <div class="diagram-wrap" data-diagram="symmetry"></div>
+      <div class="numex">
+        <div class="setup">Writing equations for lines of symmetry (original example): a rectangle has corners (−3, 4), (5, 4), (5, −2), (−3, −2).</div>
+        <div class="steps">Vertical line through the middle: x = (−3 + 5) ÷ 2 → <b>x = 1</b><br>Horizontal line through the middle: y = (4 + (−2)) ÷ 2 → <b>y = 1</b><br>A square centered at the origin would also have the diagonals <b>y = x</b> and <b>y = −x</b>.</div>
+      </div>
+      <div class="proof-label">The four rules (original example: A(2, 1), B(5, 2), C(3, 6))</div>
+      <div class="def-grid">
+        <div class="def-card"><span class="term">Across the x-axis</span><span class="desc">(x, y) → (x, −y)<br>A′(2, −1), B′(5, −2), C′(3, −6)</span></div>
+        <div class="def-card"><span class="term">Across the y-axis</span><span class="desc">(x, y) → (−x, y)<br>A′(−2, 1), B′(−5, 2), C′(−3, 6)</span></div>
+        <div class="def-card"><span class="term">Across y = x</span><span class="desc">(x, y) → (y, x)<br>A′(1, 2), B′(2, 5), C′(6, 3)</span></div>
+        <div class="def-card"><span class="term">Across y = −x</span><span class="desc">(x, y) → (−y, −x)<br>A′(−1, −2), B′(−2, −5), C′(−6, −3)</span></div>
+      </div>
+      <div class="diagram-wrap" data-diagram="reflX"></div>
+      <p class="diagram-caption">Across the x-axis: y changes sign.</p>
+      <div class="diagram-wrap" data-diagram="reflYX"></div>
+      <p class="diagram-caption">Across y = x: swap the coordinates.</p>
+      <div class="diagram-wrap" data-diagram="reflYNX"></div>
+      <p class="diagram-caption">Across y = −x: swap and change both signs.</p>
+      <div class="proof-label">Reflecting across other lines: count!</div>
+      <div class="diagram-wrap" data-diagram="reflK"></div>
+      <div class="numex">
+        <div class="setup">Reflect D(−5, 3), E(−2, 4), F(−3, 1) across the horizontal line y = −1.</div>
+        <div class="steps">D is 4 units above y = −1 → D′ is 4 below: (−5, −5)<br>E is 5 above → E′(−2, −6) &nbsp;·&nbsp; F is 2 above → F′(−3, −3)<br>x-coordinates stay the same because the line is horizontal.</div>
+      </div>
+      <div class="box tip">
+        <h4>Horizontal vs. vertical lines</h4>
+        <ul>
+          <li><b>y = k</b> is horizontal: x stays the same; count up/down.</li>
+          <li><b>x = k</b> is vertical: y stays the same; count left/right.</li>
+        </ul>
+      </div>
+      <div class="box watch">
+        <h4>Don't mix up y = −x and 180°</h4>
+        <p>Reflecting across y = −x gives (−y, −x): the coordinates <b>swap</b>. A 180° rotation gives (−x, −y): <b>no swap</b>.</p>
+      </div>
+    `
+  },
+  {
+    id: "g5",
+    label: "4.3 Rotations",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12a8 8 0 1 1-3-6.2"/><path d="M20 4v5h-5"/><circle cx="12" cy="12" r="1.5"/></svg>',
+    title: "Rotations and rotational symmetry",
+    sub: "Lesson 4.3: turn a figure around the origin, and find how a shape maps onto itself.",
+    body: `
+      <div class="proof-label">Rules for rotating around the origin</div>
+      <div class="def-grid">
+        <div class="def-card"><span class="term">90° counterclockwise</span><span class="desc">(x, y) → (−y, x)<br>Same as 270° clockwise.</span></div>
+        <div class="def-card"><span class="term">90° clockwise</span><span class="desc">(x, y) → (y, −x)<br>Same as 270° counterclockwise.</span></div>
+        <div class="def-card"><span class="term">180° (either direction)</span><span class="desc">(x, y) → (−x, −y)</span></div>
+      </div>
+      <div class="numex">
+        <div class="setup">Rotate J(1, 2), K(5, 2), L(2, 5) around the origin. (Original example.)</div>
+        <div class="steps">
+          90° ccw (−y, x): J′(−2, 1), K′(−2, 5), L′(−5, 2)<br>
+          90° cw (y, −x): J′(2, −1), K′(2, −5), L′(5, −2)<br>
+          180° (−x, −y): J′(−1, −2), K′(−5, −2), L′(−2, −5)
+        </div>
+      </div>
+      <div class="diagram-wrap" data-diagram="rotCCW"></div>
+      <p class="diagram-caption">90° counterclockwise</p>
+      <div class="diagram-wrap" data-diagram="rotCW"></div>
+      <p class="diagram-caption">90° clockwise</p>
+      <div class="diagram-wrap" data-diagram="rot180"></div>
+      <p class="diagram-caption">180°</p>
+      <div class="box tip">
+        <h4>Quick check</h4>
+        <p>After any 90° turn, the two numbers <b>swap places</b>. After 180°, they <b>stay in place</b> and both change sign.</p>
+      </div>
+      <div class="proof-label">Rotational symmetry</div>
+      <div class="box postulate">
+        <h4>Definition</h4>
+        <p>A figure has rotational symmetry if it <b>rotates onto itself at least once before a full turn</b> (360°).</p>
+      </div>
+      <div class="def-grid">
+        <div class="def-card"><span class="term">Order</span><span class="desc">How many times the figure matches itself in one full turn. <b>Order 1 = no rotational symmetry.</b></span></div>
+        <div class="def-card"><span class="term">Regular polygon angle</span><span class="desc">360° ÷ number of sides. A regular polygon with n sides has order n.</span></div>
+      </div>
+      <div class="numex"><div class="steps">Square: 360 ÷ 4 = 90° (order 4) &nbsp;·&nbsp; Equilateral triangle: 360 ÷ 3 = 120° (order 3) &nbsp;·&nbsp; Regular decagon: 360 ÷ 10 = 36° (order 10)</div></div>
+      <div class="numex">
+        <div class="setup">Mapping one vertex to another (original example): a regular hexagon is labeled A–F going clockwise around its center.</div>
+        <div class="steps">Each step = 360 ÷ 6 = 60°.<br>Clockwise rotation that maps A onto C: 2 steps → <b>120°</b>.<br>A 240° clockwise rotation moves 240 ÷ 60 = 4 steps, so B maps onto <b>F</b>.</div>
+      </div>
+    `
+  },
+  {
+    id: "g6",
+    label: "4.5 Extensions",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="16" cy="8" r="2"/><path d="M4 16a8 8 0 0 1 10-9"/><path d="M14 3v4h-4"/></svg>',
+    title: "Extensions: rotating around any point, and working backwards",
+    sub: "Lesson 4.5: centers of rotation that aren't the origin, and finding pre-images.",
+    body: `
+      <div class="proof-label">Rotating around a point that isn't the origin</div>
+      <div class="box postulate">
+        <h4>Three steps</h4>
+        <ul>
+          <li><b>1. Measure from the center:</b> how far right/left and up/down is the point from the center? (Subtract the center.)</li>
+          <li><b>2. Rotate</b> that distance with the usual rule.</li>
+          <li><b>3. Add the center back.</b></li>
+        </ul>
+        <p style="margin-top:6px">On a graph you can do the same thing by counting squares from the center.</p>
+      </div>
+      <div class="diagram-wrap" data-diagram="about"></div>
+      <div class="numex">
+        <div class="setup">Rotate P(4, 1), Q(6, 3), R(3, 4) 90° counterclockwise around C(2, 1). (Original example.)</div>
+        <div class="steps">
+          P: from C it's (2, 0) → rotate (−y, x) → (0, 2) → add C → <b>P′(2, 3)</b><br>
+          Q: from C it's (4, 2) → (−2, 4) → <b>Q′(0, 5)</b><br>
+          R: from C it's (1, 3) → (−3, 1) → <b>R′(−1, 2)</b>
+        </div>
+      </div>
+      <div class="numex">
+        <div class="setup">Rotate (1, 5) 180° around (−2, 3).</div>
+        <div class="steps">From the center: (3, 2). 180° → (−3, −2). Add the center: (−2 − 3, 3 − 2) = <b>(−5, 1)</b></div>
+      </div>
+      <div class="box tip">
+        <h4>Finding the center from a picture</h4>
+        <p>The center of rotation is where the <b>perpendicular bisectors</b> of PP′ (and NN′, EE′…) meet. It's the only point that stays the same distance from every point and its image.</p>
+      </div>
+      <div class="proof-label">Working backwards: find the pre-image</div>
+      <div class="def-grid">
+        <div class="def-card"><span class="term">Translation</span><span class="desc">Do the <b>opposite</b>: subtract what was added. A′(−2, 7) after ⟨−5, 3⟩ → A(3, 4).</span></div>
+        <div class="def-card"><span class="term">Reflection</span><span class="desc">A reflection <b>undoes itself</b>, so apply the same rule to the image. A′(5, −2) after the x-axis → A(5, 2).</span></div>
+      </div>
+      <div class="numex">
+        <div class="setup">A′(5, −2) is the image after each reflection. Find A. (Original numbers.)</div>
+        <div class="steps">x-axis (x, −y): <b>A(5, 2)</b> &nbsp;·&nbsp; y-axis (−x, y): <b>A(−5, −2)</b> &nbsp;·&nbsp; y = x (y, x): <b>A(−2, 5)</b> &nbsp;·&nbsp; y = −x (−y, −x): <b>A(2, −5)</b></div>
+      </div>
+      <div class="box watch">
+        <h4>Check your answer</h4>
+        <p>Run the pre-image forward through the transformation. If you don't land on the given image, a sign is off.</p>
+      </div>
+    `
+  },
+  {
+    id: "g7",
+    label: "4.6–4.7 Compositions",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18l4-7 4 7z"/><path d="M13 18l4-7 4 7z" stroke-dasharray="3 2"/><path d="M8 6h8M13 3l3 3-3 3"/></svg>',
+    title: "Composition of transformations",
+    sub: "Lessons 4.6–4.7: doing two transformations in a row, and why order matters.",
+    body: `
+      <div class="box postulate">
+        <h4>Composition</h4>
+        <p>Two (or more) transformations done one after another. The image of the first step becomes the pre-image of the second: A → A′ → A″.</p>
+      </div>
+      <div class="box theorem">
+        <h4>Read the notation right to left</h4>
+        <p>In <b>R<sub>x-axis</sub> ∘ T<sub>⟨3, 4⟩</sub></b>, the translation is closest to the figure, so it happens <b>FIRST</b>. Then the reflection. The process is written in reverse order.</p>
+      </div>
+      <div class="diagram-wrap" data-diagram="compose"></div>
+      <div class="numex">
+        <div class="setup">R<sub>x-axis</sub> ∘ T<sub>⟨2, −3⟩</sub> on A(−6, 2), B(−3, 2), C(−3, 5). Translate first, then reflect. (Original example, shown above.)</div>
+        <div class="steps">Step 1, T⟨2, −3⟩: A′(−4, −1), B′(−1, −1), C′(−1, 2) (gold)<br>Step 2, reflect over the x-axis: A″(−4, 1), B″(−1, 1), C″(−1, −2) (red)</div>
+      </div>
+      <div class="proof-label">Does order really matter?</div>
+      <div class="numex">
+        <div class="setup">Same two steps, both orders, on (−2, 4), (3, 1), (5, 5), (1, −3).</div>
+        <div class="steps">
+          R<sub>x-axis</sub> ∘ T<sub>⟨2, −3⟩</sub> (translate first): (0, −1), (5, 2), (7, −2), (3, 6)<br>
+          T<sub>⟨2, −3⟩</sub> ∘ R<sub>x-axis</sub> (reflect first): (0, −7), (5, −4), (7, −8), (3, 0)<br>
+          <b>Different results</b>, so order matters.
+        </div>
+      </div>
+      <div class="box tip">
+        <h4>…but not always</h4>
+        <p>Some pairs give the same result either way. R<sub>y=x</sub> ∘ R<sub>180</sub> and R<sub>180</sub> ∘ R<sub>y=x</sub> both send (x, y) to (−y, −x). Work it out to check; don't assume.</p>
+      </div>
+      <div class="proof-label">Writing the notation</div>
+      <div class="numex">
+        <div class="setup">"Reflect over the y-axis, then rotate 90° clockwise."</div>
+        <div class="steps">First step on the right: <b>R<sub>90cw</sub> ∘ R<sub>y-axis</sub></b></div>
+      </div>
+      <div class="proof-label">Two reflections over parallel lines = one translation</div>
+      <div class="diagram-wrap" data-diagram="twoRefl"></div>
+      <div class="numex">
+        <div class="setup">Reflect X(−4, 5), Y(1, 3), Z(3, 6) over y = 2, then over y = −1.</div>
+        <div class="steps">Result: X″(−4, −1), Y″(1, −3), Z″(3, 0). Every point moved <b>6 down</b>: a translation T(x, y) → (x, y − 6).<br>The lines are 3 apart, and the figure moves <b>twice</b> that distance.</div>
+      </div>
+      <div class="box watch">
+        <h4>Getting from one spot to another</h4>
+        <p>To move (−4, 5) to (4, −4) in two steps: reflect over the x-axis to (−4, −5), then translate ⟨8, 1⟩. Written: <b>T<sub>⟨8, 1⟩</sub> ∘ R<sub>x-axis</sub></b>. Many paths can work.</p>
+      </div>
+    `
+  }
+];
+
+const tabsEl = document.getElementById('tabs');
+const panelsEl = document.getElementById('panels');
+sections.forEach((s, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
+  btn.innerHTML = s.icon + '<span>' + s.label + '</span>';
+  btn.onclick = () => selectTab(s.id);
+  btn.dataset.id = s.id;
+  tabsEl.appendChild(btn);
+  const panel = document.createElement('div');
+  panel.className = 'panel' + (i === 0 ? ' active' : '');
+  panel.id = s.id;
+  panel.innerHTML = '<h2 class="section-title">' + s.title + '</h2><p class="section-sub">' + s.sub + '</p>' + s.body;
+  panelsEl.appendChild(panel);
+});
+document.querySelectorAll('[data-diagram]').forEach(function(el){ var fn = DIAGRAMS[el.dataset.diagram]; if (fn) el.innerHTML = fn(); });
+function selectTab(id) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.id === id));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === id));
+  window.scrollTo({top: document.getElementById('tabs').offsetTop - 10, behavior: 'smooth'});
+}
+</script>
+</body>
+</html>
