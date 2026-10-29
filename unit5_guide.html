@@ -490,6 +490,10 @@ const sections = [
         <p>If the angle is <b>not between</b> the two marked sides, the parts "don't match positions," and you <b>can't</b> conclude the triangles are congruent.</p>
       </div>
       <div class="diagram-wrap" data-diagram="ssa"></div>
+      <div class="box watch">
+        <h4>Angles alone aren't enough either</h4>
+        <p>If only the three <b>angles</b> match (AAA), the triangles have the same shape but could be different sizes, so they are <b>not</b> proven congruent. And if the marked parts are in a <b>different set-up</b> in each triangle, they don't count as matching.</p>
+      </div>
       <div class="proof-label">Hidden congruent parts</div>
       <div class="def-grid">
         <div class="def-card"><span class="term">Shared side</span><span class="desc">A side both triangles use is congruent to itself: the <b>reflexive property</b>.</span></div>
@@ -533,7 +537,7 @@ const sections = [
       <div class="diagram-wrap" data-diagram="vertical"></div>
       <div class="box theorem">
         <h4>All five shortcuts</h4>
-        <p><b>SSS, SAS, ASA, AAS, HL.</b> SSA does not work.</p>
+        <p><b>SSS, SAS, ASA, AAS, HL.</b> SSA and AAA do not work.</p>
       </div>
       <div class="box theorem">
         <h4>"What else do you need?" (ASA vs. AAS)</h4>
@@ -564,7 +568,10 @@ const sections = [
         <div class="def-card"><span class="term">Definition of midpoint</span><span class="desc">A midpoint makes two congruent segments.</span></div>
         <div class="def-card"><span class="term">Definition of segment bisector</span><span class="desc">A segment that bisects another cuts it into two congruent segments.</span></div>
         <div class="def-card"><span class="term">All right angles are congruent</span><span class="desc">Use when two right angles are given.</span></div>
-        <div class="def-card"><span class="term">Alternate interior angles theorem</span><span class="desc">Parallel lines → alternate interior angles are congruent.</span></div>
+        <div class="def-card"><span class="term">Alternate interior angles</span><span class="desc">Parallel lines → alternate interior angles are congruent.</span></div>
+        <div class="def-card"><span class="term">Corresponding angles</span><span class="desc">Parallel lines → corresponding angles (same position at each crossing) are congruent.</span></div>
+        <div class="def-card"><span class="term">Definition of perpendicular</span><span class="desc">Perpendicular (⊥) segments form <b>right angles</b>. Follow it with "all right angles are congruent."</span></div>
+        <div class="def-card"><span class="term">CPCTC</span><span class="desc"><b>C</b>orresponding <b>P</b>arts of <b>C</b>ongruent <b>T</b>riangles are <b>C</b>ongruent. Used <b>after</b> the triangles are proven congruent.</span></div>
         <div class="def-card"><span class="term">SSS · SAS · ASA · AAS · HL</span><span class="desc">The final reason.</span></div>
       </div>
       <div class="proof-label">Example 1 (original): right triangles</div>
@@ -600,12 +607,30 @@ const sections = [
           5. ΔGLH ≅ ΔKLJ — <b>ASA</b> (the side GL / KL is between the two angles)
         </div>
       </div>
+      <div class="proof-label">CPCTC: proving a part, not just the triangles</div>
+      <div class="box theorem">
+        <h4>Two-stage proofs</h4>
+        <p>When the "Prove" line is a single angle or segment (like ∠B ≅ ∠E), first prove the <b>triangles</b> congruent with a shortcut, then add one more line: the part you want, with the reason <b>CPCTC</b>.</p>
+      </div>
+      <div class="proof-label">Example 4 (original): perpendicular + CPCTC</div>
+      <div class="numex">
+        <div class="setup">Given: ST ≅ VT, and TU ⊥ SV at U (U is on SV). Prove: SU ≅ VU.</div>
+        <div class="steps">
+          1. ST ≅ VT, TU ⊥ SV — Given<br>
+          2. ∠SUT and ∠VUT are right angles — Definition of perpendicular<br>
+          3. TU ≅ TU — Reflexive property<br>
+          4. ΔSUT ≅ ΔVUT — <b>HL</b> (hypotenuses ST and VT, shared leg TU)<br>
+          5. SU ≅ VU — <b>CPCTC</b>
+        </div>
+      </div>
       <div class="box watch">
         <h4>Common mistakes</h4>
         <ul>
           <li>Every statement needs a reason, and "Given" only works for facts actually stated.</li>
           <li>Don't forget the "free" parts: a shared side (reflexive) or vertical angles is often the third piece you need.</li>
           <li>Check that your final shortcut matches the <b>positions</b> of your parts (included vs. not).</li>
+          <li>CPCTC only works <b>after</b> a line proving the triangles congruent. You can't use it to get one of the three pairs.</li>
+          <li>In class the reasons are often shortened: "Vertical Angles," "Alternate Interior Angles," "Reflexive Property." Those are fine.</li>
         </ul>
       </div>
     `

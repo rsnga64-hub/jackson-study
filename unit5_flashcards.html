@@ -329,13 +329,17 @@ var CARDS = [
   {cat:'short', term:'ASA', def:'Angle-side-angle: two angles and the INCLUDED side (between them) congruent → triangles congruent.', extra:null, diagram:diagASA},
   {cat:'short', term:'AAS', def:'Angle-angle-side: two angles and a NON-included side congruent → triangles congruent.', extra:null, diagram:diagAAS},
   {cat:'short', term:'SSA', def:'NOT a congruence shortcut: the angle isn\'t between the two sides, so the parts don\'t match positions.', extra:'The five shortcuts are SSS, SAS, ASA, AAS, HL.', diagram:diagSSA},
+  {cat:'short', term:'AAA', def:'NOT a congruence shortcut: three matching angles give the same shape but possibly a different size.', extra:'You need at least one pair of congruent sides.', diagram:null},
   {cat:'short', term:'Included angle / included side', def:'Included angle: the angle between two sides. Included side: the side between two angles.', extra:'This is what separates SAS from SSA, and ASA from AAS.', diagram:null},
   {cat:'proof', term:'Reflexive property', def:'A segment (or angle) is congruent to itself. Use it for a side two triangles share.', extra:'Example: BD ≅ BD.', diagram:diagShared},
   {cat:'proof', term:'Vertical angles are congruent', def:'Where two lines cross, the angles across from each other are congruent.', extra:'Look for an "X" or bow-tie shape.', diagram:diagVertical},
   {cat:'proof', term:'Definition of midpoint', def:'A midpoint divides a segment into two congruent segments.', extra:null, diagram:null},
   {cat:'proof', term:'Definition of segment bisector', def:'A bisector cuts a segment into two congruent segments.', extra:'"AE bisects BD" means the crossing point splits BD into two congruent pieces.', diagram:null},
   {cat:'proof', term:'Alternate interior angles theorem', def:'If two lines are parallel, the alternate interior angles formed by a transversal are congruent.', extra:'Use it when a figure gives you parallel sides.', diagram:null},
-  {cat:'proof', term:'Two-column proof plan', def:'Givens → hidden parts (reflexive, vertical angles, midpoint, parallel) → three pairs → shortcut.', extra:'Every statement needs a reason.', diagram:null}
+  {cat:'proof', term:'Corresponding angles', def:'If two lines are parallel, the angles in matching positions at each crossing are congruent.', extra:null, diagram:null},
+  {cat:'proof', term:'Definition of perpendicular', def:'Perpendicular segments meet at right angles.', extra:'Then use "all right angles are congruent."', diagram:null},
+  {cat:'proof', term:'CPCTC', def:'Corresponding Parts of Congruent Triangles are Congruent.', extra:'Use it AFTER proving the triangles congruent, to prove one specific side or angle.', diagram:null},
+  {cat:'proof', term:'Two-column proof plan', def:'Givens → hidden parts (reflexive, vertical angles, midpoint, parallel, perpendicular) → three pairs → shortcut → CPCTC if a single part is asked for.', extra:'Every statement needs a reason.', diagram:null}
 ];
 
 /* ============ Deck state & rendering ============ */
